@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como funciona o modelo do Bolão 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e10;
+    --bg-elev: #17171b;
+    --bg-card: #1c1c22;
+    --ink: #f1ebdf;
+    --ink-dim: #b5ac99;
+    --ink-faint: #6b6459;
+    --accent: #d4a24c;
+    --accent-2: #7aa95c;
+    --accent-3: #c4513a;
+    --line: #2a2a30;
+    --line-soft: #1f1f24;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    line-height: 1.55;
+    overflow: hidden;
+    height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-image:
+      radial-gradient(ellipse at 15% 0%, rgba(212,162,76,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 100%, rgba(122,169,92,0.04) 0%, transparent 50%);
+  }
+
+  /* --- Slide structure --- */
+  .deck { position: relative; width: 100vw; height: 100vh; }
+  .slide {
+    position: absolute; inset: 0;
+    display: none;
+    padding: 4.5vh 6vw;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .slide.active { display: flex; flex-direction: column; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* --- Typography --- */
+  h1, h2, h3 { font-family: 'Fraunces', serif; font-weight: 400; letter-spacing: -0.01em; }
+  h1 { font-size: clamp(2.2rem, 4.5vw, 4rem); line-height: 1.05; font-weight: 300; }
+  h2 { font-size: clamp(1.6rem, 2.8vw, 2.4rem); line-height: 1.15; font-weight: 400; margin-bottom: 0.6em; }
+  h3 { font-size: 1.25rem; font-weight: 500; color: var(--ink); margin-bottom: 0.4em; }
+  p { font-size: clamp(0.95rem, 1.05vw, 1.08rem); color: var(--ink-dim); max-width: 70ch; }
+  p strong { color: var(--ink); font-weight: 500; }
+  em { color: var(--accent); font-style: italic; }
+  code, .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.92em; }
+
+  /* --- Header/chip --- */
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--accent);
+    margin-bottom: 1.2em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7em;
+  }
+  .eyebrow::before {
+    content: ''; display: inline-block;
+    width: 24px; height: 1px; background: var(--accent);
+  }
+
+  .chapter-tag {
+    position: absolute;
+    top: 4.5vh; right: 6vw;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  /* --- Navigation --- */
+  .nav {
+    position: fixed; bottom: 2vh; left: 50%;
+    transform: translateX(-50%);
+    display: flex; align-items: center; gap: 1.2rem;
+    background: rgba(23,23,27,0.88);
+    backdrop-filter: blur(12px);
+    padding: 0.55rem 1.2rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    z-index: 100;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+  }
+  .nav button {
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0 0.35rem;
+    transition: color 0.15s;
+  }
+  .nav button:hover { color: var(--accent); }
+  .nav button:disabled { color: var(--ink-faint); cursor: not-allowed; }
+  .nav .counter { color: var(--ink-dim); min-width: 4.5em; text-align: center; }
+  .nav .progress {
+    width: 180px; height: 2px; background: var(--line);
+    border-radius: 1px; overflow: hidden; position: relative;
+  }
+  .nav .progress::after {
+    content: ''; position: absolute; inset: 0 auto 0 0;
+    background: var(--accent);
+    width: var(--progress, 0%);
+    transition: width 0.3s;
+  }
+
+  /* --- Common layout --- */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; flex: 1; align-items: center; }
+  .split-title { display: flex; flex-direction: column; gap: 1.2rem; }
+  .lead { font-size: clamp(1.1rem, 1.3vw, 1.35rem); color: var(--ink); line-height: 1.5; max-width: 55ch; font-weight: 300; }
+  ul.clean { list-style: none; display: flex; flex-direction: column; gap: 0.8em; margin-top: 0.8em; }
+  ul.clean li {
+    position: relative; padding-left: 1.5em;
+    color: var(--ink-dim); font-size: 1rem; line-height: 1.5;
+  }
+  ul.clean li::before {
+    content: '—';
+    position: absolute; left: 0;
+    color: var(--accent);
+  }
+
+  /* --- Cards / boxes --- */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1.5rem 1.7rem;
+  }
+  .card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    margin-bottom: 0.8em;
+  }
+  .num-huge {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .callout {
+    border-left: 2px solid var(--accent);
+    padding: 0.2em 0 0.2em 1.2em;
+    margin: 1em 0;
+    color: var(--ink);
+    font-style: italic;
+    font-family: 'Fraunces', serif;
+    font-size: 1.1em;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 0.15em 0.6em;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    background: var(--line);
+    color: var(--ink-dim);
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+  }
+  .tag.ok { background: rgba(122,169,92,0.15); color: var(--accent-2); }
+  .tag.warn { background: rgba(196,81,58,0.15); color: var(--accent-3); }
+  .tag.gold { background: rgba(212,162,76,0.15); color: var(--accent); }
+
+  /* --- Formula styling --- */
+  .formula {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.05rem;
+    background: var(--bg-elev);
+    padding: 1rem 1.3rem;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+  .formula .hl { color: var(--accent); }
+  .formula .hl2 { color: var(--accent-2); }
+  .formula .hl3 { color: var(--accent-3); }
+  .formula .comment { color: var(--ink-faint); }
+
+  /* --- Interactive controls --- */
+  .control-group { display: flex; flex-direction: column; gap: 0.4em; margin-bottom: 1em; }
+  .control-group label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex; justify-content: space-between;
+  }
+  .control-group label .val { color: var(--accent); font-size: 0.95rem; }
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 4px; background: var(--line);
+    border-radius: 2px; outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--accent); cursor: pointer;
+    border: 2px solid var(--bg);
+    transition: transform 0.1s;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type="range"]::-moz-range-thumb {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--accent); cursor: pointer;
+    border: 2px solid var(--bg);
+  }
+
+  /* --- Matrix / grid --- */
+  .matrix-grid {
+    display: grid;
+    gap: 2px;
+    background: var(--line);
+    padding: 2px;
+    border-radius: 4px;
+  }
+  .matrix-cell {
+    background: var(--bg-elev);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--ink);
+    aspect-ratio: 1;
+    transition: background 0.15s;
+  }
+  .matrix-label {
+    background: transparent;
+    color: var(--ink-faint);
+    font-size: 0.7rem;
+  }
+
+  /* --- SVG bars --- */
+  .bars-chart { display: flex; align-items: flex-end; gap: 6px; height: 180px; margin: 1em 0; }
+  .bar {
+    flex: 1;
+    background: var(--accent);
+    border-radius: 2px 2px 0 0;
+    transition: height 0.3s ease;
+    position: relative;
+    min-height: 2px;
+  }
+  .bar-label {
+    position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; color: var(--ink-faint);
+  }
+  .bar-val {
+    position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; color: var(--ink-dim);
+    white-space: nowrap;
+  }
+
+  /* --- Tables --- */
+  table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+  th, td { padding: 0.6em 0.8em; text-align: left; border-bottom: 1px solid var(--line-soft); }
+  th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--ink-faint);
+  }
+  td { color: var(--ink-dim); }
+  td.num { font-family: 'JetBrains Mono', monospace; color: var(--ink); text-align: right; }
+  tr.highlight td { color: var(--accent); }
+
+  /* --- Cover slide --- */
+  .cover {
+    justify-content: center;
+    align-items: flex-start;
+    position: relative;
+    padding-bottom: 16vh;
+  }
+  .cover .rule {
+    position: absolute; top: 0; left: 0;
+    height: 1px; width: 100%;
+    background: linear-gradient(to right, var(--accent) 0%, var(--accent) 20%, transparent 20%);
+  }
+  .cover-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--ink-faint);
+    margin-bottom: 2em;
+  }
+  .cover h1 {
+    font-size: clamp(3rem, 6.5vw, 6rem);
+    line-height: 0.95;
+    font-weight: 300;
+    margin-bottom: 0.3em;
+  }
+  .cover h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .cover .subtitle {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+    color: var(--ink-dim);
+    font-weight: 300;
+    max-width: 45ch;
+    line-height: 1.4;
+    margin-top: 1em;
+  }
+  .cover .meta {
+    position: absolute;
+    bottom: 4.5vh; left: 6vw;
+    display: flex; gap: 5em;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+  }
+  .cover .meta .key { text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.3em; }
+  .cover .meta .val { color: var(--ink-dim); font-size: 0.9rem; }
+
+  /* --- Section divider --- */
+  .divider {
+    justify-content: center; align-items: center;
+    text-align: center;
+  }
+  .divider .big-num {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(5rem, 10vw, 9rem);
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.2em;
+  }
+  .divider h2 {
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 300;
+    max-width: 25ch;
+    margin: 0 auto;
+  }
+  .divider .intro {
+    font-size: 1rem; color: var(--ink-dim);
+    max-width: 50ch; margin: 1.5em auto 0;
+  }
+
+  /* Three channel diagram */
+  .channels {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-top: 1.5rem;
+  }
+  .channel {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--accent);
+    padding: 1.4rem;
+    border-radius: 4px;
+  }
+  .channel.ch2 { border-top-color: var(--accent-2); }
+  .channel.ch3 { border-top-color: var(--accent-3); }
+  .channel-weight {
+    font-family: 'Fraunces', serif;
+    font-size: 2.6rem;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 0.2em;
+  }
+  .channel.ch2 .channel-weight { color: var(--accent-2); }
+  .channel.ch3 .channel-weight { color: var(--accent-3); }
+  .channel h3 { margin-top: 0.3em; font-size: 1.1rem; }
+  .channel p { font-size: 0.88rem; color: var(--ink-dim); margin-top: 0.4em; }
+  .channel .bias {
+    margin-top: 0.8em; padding-top: 0.8em;
+    border-top: 1px solid var(--line-soft);
+    font-size: 0.8rem; color: var(--ink-faint);
+  }
+  .channel .bias span { color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+
+  /* --- Flow diagram --- */
+  .flow {
+    display: flex; flex-direction: column; gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .flow-step {
+    display: flex; align-items: center; gap: 1.2rem;
+    padding: 0.8rem 1rem;
+    background: var(--bg-elev);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+  }
+  .flow-num {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem; color: var(--accent);
+    font-weight: 300; min-width: 1.5em;
+  }
+  .flow-content .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; color: var(--ink-faint);
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .flow-content .desc {
+    color: var(--ink); font-size: 0.95rem; margin-top: 0.15em;
+  }
+
+  /* --- Comparison visual --- */
+  .vs {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    gap: 1.5rem; align-items: stretch;
+    margin: 1.2rem 0;
+  }
+  .vs-side {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    padding: 1.2rem;
+    border-radius: 4px;
+  }
+  .vs-divider {
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    color: var(--ink-faint); font-style: italic;
+  }
+
+  /* --- Slider for interactive --- */
+  .interactive-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1.5rem;
+  }
+
+  /* --- Scrollbar --- */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ink-faint); }
+
+  /* --- Helper --- */
+  .small { font-size: 0.82rem; color: var(--ink-faint); }
+  .row { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+  .grow { flex: 1; }
+  .mt1 { margin-top: 1em; }
+  .mt2 { margin-top: 1.6em; }
+  .center { text-align: center; }
+
+  /* Quote/anecdote style */
+  .anecdote {
+    font-family: 'Fraunces', serif; font-style: italic;
+    color: var(--ink); font-size: 1.1rem;
+    padding: 1em 0;
+    border-top: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line-soft);
+    margin: 1.2em 0;
+  }
+  .anecdote .src { font-style: normal; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; color: var(--ink-faint); text-transform: uppercase;
+    letter-spacing: 0.15em; display: block; margin-top: 0.5em; }
+
+  /* Pill highlight */
+  .pill {
+    display: inline-block;
+    background: rgba(212,162,76,0.12);
+    border: 1px solid rgba(212,162,76,0.3);
+    color: var(--accent);
+    padding: 0.2em 0.7em;
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+  }
+
+  /* Slide-specific helpers */
+  .full-width { width: 100%; }
+  .cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+  .cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .cols-2.wide-left { grid-template-columns: 3fr 2fr; }
+  .cols-2.wide-right { grid-template-columns: 2fr 3fr; }
+
+  /* Matrix cell heatmap colors */
+  .heat-0 { background: var(--bg-elev); color: var(--ink-faint); }
+  .heat-1 { background: #1d2520; color: var(--ink-dim); }
+  .heat-2 { background: #253224; color: var(--ink-dim); }
+  .heat-3 { background: #324028; color: var(--ink); }
+  .heat-4 { background: #4a4d2c; color: var(--ink); }
+  .heat-5 { background: #6a5b2e; color: var(--ink); }
+  .heat-6 { background: #8a6830; color: white; font-weight: 500; }
+  .heat-7 { background: #a47030; color: white; font-weight: 600; }
+
+</style>
+</head>
+<body>
+<div class="deck">
+
+<!-- ============================================ -->
+<!-- SLIDE 1 — COVER                               -->
+<!-- ============================================ -->
+<section class="slide cover active" data-chapter="">
+  <div class="rule"></div>
+  <div class="cover-eyebrow">Bolão 2026 · Documentação didática</div>
+  <h1>Como funciona o<br>modelo que prevê<br>a <em>Copa do Mundo</em>.</h1>
+  <p class="subtitle">Uma apresentação do zero, para quem nunca estudou estatística — mas quer entender cada engrenagem e opinar sobre melhorias.</p>
+  <div class="meta">
+    <div><div class="key">Aluno</div><div class="val">Beto Hamoui</div></div>
+    <div><div class="key">Duração estimada</div><div class="val">~25 minutos</div></div>
+    <div><div class="key">Slides</div><div class="val">33</div></div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 2 — O PROBLEMA                          -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Introdução · 01/33">
+  <div class="eyebrow">O problema</div>
+  <h2>O bolão exige <em>precisão em larga escala</em>.</h2>
+  <div class="two-col mt2">
+    <div>
+      <p>Não é só "quem vai ganhar a Copa". O bolão pede:</p>
+      <ul class="clean">
+        <li><strong>Placar exato</strong> dos 72 jogos da fase de grupos</li>
+        <li>Quem <strong>classifica</strong> em cada grupo (1º, 2º e 3º)</li>
+        <li>Placares do <strong>mata-mata inteiro</strong></li>
+        <li>Campeão, artilheiro, tudo isso <strong>antes de 11 de junho</strong></li>
+      </ul>
+      <p class="mt2">É muita coisa pra chutar no feeling. Uma decisão por jogo é aceitável. Cento e quatro decisões, não.</p>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">Escala do problema</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+          <div>
+            <div class="num-huge">104</div>
+            <div class="small mt1">jogos totais</div>
+          </div>
+          <div>
+            <div class="num-huge">48</div>
+            <div class="small mt1">seleções</div>
+          </div>
+          <div>
+            <div class="num-huge">39</div>
+            <div class="small mt1">dias de Copa</div>
+          </div>
+          <div>
+            <div class="num-huge">1</div>
+            <div class="small mt1">modelo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 3 — POR QUE UM MODELO                   -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Introdução · 02/33">
+  <div class="eyebrow">Por que um modelo estatístico?</div>
+  <h2>Porque o cérebro humano é <em>ruim de escala</em>.</h2>
+  <div class="cols-3 mt2">
+    <div class="card">
+      <div class="card-label">Problema 1</div>
+      <h3>Viés emocional</h3>
+      <p>Torcida enviesa tudo. É natural superestimar o Brasil e subestimar o país rival. O modelo não torce.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Problema 2</div>
+      <h3>Inconsistência</h3>
+      <p>O chute de segunda-feira não casa com o de quarta. Dois jogos iguais viram palpites diferentes dependendo do humor.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Problema 3</div>
+      <h3>Acerto parcial</h3>
+      <p>O bolão paga por diferença de gols, vencedor, empate. Ganhar pontos exige <strong>otimizar</strong>, não só "acertar".</p>
+    </div>
+  </div>
+  <div class="callout mt2">
+    Um modelo consistente e bem calibrado perde em criatividade, mas ganha em disciplina. E disciplina, em 104 decisões, é rei.
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 4 — MAPA                                -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Introdução · 03/33">
+  <div class="eyebrow">Visão geral</div>
+  <h2>O modelo em <em>quatro movimentos</em>.</h2>
+  <p class="lead">O sistema inteiro pode ser entendido em quatro perguntas. Esta apresentação segue exatamente essa ordem.</p>
+  <div class="flow mt2">
+    <div class="flow-step">
+      <div class="flow-num">I</div>
+      <div class="flow-content">
+        <div class="label">Bloco 1 · slides 5 a 11</div>
+        <div class="desc">Como o modelo prevê <strong>um jogo só</strong>. Distribuição de Poisson, ataque, defesa, Dixon-Coles.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">II</div>
+      <div class="flow-content">
+        <div class="label">Bloco 2 · slides 12 a 18</div>
+        <div class="desc">De onde vem a <strong>força de cada seleção</strong>. Os três canais de informação e o blend bayesiano.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">III</div>
+      <div class="flow-content">
+        <div class="label">Bloco 3 · slides 19 a 23</div>
+        <div class="desc">Do jogo isolado ao <strong>torneio inteiro</strong>. Monte Carlo, mata-mata, vantagem de mando.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">IV</div>
+      <div class="flow-content">
+        <div class="label">Bloco 4 · slides 24 a 27</div>
+        <div class="desc">Como escolher <strong>o placar pra apostar</strong>. O problema do "placar mais provável" e o EV-optimal.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">V</div>
+      <div class="flow-content">
+        <div class="label">Epílogo · slides 28 a 32</div>
+        <div class="desc">Onde o modelo acerta, onde erra, e o que vem a seguir.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 5 — DIVIDER BLOCO 1                     -->
+<!-- ============================================ -->
+<section class="slide divider" data-chapter="Bloco I · 04/33">
+  <div class="big-num">I</div>
+  <h2>Prever um jogo só.</h2>
+  <p class="intro">Antes de pensar em torneio, campeão, chaveamento — vamos focar em uma única partida. Se não conseguimos prever bem <strong>um</strong> jogo, nenhum torneio se sustenta.</p>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 6 — POISSON INTUIÇÃO                    -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco I · 05/33">
+  <div class="eyebrow">A ferramenta base</div>
+  <h2>A distribuição de <em>Poisson</em>.</h2>
+  <div class="cols-2 mt2">
+    <div>
+      <p>Poisson é uma fórmula que responde a uma pergunta simples: "se eu espero em média <em>λ</em> (lambda) eventos, qual a probabilidade de acontecerem exatamente 0, 1, 2, 3... eventos?"</p>
+      <div class="callout">Para futebol: "se o Brasil marca em média 2 gols contra times desse nível, qual a chance dele marcar exatamente 3 hoje?"</div>
+      <p>A Poisson é usada em qualquer situação onde eventos raros acontecem de forma mais ou menos aleatória ao longo do tempo: ligações num call center, digitação de erros numa página, <strong>gols num jogo de futebol</strong>.</p>
+      <p class="mt2 small">Lambda (λ) é a <em>taxa esperada</em>. No resto desta apresentação você vai encontrar λ repetidamente — é sempre "o número médio de gols que esse time tende a marcar nesse jogo".</p>
+    </div>
+    <div class="interactive-panel">
+      <div class="control-group">
+        <label>λ · gols esperados <span class="val" id="poisson-lambda-val">1.5</span></label>
+        <input type="range" id="poisson-lambda" min="0.3" max="4.5" step="0.1" value="1.5">
+      </div>
+      <div class="bars-chart" id="poisson-chart"></div>
+      <div class="small center mt2">probabilidade de marcar <strong>N</strong> gols</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 7 — POISSON INTERPRETAR                 -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco I · 06/33">
+  <div class="eyebrow">Lendo a Poisson</div>
+  <h2>O que o lambda revela.</h2>
+  <div class="cols-2 mt2">
+    <div>
+      <p>Mexendo no slider do slide anterior, três padrões aparecem:</p>
+      <ul class="clean">
+        <li><strong>Lambda baixo (0.5):</strong> o placar mais provável é <em>zero gol</em>. Jogo fechado, time fraco atacando.</li>
+        <li><strong>Lambda médio (1.5):</strong> 1 gol é o mais provável, mas 0, 2 e 3 também aparecem bastante. Realidade típica de um jogo de Copa.</li>
+        <li><strong>Lambda alto (3.0):</strong> a distribuição "se abre". 2, 3, 4 gols todos parecidos. Favorito jogando contra lanterna.</li>
+      </ul>
+      <p class="mt2">A grande sacada: <strong>a Poisson dá a distribuição inteira de gols, não só um chute</strong>. Isso é fundamental.</p>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">Exemplo prático · Grupo C</div>
+        <h3 style="margin-top: 0.6em;">Brasil × Haiti</h3>
+        <div style="margin: 1rem 0; padding: 1rem; background: var(--bg-elev); border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--ink-dim);">
+          <div>λ<sub>Brasil</sub> = <span style="color: var(--accent);">2.53</span></div>
+          <div>λ<sub>Haiti</sub> = <span style="color: var(--accent-3);">0.49</span></div>
+        </div>
+        <p class="small">O modelo espera o Brasil marcando 2.53 e o Haiti 0.49. Agora cada um desses lambdas gera sua própria Poisson — <strong>uma distribuição de gols pra cada lado</strong>.</p>
+        <p class="small mt1">O resultado final do jogo é a combinação dessas duas distribuições, que veremos no próximo slide.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 8 — MATRIZ DE PLACARES                  -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco I · 07/33">
+  <div class="eyebrow">A matriz de placares</div>
+  <h2>Combinando as duas Poissons.</h2>
+  <div class="cols-2 wide-right">
+    <div>
+      <p>Se o Brasil tem uma distribuição (0, 1, 2, 3... gols) e o Haiti tem outra, a <strong>combinação</strong> produz uma <em>matriz de todos os placares possíveis</em>.</p>
+      <p class="mt2">Cada célula é a probabilidade daquele placar exato acontecer.</p>
+      <div class="callout">Esta matriz é o output fundamental do modelo. Tudo — quem vence, a chance de empate, qual placar apostar — sai dela.</div>
+      <p class="small">Na visualização ao lado, cores mais quentes = maior probabilidade. Brasil × Haiti, com os lambdas do slide anterior.</p>
+    </div>
+    <div class="interactive-panel">
+      <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--ink-faint);">
+        <div></div>
+        <div class="center">gols Haiti →</div>
+      </div>
+      <div id="score-matrix" style="display: grid; grid-template-columns: 30px repeat(6, 1fr); gap: 2px; margin-top: 0.5em;"></div>
+      <div style="text-align: center; margin-top: 0.8em; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--ink-faint);">
+        ↑ gols Brasil
+      </div>
+      <div style="display: flex; justify-content: space-around; margin-top: 1.2em; font-size: 0.85rem;">
+        <div><span style="color: var(--ink-faint);">Brasil vence:</span> <strong id="p-home">—</strong></div>
+        <div><span style="color: var(--ink-faint);">Empate:</span> <strong id="p-draw">—</strong></div>
+        <div><span style="color: var(--ink-faint);">Haiti vence:</span> <strong id="p-away">—</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 9 — PROBLEMA DA POISSON PURA            -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco I · 08/33">
+  <div class="eyebrow">O defeito da Poisson pura</div>
+  <h2>Placares baixos aparecem <em>mais</em> do que a Poisson prevê.</h2>
+  <div class="cols-2 mt2">
+    <div>
+      <p>A Poisson bivariada (os dois times combinados) tem um defeito conhecido desde os anos 90: ela subestima 0×0, 1×0, 0×1 e 1×1.</p>
+      <p class="mt2"><strong>Por que?</strong> A Poisson assume que os gols de um time e do outro são independentes. Mas no futebol real existe uma <em>dinâmica tática</em>:</p>
+      <ul class="clean">
+        <li>Se um time marca 1, ele recua pra segurar. O outro não consegue reagir à altura.</li>
+        <li>Se o jogo está 0×0 no segundo tempo, ambos ficam cautelosos. Defendem mais.</li>
+        <li>Gols "contagiam" jogadas pros dois lados — ou travam ambos.</li>
+      </ul>
+      <p class="mt2">Resultado: placares como 1×0 e 1×1 aparecem ~15-20% <em>mais</em> do que a Poisson pura estima.</p>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">Estatística real vs. Poisson pura</div>
+        <table style="margin-top: 1em;">
+          <thead>
+            <tr><th>Placar</th><th>Poisson</th><th>Real</th><th>Erro</th></tr>
+          </thead>
+          <tbody>
+            <tr class="highlight"><td>0 × 0</td><td class="num">8.2%</td><td class="num">9.8%</td><td class="num">+1.6pp</td></tr>
+            <tr class="highlight"><td>1 × 0</td><td class="num">11.4%</td><td class="num">13.1%</td><td class="num">+1.7pp</td></tr>
+            <tr class="highlight"><td>0 × 1</td><td class="num">7.2%</td><td class="num">8.5%</td><td class="num">+1.3pp</td></tr>
+            <tr class="highlight"><td>1 × 1</td><td class="num">10.0%</td><td class="num">11.9%</td><td class="num">+1.9pp</td></tr>
+            <tr><td>2 × 1</td><td class="num">6.8%</td><td class="num">6.5%</td><td class="num">-0.3pp</td></tr>
+            <tr><td>3 × 2</td><td class="num">1.6%</td><td class="num">1.4%</td><td class="num">-0.2pp</td></tr>
+          </tbody>
+        </table>
+        <p class="small mt2">Números ilustrativos baseados em Dixon & Coles (1997). O erro é pequeno em cada célula, mas em 104 jogos de Copa, ele se acumula.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 10 — DIXON COLES                        -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco I · 09/33">
+  <div class="eyebrow">A correção</div>
+  <h2>Dixon-Coles: <em>ajustando</em> a Poisson.</h2>
+  <div class="cols-2 mt2">
+    <div>
+      <p>Em 1997, Mark Dixon e Stuart Coles publicaram a solução que virou padrão da indústria: multiplicar os 4 placares baixos por um <strong>fator de correção τ (tau)</strong> que empurra esses placares pra cima.</p>
+      <p class="mt2">O fator τ depende de um único parâmetro <span class="pill">ρ</span> (rho) que o modelo aprende ao olhar os dados históricos.</p>
+      <p class="mt2">Nos dados atuais do modelo, <strong>ρ ≈ −0.12</strong>. Negativo indica exatamente o padrão: há correlação entre os gols dos dois times no sentido de "placares baixos juntos são mais comuns do que o independente sugere".</p>
+    </div>
+    <div>
+      <div class="formula">
+<span class="comment"># para cada placar (i, j), a Poisson é multiplicada por τ:</span>
+
+τ(0,0) = 1 − λ · μ · <span class="hl">ρ</span>
+τ(1,0) = 1 + μ · <span class="hl">ρ</span>
+τ(0,1) = 1 + λ · <span class="hl">ρ</span>
+τ(1,1) = 1 − <span class="hl">ρ</span>
+
+τ(i, j) = 1  <span class="comment"># para os outros placares</span>
+      </div>
+      <p class="small mt2"><strong>Traduzindo:</strong> se ρ é negativo, os 4 placares baixos ganham probabilidade. Os outros ficam quase iguais.</p>
+      <p class="small mt1">É uma correção cirúrgica. Não destrói o que a Poisson fazia certo; só conserta onde ela errava.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 11 — ATAQUE E DEFESA                    -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco I · 10/33">
+  <div class="eyebrow">Quem joga contra quem</div>
+  <h2>De onde vem o λ de cada seleção.</h2>
+  <div class="cols-2">
+    <div>
+      <p>Cada seleção tem dois parâmetros que o modelo aprende:</p>
+      <ul class="clean">
+        <li><strong>Ataque (α):</strong> quão bem o time marca. Positivo = acima da média.</li>
+        <li><strong>Defesa (β):</strong> quão bem o time defende. Negativo = boa defesa (sofre menos).</li>
+      </ul>
+      <p class="mt2">O λ de um jogo sai da combinação: <strong>meu ataque × defesa do adversário × vantagem de mando</strong>.</p>
+      <p class="mt2 small">A exponencial garante que λ seja sempre positivo (não existe "taxa negativa de gols"). Os parâmetros α e β podem ser negativos; a exp sempre gera algo ≥ 0.</p>
+    </div>
+    <div>
+      <div class="formula">
+<span class="comment"># previsão de gols do mandante:</span>
+λ<sub>home</sub> = exp( α<sub>home</sub> + β<sub>away</sub> + <span class="hl">home_adv</span> )
+
+<span class="comment"># previsão de gols do visitante:</span>
+λ<sub>away</sub> = exp( α<sub>away</sub> + β<sub>home</sub> )
+      </div>
+      <div class="callout mt2">
+        Se o Brasil (α alto) joga contra a Bolívia (β alto, defesa ruim), o λ do Brasil dispara. Se joga contra a França (β baixo, defesa ótima), o λ cai.
+      </div>
+      <p class="small">Os valores de α e β vêm de treinamento nos dados históricos. Mas treinar direto tem problemas — que o Bloco II resolve.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 12 — HOME ADV                           -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco I · 11/33">
+  <div class="eyebrow">Vantagem de mando</div>
+  <h2>Jogar em casa ajuda. <em>Na Copa, ajuda menos.</em></h2>
+  <div class="cols-2 mt2">
+    <div>
+      <p>Em jogos internacionais em geral, jogar em casa vale muito: torcida, gramado conhecido, sem jet-lag, árbitro psicologicamente enviesado. O modelo estima esse bônus em ~+21% nos gols.</p>
+      <p class="mt2"><strong>Mas Copa do Mundo é diferente</strong>. Em Copa:</p>
+      <ul class="clean">
+        <li>Todos os times viajam. Não há assimetria de jet lag.</li>
+        <li>Estádios são novos pra quase todos.</li>
+        <li>Arbitragem é FIFA internacional, menos enviesada.</li>
+        <li>O que sobra é <strong>só torcida e aclimatação</strong>.</li>
+      </ul>
+      <p class="mt2">Por isso o modelo usa um <strong>host advantage reduzido</strong>: só +12.7% nos gols, e <em>só</em> nos 9 jogos onde um anfitrião (EUA, México, Canadá) joga no próprio país.</p>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">Os 9 jogos com bônus</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--ink-dim); margin-top: 1em; line-height: 1.8;">
+          <div><span class="tag gold">MEX</span> × Coreia · África · Chéquia</div>
+          <div><span class="tag gold">USA</span> × Paraguai · Austrália · Turquia</div>
+          <div><span class="tag gold">CAN</span> × Qatar · Suíça · Bósnia</div>
+        </div>
+        <p class="small mt2">Fora desses 9 jogos — e em todo o mata-mata — o modelo trata tudo como campo neutro. Uma simplificação defensável: mesmo que EUA passe de fase e jogue em Los Angeles, a probabilidade de chegar longe é baixa (~1%), então o efeito agregado é mínimo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 13 — DIVIDER BLOCO II                   -->
+<!-- ============================================ -->
+<section class="slide divider" data-chapter="Bloco II · 12/33">
+  <div class="big-num">II</div>
+  <h2>De onde vem a força de cada time.</h2>
+  <p class="intro">Beleza — o modelo sabe combinar ataque × defesa × vantagem de mando. Mas <em>de onde</em> vêm esses valores de ataque e defesa? Essa é a parte mais rica e delicada do sistema.</p>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 14 — TRÊS CANAIS                        -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco II · 13/33">
+  <div class="eyebrow">O princípio</div>
+  <h2>Três fontes de informação <em>complementares</em>.</h2>
+  <p class="lead">Nenhuma fonte única é perfeita. Cada uma vê o que a outra não vê — e cada uma tem vieses que as outras corrigem. Misturar as três é a <em>sacada arquitetural</em> do modelo.</p>
+  <div class="channels mt2">
+    <div class="channel">
+      <div class="card-label">Canal 1 · 45%</div>
+      <div class="channel-weight">DC</div>
+      <h3>Dixon-Coles</h3>
+      <p>O que o time vem fazendo em campo, recentemente.</p>
+      <div class="bias"><span>viés:</span> times que jogam contra adversários fracos ficam inflados (Brasil vs. CONMEBOL).</div>
+    </div>
+    <div class="channel ch2">
+      <div class="card-label">Canal 2 · 30%</div>
+      <div class="channel-weight">ELO</div>
+      <h3>Elo Rating</h3>
+      <p>Força histórica acumulada, já ajustada por qualidade do adversário.</p>
+      <div class="bias"><span>viés:</span> demora pra refletir mudanças no plantel. Time com jogadores novos demora a "subir" no Elo.</div>
+    </div>
+    <div class="channel ch3">
+      <div class="card-label">Canal 3 · 25%</div>
+      <div class="channel-weight">TM</div>
+      <h3>Transfermarkt</h3>
+      <p>Valor de mercado do elenco. Qualidade individual dos jogadores.</p>
+      <div class="bias"><span>viés:</span> não vê entrosamento nem forma atual. Plantel caro que não joga junto há 3 meses não aparece aqui.</div>
+    </div>
+  </div>
+  <div class="callout mt2">
+    Elo corrige o viés de adversário do DC. TM corrige o viés temporal do Elo. DC corrige o fato de que TM não sente tática. Cada canal conserta o buraco do outro.
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 15 — DC DETALHE                         -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco II · 14/33">
+  <div class="eyebrow">Canal 1 em detalhe</div>
+  <h2>Dixon-Coles: <em>"o que vem acontecendo em campo?"</em></h2>
+  <div class="cols-2">
+    <div>
+      <p>O modelo DC olha todos os jogos internacionais desde 2022 (cerca de 538 jogos envolvendo as 48 seleções da Copa) e estima os valores de <strong>ataque e defesa de cada seleção</strong> que melhor explicam os placares observados.</p>
+      <p class="mt2"><strong>Por que só desde 2022?</strong> Jogos antigos pesam menos porque o plantel muda, o técnico muda, tudo muda. O modelo aplica um <em>time-decay</em> que dá peso quase zero a jogos de 5+ anos atrás.</p>
+      <p class="mt2"><strong>O problema principal:</strong> o DC não sabe <em>contra quem</em> o jogo foi — só vê "Brasil fez 5, adversário fez 0". Então o Brasil, que joga muito contra Bolívia e Venezuela nas Eliminatórias, fica com o ataque inflado.</p>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">O viés do Brasil, ilustrado</div>
+        <table style="margin-top: 1em;">
+          <thead>
+            <tr><th>Brasil (últimos jogos)</th><th>Placar</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Brasil × Bolívia</td><td class="num">5 × 0</td></tr>
+            <tr><td>Brasil × Peru</td><td class="num">4 × 0</td></tr>
+            <tr><td>Brasil × Venezuela</td><td class="num">3 × 1</td></tr>
+            <tr><td>Brasil × Paraguai</td><td class="num">4 × 1</td></tr>
+            <tr class="highlight"><td><em>Brasil × Argentina</em></td><td class="num">0 × 1</td></tr>
+          </tbody>
+        </table>
+        <p class="small mt2">O DC vê as 4 goleadas e joga o α_Brasil para cima. A derrota contra a Argentina (único rival forte) fica diluída. <strong>Resultado: α_Brasil acaba superestimado.</strong></p>
+        <p class="small mt1">Por isso precisamos dos outros dois canais pra ancorar a realidade.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 16 — ELO                                -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco II · 15/33">
+  <div class="eyebrow">Canal 2 em detalhe</div>
+  <h2>Elo: <em>"quão forte, ajustado por adversário?"</em></h2>
+  <div class="cols-2">
+    <div>
+      <p>Elo é um sistema de rating criado nos anos 60 pra xadrez e depois adaptado pra esportes. Funciona assim:</p>
+      <ul class="clean">
+        <li>Cada time tem um rating numérico (tipicamente 1500 a 2200).</li>
+        <li>Quando vence, rouba pontos do adversário. Quando perde, cede.</li>
+        <li><strong>Quanto</strong> ganha/perde depende do diferença de rating: vencer um mais forte rende mais, vencer um mais fraco rende pouco.</li>
+      </ul>
+      <p class="mt2">Esta é a genialidade do Elo: ele <em>já ajusta automaticamente pela qualidade do adversário</em>. O Brasil vencer a Bolívia por 5×0 quase não mexe no seu Elo, porque era esperado. Perder pra Argentina machuca muito.</p>
+      <p class="mt2">Por isso o Elo é perfeito pra <strong>corrigir o viés de adversário do Dixon-Coles</strong>.</p>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">Top 10 Elo · abril 2026</div>
+        <table style="margin-top: 0.8em;">
+          <tbody>
+            <tr><td>1. Espanha</td><td class="num">2165</td></tr>
+            <tr><td>2. Argentina</td><td class="num">2113</td></tr>
+            <tr><td>3. França</td><td class="num">2082</td></tr>
+            <tr><td>4. Inglaterra</td><td class="num">2020</td></tr>
+            <tr><td>5. Brasil</td><td class="num">1984</td></tr>
+            <tr><td>5. Portugal</td><td class="num">1984</td></tr>
+            <tr><td>7. Colômbia</td><td class="num">1975</td></tr>
+            <tr><td>8. Holanda</td><td class="num">1961</td></tr>
+            <tr><td>9. Alemanha</td><td class="num">1950</td></tr>
+            <tr><td>10. Uruguai</td><td class="num">1914</td></tr>
+          </tbody>
+        </table>
+        <p class="small mt2">Elo sugere que Inglaterra está na elite (4º mundial), enquanto DC cru a colocaria bem mais abaixo. <strong>Essa divergência é exatamente o que queremos capturar.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 17 — TRANSFERMARKT                      -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco II · 16/33">
+  <div class="eyebrow">Canal 3 em detalhe</div>
+  <h2>Transfermarkt: <em>"quanto custa o elenco?"</em></h2>
+  <div class="cols-2">
+    <div>
+      <p>Transfermarkt é um site alemão que estima o valor de mercado de cada jogador do mundo. Somando os valores dos 23-26 jogadores da seleção, temos o <strong>valor total do elenco</strong>.</p>
+      <p class="mt2">Por que isso importa? Porque o valor de mercado é a melhor medida sintética que existe de <em>quão bons são os jogadores</em>, independente de como o time vem jogando.</p>
+      <p class="mt2"><strong>Qualidade do canal:</strong> é o único dos três que <em>não depende de resultados</em>. Elo e DC são ambos função do placar dos jogos. TM é função do mercado de transferências — uma visão externa, independente.</p>
+      <div class="callout mt2">
+        TM captura: "o time tem um craque recém-contratado", "tem lesão importante", "plantel envelhecendo". O Elo e o DC só descobrem isso depois de alguns jogos ruins ou bons.
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">Valor do elenco · M€ · março 2026</div>
+        <table style="margin-top: 0.8em;">
+          <tbody>
+            <tr class="highlight"><td>1. Inglaterra</td><td class="num">1.300</td></tr>
+            <tr class="highlight"><td>2. França</td><td class="num">1.280</td></tr>
+            <tr><td>3. Espanha</td><td class="num">920</td></tr>
+            <tr><td>4. Portugal</td><td class="num">865</td></tr>
+            <tr><td>5. Brasil</td><td class="num">854</td></tr>
+            <tr><td>6. Alemanha</td><td class="num">817</td></tr>
+            <tr><td>7. Holanda</td><td class="num">712</td></tr>
+            <tr><td>8. Argentina</td><td class="num">600</td></tr>
+          </tbody>
+        </table>
+        <p class="small mt2">Inglaterra tem o elenco <strong>mais caro do mundo</strong> — mas o DC a coloca abaixo do Brasil. <strong>Essa é a tensão exata que o blend resolve.</strong></p>
+        <p class="small mt1">Fun fact: TM da Argentina (8ª) é bem menor que o Elo dela (2ª) sugeriria. O Elo premia a campanha; o TM revela que o plantel depende demais do Messi. Dois sinais, duas verdades.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 18 — BLEND BAYESIANO                    -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco II · 17/33">
+  <div class="eyebrow">A receita</div>
+  <h2>Como os três canais são <em>combinados</em>.</h2>
+  <div class="cols-2">
+    <div>
+      <p>É aritmética simples: uma <strong>média ponderada</strong> dos três canais, para cada seleção, gerando os valores finais de ataque e defesa que vão para a Poisson.</p>
+      <div class="formula mt1">
+α<sub>final</sub> = <span class="hl">0.45</span>·α<sub>DC</sub> + <span class="hl2">0.30</span>·α<sub>Elo</sub> + <span class="hl3">0.25</span>·α<sub>TM</sub>
+
+β<sub>final</sub> = <span class="hl">0.45</span>·β<sub>DC</sub> + <span class="hl2">0.30</span>·β<sub>Elo</sub> + <span class="hl3">0.25</span>·β<sub>TM</sub>
+      </div>
+      <p class="mt2"><strong>Por que esses pesos?</strong> DC é o mais rico em informação (vê forma atual e estilo), mas o mais enviesado. Elo é estável mas lag. TM é independente mas não vê tática. A calibração 45/30/25 foi testada empiricamente.</p>
+      <p class="mt2 small">"Bayesiano" aqui é jargão leve. A ideia real: cada canal traz uma "opinião" sobre o time, e combinamos essas opiniões ponderando por confiança.</p>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">O caso paradigmático · Inglaterra</div>
+        <div style="margin: 1.2em 0;">
+          <div style="display: flex; align-items: center; gap: 0.5em; margin-bottom: 0.8em;">
+            <div style="width: 60px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent);">DC</div>
+            <div style="flex: 1; height: 8px; background: var(--line); border-radius: 4px; position: relative;">
+              <div style="position: absolute; left: 30%; width: 20%; height: 100%; background: var(--accent); border-radius: 4px;"></div>
+            </div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--ink-dim);">fraco</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5em; margin-bottom: 0.8em;">
+            <div style="width: 60px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-2);">Elo</div>
+            <div style="flex: 1; height: 8px; background: var(--line); border-radius: 4px; position: relative;">
+              <div style="position: absolute; left: 50%; width: 30%; height: 100%; background: var(--accent-2); border-radius: 4px;"></div>
+            </div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--ink-dim);">bom</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5em; margin-bottom: 0.8em;">
+            <div style="width: 60px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-3);">TM</div>
+            <div style="flex: 1; height: 8px; background: var(--line); border-radius: 4px; position: relative;">
+              <div style="position: absolute; left: 70%; width: 25%; height: 100%; background: var(--accent-3); border-radius: 4px;"></div>
+            </div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--ink-dim);">topo</div>
+          </div>
+          <div style="margin-top: 1.5em; padding-top: 1em; border-top: 1px solid var(--line-soft); display: flex; align-items: center; gap: 0.5em;">
+            <div style="width: 60px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--ink);">BLEND</div>
+            <div style="flex: 1; height: 10px; background: var(--line); border-radius: 5px; position: relative;">
+              <div style="position: absolute; left: 50%; width: 22%; height: 100%; background: var(--ink); border-radius: 5px;"></div>
+            </div>
+          </div>
+        </div>
+        <p class="small">Sozinho, o DC colocaria a Inglaterra na categoria "boa mas não top". O Elo e o TM puxam pra cima. O resultado final é um compromisso razoável.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 19 — BLEND INTERATIVO                   -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco II · 18/33">
+  <div class="eyebrow">Experimento</div>
+  <h2>Mude os pesos, veja o <em>ranking mudar</em>.</h2>
+  <div class="cols-2 wide-right">
+    <div>
+      <p>Mexendo nos três sliders ao lado, você vê como o top 10 de favoritos ao título se reorganiza.</p>
+      <p class="mt2"><strong>Experimente:</strong></p>
+      <ul class="clean">
+        <li>Zerar o DC: quase só Elo + TM. Inglaterra sobe demais.</li>
+        <li>Zerar o TM: Elo + DC. Brasil dispara.</li>
+        <li>Pesos atuais (45/30/25): compromisso calibrado.</li>
+      </ul>
+      <p class="mt2 small">O sistema força os pesos a somarem 100%. Se você aumenta o DC, os outros dois diminuem proporcionalmente.</p>
+      <p class="mt2 small">Valores ilustrativos baseados em uma aproximação da sensibilidade dos canais.</p>
+    </div>
+    <div class="interactive-panel">
+      <div class="control-group">
+        <label>Dixon-Coles <span class="val" id="wdc-val">45%</span></label>
+        <input type="range" id="wdc" min="0" max="100" step="5" value="45">
+      </div>
+      <div class="control-group">
+        <label>Elo Rating <span class="val" id="welo-val">30%</span></label>
+        <input type="range" id="welo" min="0" max="100" step="5" value="30">
+      </div>
+      <div class="control-group">
+        <label>Transfermarkt <span class="val" id="wtm-val">25%</span></label>
+        <input type="range" id="wtm" min="0" max="100" step="5" value="25">
+      </div>
+      <div style="margin-top: 1.2em;" id="blend-ranking"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 20 — TIME DECAY                         -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco II · 19/33">
+  <div class="eyebrow">Um detalhe importante</div>
+  <h2>Por que jogos antigos <em>pesam menos</em>.</h2>
+  <div class="cols-2 mt2">
+    <div>
+      <p>Quando o Dixon-Coles treina, nem todos os jogos têm peso igual. O modelo aplica um <strong>decaimento exponencial</strong> com o tempo — um jogo de ontem vale ~100%, um de 1 ano atrás vale ~69%, um de 5 anos atrás vale ~16%.</p>
+      <p class="mt2"><strong>Por quê?</strong> Porque o futebol muda:</p>
+      <ul class="clean">
+        <li>Jogadores se aposentam, surgem novos</li>
+        <li>Técnicos trocam e mudam o estilo</li>
+        <li>Geração de craques vira geração medíocre (e vice-versa)</li>
+      </ul>
+      <p class="mt2">O modelo calibra com o parâmetro <em>xi = 0.001</em>, que foi escolhido via literatura acadêmica. Xi maior = mais peso em recentes. Xi menor = mais peso em histórico.</p>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">Curva de peso</div>
+        <svg viewBox="0 0 400 200" style="width: 100%; margin: 1em 0;">
+          <!-- Grid -->
+          <line x1="40" y1="20" x2="40" y2="170" stroke="#2a2a30" stroke-width="1"/>
+          <line x1="40" y1="170" x2="380" y2="170" stroke="#2a2a30" stroke-width="1"/>
+          <!-- Y labels -->
+          <text x="35" y="25" text-anchor="end" fill="#6b6459" font-family="JetBrains Mono" font-size="10">100%</text>
+          <text x="35" y="100" text-anchor="end" fill="#6b6459" font-family="JetBrains Mono" font-size="10">50%</text>
+          <text x="35" y="174" text-anchor="end" fill="#6b6459" font-family="JetBrains Mono" font-size="10">0%</text>
+          <!-- X labels -->
+          <text x="40" y="190" text-anchor="middle" fill="#6b6459" font-family="JetBrains Mono" font-size="10">hoje</text>
+          <text x="125" y="190" text-anchor="middle" fill="#6b6459" font-family="JetBrains Mono" font-size="10">1 ano</text>
+          <text x="210" y="190" text-anchor="middle" fill="#6b6459" font-family="JetBrains Mono" font-size="10">2 anos</text>
+          <text x="295" y="190" text-anchor="middle" fill="#6b6459" font-family="JetBrains Mono" font-size="10">4 anos</text>
+          <text x="370" y="190" text-anchor="middle" fill="#6b6459" font-family="JetBrains Mono" font-size="10">6 anos</text>
+          <!-- Curve: exp(-0.001 * days) where days = (x-40)/340 * 2190 -->
+          <path d="M 40 20
+                   Q 100 40, 125 66
+                   Q 180 103, 210 124
+                   Q 260 148, 295 158
+                   Q 340 166, 380 169"
+                stroke="#d4a24c" stroke-width="2" fill="none"/>
+          <!-- Markers -->
+          <circle cx="40" cy="20" r="3" fill="#d4a24c"/>
+          <circle cx="125" cy="66" r="3" fill="#d4a24c"/>
+          <circle cx="210" cy="124" r="3" fill="#d4a24c"/>
+          <circle cx="295" cy="158" r="3" fill="#d4a24c"/>
+          <!-- Labels on curve -->
+          <text x="50" y="16" fill="#d4a24c" font-family="JetBrains Mono" font-size="9">100</text>
+          <text x="135" y="62" fill="#d4a24c" font-family="JetBrains Mono" font-size="9">69</text>
+          <text x="220" y="120" fill="#d4a24c" font-family="JetBrains Mono" font-size="9">48</text>
+          <text x="305" y="154" fill="#d4a24c" font-family="JetBrains Mono" font-size="9">23</text>
+        </svg>
+        <p class="small mt1">Jogos mais recentes pesam exponencialmente mais. Consequência: uma Espanha em queda há 2 anos é "descontada" automaticamente; uma Alemanha em recuperação na última temporada é premiada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 21 — DIVIDER BLOCO III                  -->
+<!-- ============================================ -->
+<section class="slide divider" data-chapter="Bloco III · 20/33">
+  <div class="big-num">III</div>
+  <h2>Do jogo isolado<br>ao torneio inteiro.</h2>
+  <p class="intro">Com o λ de cada jogo em mãos, falta a parte mais divertida: <em>simular a Copa 50.000 vezes</em> pra saber quem vira campeão, quem cai na primeira fase, quem surpreende.</p>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 22 — MONTE CARLO                        -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco III · 21/33">
+  <div class="eyebrow">A técnica</div>
+  <h2>Monte Carlo: jogar a Copa <em>cinquenta mil vezes</em>.</h2>
+  <div class="cols-2">
+    <div>
+      <p>O nome soa misterioso — "Monte Carlo" — mas a ideia é simples. Do nome do cassino, a técnica foi batizada por cientistas do Projeto Manhattan nos anos 40 justamente por ser <em>baseada em sortear coisas aleatoriamente</em>.</p>
+      <p class="mt2"><strong>O procedimento para a Copa:</strong></p>
+      <ul class="clean">
+        <li>Pegue o primeiro jogo (ex: Brasil × Marrocos)</li>
+        <li>A matriz de placares diz que 2×1 tem 9%, 1×1 tem 8%, etc.</li>
+        <li><strong>Sorteie</strong> um placar obedecendo essas probabilidades. Digamos que saiu 1×0.</li>
+        <li>Repita pros 104 jogos. Determine o campeão <em>dessa</em> Copa.</li>
+        <li>Volte ao início. Rode de novo. Outra Copa. Outro campeão.</li>
+        <li>Rode 50.000 vezes.</li>
+      </ul>
+      <p class="mt2">No fim, se a Espanha foi campeã em 7.700 das 50.000 simulações, dizemos que <strong>probabilidade de título = 15.4%</strong>.</p>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">Por que 50.000?</div>
+        <p>A precisão de uma probabilidade simulada melhora com a raiz quadrada do número de simulações.</p>
+        <div class="formula mt1" style="font-size: 0.9rem;">
+erro ≈ √( p · (1-p) / N )
+        </div>
+        <p class="small mt2">Para uma probabilidade em torno de 10% com 50.000 simulações, o erro de amostragem é de ~±0.26 pp. Mais do que suficiente — dobrar pra 100.000 dobraria o tempo pra ganhar precisão irrelevante.</p>
+        <div style="margin-top: 1.5em; padding: 1em; background: var(--bg-elev); border-radius: 3px; text-align: center;">
+          <div class="num-huge" style="font-size: 2.2rem;">~6s</div>
+          <div class="small mt1">tempo total do pipeline completo na máquina do Beto</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 23 — GRUPOS                             -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco III · 22/33">
+  <div class="eyebrow">Simulando a fase de grupos</div>
+  <h2>Seis jogos por grupo, <em>50 mil vezes</em>.</h2>
+  <div class="cols-2 mt2">
+    <div>
+      <p>Dentro de cada uma das 50.000 simulações:</p>
+      <ul class="clean">
+        <li>Cada um dos 12 grupos tem 6 jogos (todos contra todos)</li>
+        <li>Cada jogo tem seu placar sorteado da matriz de Poisson corrigida</li>
+        <li>Pontuação: 3 vitória, 1 empate</li>
+        <li>Classificação: pontos → saldo de gols → gols pró</li>
+      </ul>
+      <p class="mt2"><strong>Os 2 primeiros</strong> de cada grupo avançam direto (24 times). Os <strong>8 melhores terceiros</strong> também avançam — novidade do formato 2026, que gera um round de 32 (uma fase a mais no mata-mata).</p>
+      <p class="mt2 small">Um detalhe técnico importante: o modelo pré-calcula os λ de todos os possíveis confrontos <em>uma vez</em>, antes de começar as simulações. Sem isso, rodaríamos a otimização de parâmetros 50.000 × 6 × 12 = 3.6 milhões de vezes. Com o cache, são 6 segundos; sem ele, seriam 8 minutos.</p>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">Grupo C · exemplo simulado</div>
+        <table style="margin-top: 0.8em; font-size: 0.85rem;">
+          <thead>
+            <tr><th>Time</th><th>1º</th><th>2º</th><th>3ºQ</th><th>Elim</th></tr>
+          </thead>
+          <tbody>
+            <tr class="highlight"><td>Brasil</td><td class="num">64.5%</td><td class="num">24.2%</td><td class="num">8.0%</td><td class="num">3.3%</td></tr>
+            <tr><td>Marrocos</td><td class="num">22.6%</td><td class="num">40.1%</td><td class="num">19.5%</td><td class="num">17.8%</td></tr>
+            <tr><td>Escócia</td><td class="num">9.8%</td><td class="num">23.4%</td><td class="num">28.2%</td><td class="num">38.6%</td></tr>
+            <tr><td>Haiti</td><td class="num">3.1%</td><td class="num">12.3%</td><td class="num">22.1%</td><td class="num">62.5%</td></tr>
+          </tbody>
+        </table>
+        <p class="small mt2">Leitura: nas 50.000 simulações, o Brasil foi 1º colocado em 64.5% delas; foi 2º em 24.2%; avançou como 3º em 8.0%; e foi eliminado em 3.3%. <strong>A soma sempre é 100%</strong> — essas são as únicas 4 possibilidades.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 24 — MATA MATA                          -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco III · 23/33">
+  <div class="eyebrow">Simulando o mata-mata</div>
+  <h2>Prorrogação, pênaltis, <em>tudo no sorteio</em>.</h2>
+  <div class="cols-2 mt2">
+    <div>
+      <p>Depois dos grupos, o mata-mata segue a mesma lógica, mas com detalhes extras:</p>
+      <ul class="clean">
+        <li><strong>Empate no tempo normal?</strong> Simulamos uma prorrogação com λ reduzido (30min é ~1/3 de um jogo).</li>
+        <li><strong>Ainda empatado?</strong> Pênaltis: cada time tem ~50% de chance, com leve viés pro de maior Elo (máximo 65% pro favorito).</li>
+        <li><strong>Vence</strong> → avança pra próxima fase.</li>
+      </ul>
+      <p class="mt2">O mata-mata tem 5 fases: Round of 32 → 16 → Quartas → Semifinais → Final. Ao final, sai um campeão daquela simulação.</p>
+      <p class="mt2 small">Limitação conhecida: o bracket do mata-mata é simplificado. A FIFA tem regras de cross-bracket pra evitar confrontos precoces entre cabeças de chave. O modelo ignora isso — por enquanto.</p>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">Top 10 favoritos ao título · 50k sims</div>
+        <table style="margin-top: 0.8em; font-size: 0.88rem;">
+          <thead>
+            <tr><th>Seleção</th><th>Título</th><th>Final</th><th>Semi</th></tr>
+          </thead>
+          <tbody>
+            <tr class="highlight"><td>Espanha</td><td class="num">15.4%</td><td class="num">26.1%</td><td class="num">37.3%</td></tr>
+            <tr><td>França</td><td class="num">14.7%</td><td class="num">22.7%</td><td class="num">31.1%</td></tr>
+            <tr><td>Brasil</td><td class="num">12.0%</td><td class="num">22.1%</td><td class="num">39.8%</td></tr>
+            <tr><td>Argentina</td><td class="num">9.3%</td><td class="num">17.8%</td><td class="num">29.4%</td></tr>
+            <tr><td>Portugal</td><td class="num">7.3%</td><td class="num">14.5%</td><td class="num">24.8%</td></tr>
+            <tr><td>Inglaterra</td><td class="num">6.3%</td><td class="num">13.2%</td><td class="num">23.1%</td></tr>
+            <tr><td>Alemanha</td><td class="num">4.8%</td><td class="num">11.0%</td><td class="num">20.1%</td></tr>
+            <tr><td>Holanda</td><td class="num">3.9%</td><td class="num">9.4%</td><td class="num">17.8%</td></tr>
+            <tr><td>Colômbia</td><td class="num">3.8%</td><td class="num">9.1%</td><td class="num">17.2%</td></tr>
+            <tr><td>Bélgica</td><td class="num">2.4%</td><td class="num">6.3%</td><td class="num">12.5%</td></tr>
+          </tbody>
+        </table>
+        <p class="small mt2">Cascata sempre decrescente: chegar na final &gt; ganhar a final. Se a coluna Semi não for ≥ Final ≥ Título pra um time, tem bug.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 25 — DIVIDER BLOCO IV                   -->
+<!-- ============================================ -->
+<section class="slide divider" data-chapter="Bloco IV · 24/33">
+  <div class="big-num">IV</div>
+  <h2>Escolhendo o<br>placar pra apostar.</h2>
+  <p class="intro">O modelo já conhece a probabilidade de cada placar. Agora vem a última grande sacada: <em>qual placar maximiza pontos no bolão?</em> E — surpresa — não é o mais provável.</p>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 26 — REGRAS BOLÃO                       -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco IV · 25/33">
+  <div class="eyebrow">Primeiro, as regras</div>
+  <h2>Como o bolão <em>paga</em>.</h2>
+  <div class="cols-2 mt2">
+    <div>
+      <p>A chave pra entender a próxima sacada é entender que o bolão <strong>paga parcialmente</strong>. Não é tudo-ou-nada.</p>
+      <p class="mt2">Se o jogo terminou 2×1 Brasil e você apostou:</p>
+      <ul class="clean">
+        <li>2×1 exato: <strong>10 pontos</strong></li>
+        <li>3×2 (mesma diferença): <strong>6 pontos</strong></li>
+        <li>2×0 (acertou os gols do vencedor): <strong>5 pontos</strong></li>
+        <li>3×1 (acertou os gols do perdedor): <strong>4 pontos</strong></li>
+        <li>Só Brasil ganhando: <strong>3 pontos</strong></li>
+        <li>Empate ou Marrocos ganhando: <strong>zero</strong></li>
+      </ul>
+      <p class="mt2">Cada critério vale mais do que "só o vencedor" e menos do que "placar exato". A hierarquia premia <em>o quão perto você chegou</em>.</p>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">Tabela de pontos · grupos</div>
+        <table style="margin-top: 0.8em;">
+          <tbody>
+            <tr><td>Placar exato (vitória ou empate)</td><td class="num">10 pts</td></tr>
+            <tr><td>Diferença de gols certa</td><td class="num">6 pts</td></tr>
+            <tr><td>Empate (placar errado)</td><td class="num">6 pts</td></tr>
+            <tr><td>Gols do vencedor certos</td><td class="num">5 pts</td></tr>
+            <tr><td>Gols do perdedor certos</td><td class="num">4 pts</td></tr>
+            <tr><td>Só o vencedor certo</td><td class="num">3 pts</td></tr>
+            <tr><td>Errou o vencedor ou errou o empate</td><td class="num">0 pts</td></tr>
+          </tbody>
+        </table>
+        <p class="small mt2">No mata-mata, todos os valores <strong>dobram</strong> (10 vira 20, 6 vira 12, etc).</p>
+        <p class="small mt1">Há também bônus de classificação (10 pts por acertar 1º do grupo, 10 pts por acertar 2º), mas os placares são o volume principal da pontuação.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 27 — PLACAR MAIS PROVÁVEL               -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco IV · 26/33">
+  <div class="eyebrow">O erro intuitivo</div>
+  <h2>"Apostar no placar mais provável" <em>é armadilha</em>.</h2>
+  <div class="cols-2 mt2">
+    <div>
+      <p>Considere: Brasil × Marrocos. Suponha que a matriz de placares diga isto:</p>
+      <div class="card" style="margin-top: 1em;">
+        <table style="font-size: 0.85rem;">
+          <thead><tr><th>Placar</th><th>Probabilidade</th></tr></thead>
+          <tbody>
+            <tr class="highlight"><td>1 × 1 (modal)</td><td class="num">8%</td></tr>
+            <tr><td>2 × 1</td><td class="num">7%</td></tr>
+            <tr><td>1 × 0</td><td class="num">7%</td></tr>
+            <tr><td>2 × 0</td><td class="num">6%</td></tr>
+            <tr><td>Brasil vence (total)</td><td class="num">51%</td></tr>
+            <tr><td>Empate (total)</td><td class="num">29%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mt2">O empate 1×1 é o placar <em>individual</em> mais provável (8%). Mas o Brasil vence em <strong>51%</strong> das simulações. As vitórias do Brasil estão espalhadas em muitos placares diferentes (2×1, 1×0, 2×0, 3×1...) enquanto os empates se concentram em 1×1 e 0×0.</p>
+    </div>
+    <div>
+      <div class="callout">Apostar sempre no modal = apostar empate em jogos onde o favorito tem 51% de chance de vencer. Matematicamente desastroso.</div>
+      <p class="mt2"><strong>A alternativa:</strong> em vez de buscar o placar mais provável, buscar o placar que <em>maximiza pontos esperados</em> do bolão.</p>
+      <p class="mt2">Como o bolão paga parcialmente por "diferença de gols correta" e "gols do vencedor corretos", apostar 2×0 em Brasil × Marrocos pode capturar:</p>
+      <ul class="clean">
+        <li>2×0 acontece: 10 pts (placar exato)</li>
+        <li>Outras vitórias do Brasil por 2 gols (3×1, 4×2): 6 pts cada</li>
+        <li>Outras vitórias do Brasil com gol 0 do Marrocos (1×0, 3×0): 4-5 pts</li>
+        <li>Vitória qualquer do Brasil: pelo menos 3 pts</li>
+      </ul>
+      <p class="mt2">Empate 1×1? <strong>Zero pontos.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 28 — EV OPTIMAL                         -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Bloco IV · 27/33">
+  <div class="eyebrow">A solução matemática</div>
+  <h2>EV-optimal: <em>maximizar pontos esperados</em>.</h2>
+  <div class="cols-2">
+    <div>
+      <p>EV = <em>Expected Value</em>, valor esperado. Para cada placar candidato (a, b) que poderíamos apostar, calculamos:</p>
+      <div class="formula mt1">
+EV(a,b) = Σ<sub>i,j</sub> P(i,j) · <span class="hl">pontos</span>((a,b), (i,j))
+      </div>
+      <p class="mt2">Em português: para cada placar real possível (i, j), multiplicamos a probabilidade daquele placar sair <em>pelos pontos</em> que nossa aposta (a, b) ganharia contra ele. Somamos tudo.</p>
+      <p class="mt2">O placar (a, b) com o <strong>maior EV</strong> é o recomendado.</p>
+      <div class="callout mt2">
+        Esta é uma escolha <em>matematicamente ótima</em> — não heurística. Dado o modelo, nenhuma aposta individual tem EV maior.
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">Exemplo · Brasil × Haiti</div>
+        <p style="margin: 0.8em 0;">λ_Brasil ≈ 2.53, λ_Haiti ≈ 0.49</p>
+        <table style="font-size: 0.85rem;">
+          <thead><tr><th>Aposta</th><th>Probabilidade</th><th>EV (pts)</th></tr></thead>
+          <tbody>
+            <tr class="highlight"><td><strong>2 × 0</strong></td><td class="num">15.6%</td><td class="num">4.26</td></tr>
+            <tr><td>3 × 0</td><td class="num">13.1%</td><td class="num">4.02</td></tr>
+            <tr><td>1 × 0</td><td class="num">12.3%</td><td class="num">3.50</td></tr>
+            <tr><td>4 × 0</td><td class="num">8.3%</td><td class="num">3.30</td></tr>
+            <tr><td>2 × 1</td><td class="num">7.8%</td><td class="num">3.15</td></tr>
+            <tr><td>1 × 1 (modal)</td><td class="num">5.2%</td><td class="num">1.80</td></tr>
+          </tbody>
+        </table>
+        <p class="small mt2"><strong>2×0 vence.</strong> É o placar mais provável que acontece em 15.6% das simulações E que pega pontos parciais em outras vitórias do Brasil com gol 0 do Haiti. O modal 1×1 é pior que metade dos candidatos.</p>
+        <p class="small mt1">Nos 72 jogos da fase de grupos, <strong>18 jogos</strong> têm EV-optimal diferente do modal — quase todos com favorito indo "mais fundo" no placar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 29 — DIVIDER BLOCO V                    -->
+<!-- ============================================ -->
+<section class="slide divider" data-chapter="Epílogo · 28/33">
+  <div class="big-num">V</div>
+  <h2>Onde acertamos,<br>onde erramos,<br>o que vem a seguir.</h2>
+  <p class="intro">Nenhum modelo é perfeito. Entender as fraquezas é parte de saber usá-lo — e é a chave pra você <em>opinar sobre melhorias</em>.</p>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 30 — CONVERGÊNCIA                       -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Epílogo · 29/33">
+  <div class="eyebrow">Como validamos</div>
+  <h2>O modelo <em>converge com as casas de aposta</em>.</h2>
+  <div class="cols-2 mt2">
+    <div>
+      <p>Casas de aposta operam com milhões de dólares em jogo. Seus modelos são os mais caros e afinados do mundo. Se o nosso modelo diverge muito do mercado, <strong>é sinal de bug, não de insight</strong>.</p>
+      <p class="mt2">Dos 10 favoritos ao título, 7 estão calibrados dentro de ±1 ponto percentual do mercado:</p>
+      <ul class="clean">
+        <li>Espanha: 15.4% vs mercado 16.4%</li>
+        <li>França: 14.7% vs ~14%</li>
+        <li>Argentina: 9.3% vs 9.4%</li>
+        <li>Alemanha, Holanda, Bélgica, Colômbia: todos muito próximos</li>
+      </ul>
+      <p class="mt2">Essa convergência é <strong>resultado, não objetivo</strong>. O modelo não foi calibrado pra bater com o mercado — mas quando três canais independentes (DC, Elo, TM) convergem num número, esse número tende a ser o que a verdade é.</p>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">Top 10 vs. mercado</div>
+        <table style="margin-top: 0.8em;">
+          <thead><tr><th>Time</th><th>Modelo</th><th>Mercado</th><th>Δ</th></tr></thead>
+          <tbody>
+            <tr><td>Espanha</td><td class="num">15.4%</td><td class="num">16.4%</td><td class="num"><span class="tag ok">−1.0</span></td></tr>
+            <tr><td>França</td><td class="num">14.7%</td><td class="num">~14%</td><td class="num"><span class="tag ok">+0.7</span></td></tr>
+            <tr class="highlight"><td>Brasil</td><td class="num">12.0%</td><td class="num">~7%</td><td class="num"><span class="tag warn">+5.0</span></td></tr>
+            <tr><td>Argentina</td><td class="num">9.3%</td><td class="num">9.4%</td><td class="num"><span class="tag ok">−0.1</span></td></tr>
+            <tr><td>Portugal</td><td class="num">7.3%</td><td class="num">~5%</td><td class="num"><span class="tag ok">+2.3</span></td></tr>
+            <tr class="highlight"><td>Inglaterra</td><td class="num">6.3%</td><td class="num">~12%</td><td class="num"><span class="tag warn">−6.0</span></td></tr>
+            <tr><td>Alemanha</td><td class="num">4.8%</td><td class="num">~5%</td><td class="num"><span class="tag ok">−0.2</span></td></tr>
+            <tr><td>Holanda</td><td class="num">3.9%</td><td class="num">~4%</td><td class="num"><span class="tag ok">−0.1</span></td></tr>
+            <tr><td>Colômbia</td><td class="num">3.8%</td><td class="num">~3%</td><td class="num"><span class="tag ok">+0.8</span></td></tr>
+            <tr><td>Bélgica</td><td class="num">2.4%</td><td class="num">~2%</td><td class="num"><span class="tag ok">+0.4</span></td></tr>
+          </tbody>
+        </table>
+        <p class="small mt2">Duas linhas destacadas: Brasil muito acima, Inglaterra muito abaixo. <strong>Esses são os bugs conhecidos do modelo.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 31 — FRAQUEZA 1                         -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Epílogo · 30/33">
+  <div class="eyebrow">Fraqueza crítica #1</div>
+  <h2>Brasil inflado, Inglaterra deflacionada.</h2>
+  <div class="cols-2 mt2">
+    <div>
+      <p>Os três canais do modelo veem <em>coisas diferentes</em>, mas compartilham um ponto cego: nenhum deles olha especificamente <em>performance em torneios curtos</em>.</p>
+      <p class="mt2"><strong>Brasil nas últimas Copas:</strong></p>
+      <ul class="clean">
+        <li>2014: humilhação 1-7 pra Alemanha</li>
+        <li>2018: eliminado nas quartas pela Bélgica</li>
+        <li>2022: eliminado nas quartas pela Croácia (pênaltis)</li>
+      </ul>
+      <p class="mt2"><strong>Inglaterra nas últimas:</strong></p>
+      <ul class="clean">
+        <li>2018 Copa: semifinais</li>
+        <li>2020 Eurocopa: final</li>
+        <li>2022 Copa: quartas (caiu pra França)</li>
+        <li>2024 Eurocopa: final</li>
+      </ul>
+      <p class="mt2">O modelo vê Eliminatórias e amistosos, onde Brasil brilha e Inglaterra patina. Não vê torneios, onde Inglaterra consistentemente supera expectativas e Brasil, ultimamente, frustra.</p>
+    </div>
+    <div>
+      <div class="card" style="border-left: 2px solid var(--accent-3);">
+        <div class="card-label">Solução proposta</div>
+        <h3>Canal 4: tournament factor</h3>
+        <p>Adicionar um quarto canal ao blend bayesiano que mede, especificamente, a performance do time em torneios curtos (Copas, Eurocopa, Copa América) dos últimos anos.</p>
+        <p class="mt2"><strong>Fórmula aproximada:</strong></p>
+        <div class="formula mt1" style="font-size: 0.85rem;">
+TF = (gols_torneios − gols_esperados)
+     / jogos_em_torneios
+        </div>
+        <p class="small mt2">Brasil teria TF negativo (underperforma). Inglaterra, positivo (overperforma).</p>
+        <p class="small mt1">Peso sugerido: ~10-15%, reduzindo proporcionalmente os três canais existentes. Esta é a melhoria mais impactante no roadmap da próxima sprint.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 32 — FRAQUEZA 2 + OUTRAS                -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Epílogo · 31/33">
+  <div class="eyebrow">Fraquezas adicionais</div>
+  <h2>O que mais pode <em>dar errado</em>.</h2>
+  <div class="cols-3 mt2">
+    <div class="card">
+      <div class="card-label">Fraqueza 2</div>
+      <h3>Poisson subestima zebras</h3>
+      <p>Poisson assume que a variância dos gols é igual à média. No futebol real, a variância é maior — mais zebras, mais goleadas surpresa.</p>
+      <p class="small mt2">Em Copa 2022, Argentina perdeu pra Saudi 1-2. Modelo dava ~8% — provavelmente deveria dar ~11%.</p>
+      <p class="small mt1"><strong>Fix:</strong> adicionar ruído gaussiano aos λ antes de sortear, simulando over-dispersion.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Fraqueza 3</div>
+      <h3>DC sem filtro de qualidade</h3>
+      <p>Brasil 5×0 Bolívia pesa o mesmo que Brasil 1×1 Argentina no treinamento do DC. Jogos contra fracos deveriam pesar <em>menos</em>.</p>
+      <p class="small mt2"><strong>Fix:</strong> multiplicar o peso de cada jogo por uma função decrescente do gap de Elo entre os times. Gap &gt; 300 Elo → peso 0.2.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Fraqueza 4</div>
+      <h3>Bracket simplificado</h3>
+      <p>O modelo simula o mata-mata parelado sequencialmente (q[0]×q[1], q[2]×q[3]...). A FIFA tem regras de cross-bracket que evitam encontros precoces entre cabeças de chave.</p>
+      <p class="small mt2">Efeito: probabilidades de encontro específico estão imprecisas, mas probabilidades agregadas (chegou às quartas, etc.) são ~OK.</p>
+    </div>
+  </div>
+  <div class="cols-3 mt2">
+    <div class="card">
+      <div class="card-label">Fraqueza 5</div>
+      <h3>Bônus de grupo não otimizados</h3>
+      <p>O bolão paga 10 pts por acertar 1º do grupo. O modelo mostra probabilidades mas <em>não otimiza</em> quem apostar — decisão ainda manual.</p>
+      <p class="small mt2"><strong>Fix:</strong> criar função análoga ao EV-optimal mas pra escolha de 1º e 2º do grupo.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Fraqueza 6</div>
+      <h3>Artilheiro não modelado</h3>
+      <p>30 pts por acertar artilheiro. Hoje, zero suporte. Exige modelar gols por jogador individual — complexo.</p>
+      <p class="small mt2"><strong>Escopo:</strong> Sprint 5+. Requer dados de Transfermarkt por jogador e xG histórico individual.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Fraqueza 7</div>
+      <h3>Sem backtest</h3>
+      <p>O modelo nunca foi testado contra Copas passadas (2014, 2018, 2022). Temos convicção teórica mas <em>não temos evidência empírica</em> de que ele acerta mais que um baseline simples.</p>
+      <p class="small mt2"><strong>Fix:</strong> Sprint 4. Rodar modelo com dados de abril/2022 e ver se prevê bem a Copa do Catar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SLIDE 33 — RECAP FINAL                        -->
+<!-- ============================================ -->
+<section class="slide" data-chapter="Fim · 32/33">
+  <div class="eyebrow">Recapitulação</div>
+  <h2>O modelo, em <em>uma página</em>.</h2>
+  <div class="flow mt2">
+    <div class="flow-step">
+      <div class="flow-num">1</div>
+      <div class="flow-content">
+        <div class="label">Previsão por jogo</div>
+        <div class="desc">Cada seleção tem <strong>ataque</strong> e <strong>defesa</strong>. Combinados, geram os λ esperados de gols. A <strong>Poisson corrigida por Dixon-Coles</strong> transforma λ numa matriz completa de probabilidades de placares.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">2</div>
+      <div class="flow-content">
+        <div class="label">Origem dos parâmetros</div>
+        <div class="desc">Ataque e defesa finais são um <strong>blend bayesiano</strong> de três canais: 45% Dixon-Coles (o que o time faz em campo), 30% Elo (força histórica ajustada), 25% Transfermarkt (qualidade individual do plantel).</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">3</div>
+      <div class="flow-content">
+        <div class="label">Do jogo ao torneio</div>
+        <div class="desc"><strong>Monte Carlo</strong>: a Copa inteira é simulada 50.000 vezes. Em cada simulação, cada placar é sorteado obedecendo a matriz de probabilidades. Agregando, descobrimos a probabilidade de cada time chegar a cada fase.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">4</div>
+      <div class="flow-content">
+        <div class="label">Qual placar apostar</div>
+        <div class="desc">Não é o modal. É o <strong>EV-optimal</strong>: o placar que maximiza pontos esperados, considerando que o bolão paga parcialmente por DG, GV, GP. Tipicamente resulta em "vitória do favorito por 1-2 gols de diferença", não empate seguro.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">5</div>
+      <div class="flow-content">
+        <div class="label">Fraquezas conhecidas</div>
+        <div class="desc"><strong>Brasil inflado</strong> e <strong>Inglaterra subestimada</strong> (nenhum canal mede performance em torneios curtos). Poisson subestima zebras. DC sem filtro de qualidade de adversário. Sem backtest ainda. Roadmap de melhorias mapeado.</div>
+      </div>
+    </div>
+  </div>
+  <div class="callout center mt2" style="text-align: center; border-left: none; border-top: 1px solid var(--accent); padding-top: 1em;">
+    Parabéns — agora você entende cada peça. Pode discutir, opinar, questionar, e propor melhorias. A ciência, no fim, é iteração. Boa Copa.
+  </div>
+</section>
+
+</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <button id="prev" aria-label="Anterior">‹</button>
+  <div class="counter"><span id="curr">1</span> / <span id="total">33</span></div>
+  <div class="progress" id="progress"></div>
+  <button id="next" aria-label="Próximo">›</button>
+</nav>
+
+<script>
+// ============ NAVIGATION ============
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+let current = 0;
+
+document.getElementById('total').textContent = total;
+
+function go(n) {
+  if (n < 0 || n >= total) return;
+  slides[current].classList.remove('active');
+  current = n;
+  slides[current].classList.add('active');
+  document.getElementById('curr').textContent = current + 1;
+  document.getElementById('progress').style.setProperty('--progress', ((current + 1) / total * 100) + '%');
+  document.getElementById('prev').disabled = current === 0;
+  document.getElementById('next').disabled = current === total - 1;
+
+  // Add chapter tag dynamically
+  const ch = slides[current].dataset.chapter;
+  let existingTag = slides[current].querySelector('.chapter-tag');
+  if (!existingTag && ch) {
+    const tag = document.createElement('div');
+    tag.className = 'chapter-tag';
+    tag.textContent = ch;
+    slides[current].prepend(tag);
+  }
+}
+
+document.getElementById('prev').addEventListener('click', () => go(current - 1));
+document.getElementById('next').addEventListener('click', () => go(current + 1));
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+    e.preventDefault(); go(current + 1);
+  }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+    e.preventDefault(); go(current - 1);
+  }
+  if (e.key === 'Home') { e.preventDefault(); go(0); }
+  if (e.key === 'End') { e.preventDefault(); go(total - 1); }
+});
+
+// Add chapter tags to all slides initially
+slides.forEach(s => {
+  const ch = s.dataset.chapter;
+  if (ch) {
+    const tag = document.createElement('div');
+    tag.className = 'chapter-tag';
+    tag.textContent = ch;
+    s.prepend(tag);
+  }
+});
+
+go(0);
+
+// ============ POISSON CHART (Slide 6) ============
+function poissonPmf(k, lambda) {
+  let fact = 1;
+  for (let i = 2; i <= k; i++) fact *= i;
+  return Math.exp(-lambda) * Math.pow(lambda, k) / fact;
+}
+
+function renderPoissonChart() {
+  const lambda = parseFloat(document.getElementById('poisson-lambda').value);
+  document.getElementById('poisson-lambda-val').textContent = lambda.toFixed(1);
+  const chart = document.getElementById('poisson-chart');
+  chart.innerHTML = '';
+  const probs = [];
+  let maxP = 0;
+  for (let k = 0; k <= 7; k++) {
+    const p = poissonPmf(k, lambda);
+    probs.push(p);
+    maxP = Math.max(maxP, p);
+  }
+  probs.forEach((p, k) => {
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.height = (p / maxP * 90) + '%';
+    bar.innerHTML = `<span class="bar-val">${(p*100).toFixed(0)}%</span><span class="bar-label">${k}</span>`;
+    chart.appendChild(bar);
+  });
+}
+document.getElementById('poisson-lambda').addEventListener('input', renderPoissonChart);
+renderPoissonChart();
+
+// ============ SCORE MATRIX (Slide 8) ============
+function renderScoreMatrix() {
+  const matrix = document.getElementById('score-matrix');
+  if (!matrix) return;
+  matrix.innerHTML = '';
+  const lh = 2.53, la = 0.49;
+  const rho = -0.12;
+  const size = 6;
+  const probs = [];
+  let total = 0;
+  for (let i = 0; i < size; i++) {
+    probs.push([]);
+    for (let j = 0; j < size; j++) {
+      let p = poissonPmf(i, lh) * poissonPmf(j, la);
+      // Apply DC correction
+      if (i === 0 && j === 0) p *= (1 - lh*la*rho);
+      else if (i === 0 && j === 1) p *= (1 + lh*rho);
+      else if (i === 1 && j === 0) p *= (1 + la*rho);
+      else if (i === 1 && j === 1) p *= (1 - rho);
+      probs[i][j] = Math.max(p, 0);
+      total += probs[i][j];
+    }
+  }
+  // Normalize
+  for (let i = 0; i < size; i++) for (let j = 0; j < size; j++) probs[i][j] /= total;
+
+  // Find max for heatmap scaling
+  let maxP = 0;
+  for (let i = 0; i < size; i++) for (let j = 0; j < size; j++) maxP = Math.max(maxP, probs[i][j]);
+
+  // Header row
+  matrix.appendChild(document.createElement('div')); // empty corner
+  for (let j = 0; j < size; j++) {
+    const lbl = document.createElement('div');
+    lbl.className = 'matrix-cell matrix-label';
+    lbl.textContent = j;
+    matrix.appendChild(lbl);
+  }
+
+  // Render matrix (i=0 at top)
+  for (let i = 0; i < size; i++) {
+    const rowLbl = document.createElement('div');
+    rowLbl.className = 'matrix-cell matrix-label';
+    rowLbl.textContent = i;
+    matrix.appendChild(rowLbl);
+    for (let j = 0; j < size; j++) {
+      const cell = document.createElement('div');
+      cell.className = 'matrix-cell';
+      const intensity = Math.round(probs[i][j] / maxP * 7);
+      cell.classList.add('heat-' + intensity);
+      cell.textContent = (probs[i][j]*100).toFixed(0) + '%';
+      matrix.appendChild(cell);
+    }
+  }
+
+  // Win/draw/loss
+  let pH = 0, pD = 0, pA = 0;
+  for (let i = 0; i < size; i++) for (let j = 0; j < size; j++) {
+    if (i > j) pH += probs[i][j];
+    else if (i < j) pA += probs[i][j];
+    else pD += probs[i][j];
+  }
+  document.getElementById('p-home').textContent = (pH*100).toFixed(0) + '%';
+  document.getElementById('p-draw').textContent = (pD*100).toFixed(0) + '%';
+  document.getElementById('p-away').textContent = (pA*100).toFixed(0) + '%';
+}
+renderScoreMatrix();
+
+// ============ BLEND INTERACTIVE (Slide 19) ============
+// Simplified illustrative data — each team has three "strength" scores (0-100)
+// based on each channel. Blend weights determine final ranking.
+const blendTeams = [
+  // [name, DC, Elo, TM]
+  ['Espanha', 78, 95, 72],
+  ['França', 72, 88, 92],
+  ['Brasil', 90, 78, 68],
+  ['Argentina', 82, 92, 55],
+  ['Portugal', 70, 78, 65],
+  ['Inglaterra', 55, 82, 98],
+  ['Alemanha', 65, 72, 62],
+  ['Holanda', 68, 75, 58],
+  ['Colômbia', 72, 76, 32],
+  ['Bélgica', 58, 72, 48],
+  ['Uruguai', 62, 72, 30],
+  ['Croácia', 60, 70, 30]
+];
+
+function renderBlend() {
+  let wdc = parseInt(document.getElementById('wdc').value);
+  let welo = parseInt(document.getElementById('welo').value);
+  let wtm = parseInt(document.getElementById('wtm').value);
+  const sum = wdc + welo + wtm;
+  if (sum === 0) {
+    wdc = welo = wtm = 33;
+  }
+  const total = wdc + welo + wtm;
+  document.getElementById('wdc-val').textContent = Math.round(wdc/total*100) + '%';
+  document.getElementById('welo-val').textContent = Math.round(welo/total*100) + '%';
+  document.getElementById('wtm-val').textContent = Math.round(wtm/total*100) + '%';
+
+  const ranked = blendTeams.map(t => {
+    const score = (t[1]*wdc + t[2]*welo + t[3]*wtm) / total;
+    return {name: t[0], score};
+  }).sort((a,b) => b.score - a.score);
+
+  const container = document.getElementById('blend-ranking');
+  container.innerHTML = '<div class="card-label" style="margin-bottom: 0.8em;">Ranking resultante</div>';
+
+  const maxS = ranked[0].score;
+  const minS = ranked[ranked.length-1].score;
+  const range = maxS - minS;
+
+  ranked.slice(0, 8).forEach((t, idx) => {
+    const pct = range > 0 ? (t.score - minS) / range * 90 + 10 : 50;
+    const row = document.createElement('div');
+    row.style.cssText = 'display: flex; align-items: center; gap: 0.5em; margin-bottom: 0.35em; font-size: 0.85rem; font-family: "JetBrains Mono", monospace;';
+    row.innerHTML = `
+      <div style="width: 16px; color: var(--ink-faint); font-size: 0.75rem;">${idx+1}</div>
+      <div style="width: 80px; color: var(--ink);">${t.name}</div>
+      <div style="flex: 1; height: 6px; background: var(--line); border-radius: 3px; position: relative;">
+        <div style="position: absolute; left: 0; width: ${pct}%; height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.2s;"></div>
+      </div>
+      <div style="width: 40px; text-align: right; color: var(--ink-dim); font-size: 0.75rem;">${t.score.toFixed(1)}</div>
+    `;
+    container.appendChild(row);
+  });
+}
+['wdc', 'welo', 'wtm'].forEach(id => document.getElementById(id).addEventListener('input', renderBlend));
+renderBlend();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+streamlit>=1.30
+numpy
+scipy
+pandas
+requests
+beautifulsoup4
+rapidfuzz
