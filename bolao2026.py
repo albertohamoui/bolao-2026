@@ -1084,36 +1084,108 @@ class DixonColesModel:
         return attack, defense, home_adv, rho
 
     def _log_likelihood(self, params, matches, weights):
+        """Versao original (mantida para compatibilidade com audit scripts)."""
         attack, defense, home_adv, rho = self._unpack_params(params)
-        n = self.n_teams
         log_lik = 0.0
-
         attack_penalty = 100 * (np.sum(attack) ** 2)
-
         for i, (home, away, hg, ag, _) in enumerate(matches):
             hi = self.team_idx.get(home)
             ai = self.team_idx.get(away)
             if hi is None or ai is None:
                 continue
-
-            lambda_h = np.exp(attack[hi] + defense[ai] + home_adv)
-            mu_a = np.exp(attack[ai] + defense[hi])
-
-            lambda_h = np.clip(lambda_h, 0.001, 15.0)
-            mu_a = np.clip(mu_a, 0.001, 15.0)
-
+            lambda_h = np.clip(np.exp(attack[hi] + defense[ai] + home_adv), 0.001, 15.0)
+            mu_a = np.clip(np.exp(attack[ai] + defense[hi]), 0.001, 15.0)
             tau = self._tau(hg, ag, lambda_h, mu_a, rho)
             if tau <= 0:
                 tau = 0.0001
-
             w = weights[i]
-            log_lik += w * (
-                np.log(tau)
-                + hg * np.log(lambda_h) - lambda_h
-                + ag * np.log(mu_a) - mu_a
-            )
-
+            log_lik += w * (np.log(tau) + hg * np.log(lambda_h) - lambda_h
+                            + ag * np.log(mu_a) - mu_a)
         return -log_lik + attack_penalty
+
+    def _nll_and_grad(self, params, hi_arr, ai_arr, hg_arr, ag_arr, w_arr):
+        """
+        Neg-log-likelihood + gradiente analitico, totalmente vectorizado.
+
+        Recebe arrays pre-computados (indices inteiros, nao nomes de time).
+        Retorna (nll, grad) para uso com minimize(..., jac=True).
+        """
+        attack, defense, home_adv, rho = self._unpack_params(params)
+        n = self.n_teams
+
+        # --- Forward: lambdas e mus ---
+        lh_raw = np.exp(attack[hi_arr] + defense[ai_arr] + home_adv)
+        ma_raw = np.exp(attack[ai_arr] + defense[hi_arr])
+        lh = np.clip(lh_raw, 0.001, 15.0)
+        ma = np.clip(ma_raw, 0.001, 15.0)
+
+        # Mascara de clipping (gradiente = 0 onde clip ativou)
+        lh_active = (lh_raw > 0.001) & (lh_raw < 15.0)
+        ma_active = (ma_raw > 0.001) & (ma_raw < 15.0)
+
+        # --- Tau vectorizado ---
+        tau = np.ones_like(lh)
+        m00 = (hg_arr == 0) & (ag_arr == 0)
+        m01 = (hg_arr == 0) & (ag_arr == 1)
+        m10 = (hg_arr == 1) & (ag_arr == 0)
+        m11 = (hg_arr == 1) & (ag_arr == 1)
+
+        tau[m00] = 1.0 - lh[m00] * ma[m00] * rho
+        tau[m01] = 1.0 + lh[m01] * rho
+        tau[m10] = 1.0 + ma[m10] * rho
+        tau[m11] = 1.0 - rho
+        tau = np.maximum(tau, 0.0001)
+
+        # --- NLL ---
+        log_lik = np.sum(w_arr * (
+            np.log(tau) + hg_arr * np.log(lh) - lh + ag_arr * np.log(ma) - ma
+        ))
+        sum_atk = np.sum(attack)
+        penalty = 100.0 * sum_atk ** 2
+        nll = -log_lik + penalty
+
+        # --- Gradiente analitico ---
+        dtau_dlh = np.zeros_like(lh)
+        dtau_dlh[m00] = -ma[m00] * rho
+        dtau_dlh[m01] = rho
+
+        dtau_dma = np.zeros_like(ma)
+        dtau_dma[m00] = -lh[m00] * rho
+        dtau_dma[m10] = rho
+
+        dlogtau_dlh = dtau_dlh / tau
+        dlogtau_dma = dtau_dma / tau
+
+        # Contribuicao de cada jogo via lambda_h e mu_a (com chain rule)
+        contrib_lh = w_arr * (dlogtau_dlh * lh + hg_arr - lh) * lh_active
+        contrib_ma = w_arr * (dlogtau_dma * ma + ag_arr - ma) * ma_active
+
+        grad = np.zeros(2 * n + 2)
+
+        # attack[k]: recebe contrib_lh onde hi==k, contrib_ma onde ai==k
+        np.add.at(grad[:n], hi_arr, contrib_lh)
+        np.add.at(grad[:n], ai_arr, contrib_ma)
+
+        # defense[k]: recebe contrib_lh onde ai==k, contrib_ma onde hi==k
+        np.add.at(grad[n:2*n], ai_arr, contrib_lh)
+        np.add.at(grad[n:2*n], hi_arr, contrib_ma)
+
+        # home_adv: recebe contrib_lh de todos os jogos
+        grad[2*n] = np.sum(contrib_lh)
+
+        # rho
+        dtau_drho = np.zeros_like(lh)
+        dtau_drho[m00] = -lh[m00] * ma[m00]
+        dtau_drho[m01] = lh[m01]
+        dtau_drho[m10] = ma[m10]
+        dtau_drho[m11] = -1.0
+        grad[2*n + 1] = np.sum(w_arr * dtau_drho / tau)
+
+        # Negar (minimizamos -log_lik) e somar penalty gradient
+        grad = -grad
+        grad[:n] += 200.0 * sum_atk
+
+        return nll, grad
 
     def fit(self, matches):
         """
@@ -1153,6 +1225,13 @@ class DixonColesModel:
         n = self.n_teams
         N_STARTS = 8
 
+        # Pre-computar arrays de indices para o otimizador vectorizado
+        hi_arr = np.array([self.team_idx[h] for h, _, _, _, _ in valid], dtype=np.int32)
+        ai_arr = np.array([self.team_idx[a] for _, a, _, _, _ in valid], dtype=np.int32)
+        hg_arr = np.array([hg for _, _, hg, _, _ in valid], dtype=np.int32)
+        ag_arr = np.array([ag for _, _, _, ag, _ in valid], dtype=np.int32)
+        w_arr = np.array(weights, dtype=np.float64)
+
         # Ponto base: zeros para alpha/beta, home_adv=0.25, rho=-0.05
         x0_base = np.zeros(2 * n + 2)
         x0_base[2*n] = 0.25
@@ -1176,10 +1255,11 @@ class DixonColesModel:
         all_nll = []
         for i, x0 in enumerate(starts):
             result = minimize(
-                self._log_likelihood,
+                self._nll_and_grad,
                 x0,
-                args=(valid, weights),
+                args=(hi_arr, ai_arr, hg_arr, ag_arr, w_arr),
                 method='L-BFGS-B',
+                jac=True,
                 options={'maxiter': 500}
             )
             all_nll.append(result.fun)

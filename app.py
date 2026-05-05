@@ -3,10 +3,14 @@ Bolao 2026 — Frontend Streamlit
 Sprint 3a: Setup + Tela de Calibracao
 """
 
+import glob
+import json
 import os
 import sys
+import time
 from datetime import date, datetime
 
+import numpy as np
 import pandas as pd
 import streamlit as st
 
@@ -20,8 +24,10 @@ from bolao2026 import (
     DEFAULT_ELO_RATINGS,
     DEFAULT_TRANSFERMARKT_VALUES,
     GROUPS,
+    WORLD_CUP_TEAM_LIST,
     Calibration,
     load_config,
+    run_full_pipeline,
     save_config,
 )
 
@@ -822,32 +828,503 @@ def _render_review_tab():
 
 
 # =============================================================================
-# Stubs das telas futuras
+# Diretorio de simulacoes salvas
 # =============================================================================
 
-def render_run_page_stub():
+RUNS_DIR = os.path.join(PROJECT_DIR, "runs")
+os.makedirs(RUNS_DIR, exist_ok=True)
+
+
+# =============================================================================
+# Tela: Rodar Simulacao
+# =============================================================================
+
+def render_run_page():
     st.header("Rodar Simulacao")
-    st.info(
-        "Em construcao — Sprint 3b.\n\n"
-        "Aqui voce podera:\n"
-        "- Executar o pipeline com a calibracao ativa\n"
-        "- Ver resultados (top favoritos, grupos, apostas EV-optimal)\n"
-        "- Rodar sanity checks\n"
-        "- Comparar com a ultima simulacao salva\n"
-        "- Salvar com nome e notas"
+
+    cal_d = _cal_dict()
+    cal = Calibration.from_dict(dict(cal_d))
+    errors = cal.validate()
+
+    if errors:
+        st.error("Calibracao invalida — corrija na aba Calibracao antes de rodar:")
+        for e in errors:
+            st.error(f"  {e}")
+        return
+
+    col_run, col_info = st.columns([1, 3])
+    with col_run:
+        run_clicked = st.button("Rodar Pipeline", type="primary", key="btn_run")
+    with col_info:
+        st.caption(
+            f"DC {cal.w_dc:.0%} + Elo {cal.w_elo:.0%} + TM {cal.w_tm:.0%} | "
+            f"{cal.n_sims:,} sims | cutoff {cal.date_cutoff}"
+        )
+
+    if run_clicked:
+        t_start = time.time()
+        status = st.empty()
+        progress_bar = st.progress(0, text="Carregando dados e otimizando Dixon-Coles...")
+
+        def mc_progress(current, total):
+            pct = current / total
+            progress_bar.progress(pct, text=f"Monte Carlo: {current:,}/{total:,} simulacoes...")
+
+        try:
+            status.info("Otimizacao Dixon-Coles em andamento (multi-start 8x). Pode levar alguns minutos...")
+            output = run_full_pipeline(cal, progress_callback=mc_progress)
+            elapsed = time.time() - t_start
+            progress_bar.progress(1.0, text=f"Concluido em {elapsed:.0f}s")
+            status.success(f"Pipeline concluido em {elapsed:.0f}s")
+
+            st.session_state.last_run = output
+            st.session_state.last_run_time = elapsed
+            st.session_state.last_run_timestamp = datetime.now().isoformat()
+
+        except Exception as e:
+            progress_bar.empty()
+            status.empty()
+            st.error(f"Erro no pipeline: {e}")
+            import traceback
+            st.code(traceback.format_exc())
+            return
+
+    if "last_run" not in st.session_state:
+        st.info("Clique 'Rodar Pipeline' para executar o modelo com a calibracao atual.")
+        return
+
+    output = st.session_state.last_run
+    elapsed = st.session_state.get("last_run_time", 0)
+    timestamp = st.session_state.get("last_run_timestamp", "")
+
+    _display_results(output, elapsed, timestamp, show_save=True)
+
+
+def _display_results(output, elapsed, timestamp, show_save=False):
+    """Renderiza os resultados do pipeline em secoes organizadas."""
+    model_params = output["model_params"]
+    stats = output["simulation_stats"]
+
+    st.divider()
+
+    # Metricas resumo
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.metric("rho", f"{model_params['rho']:.4f}")
+    with col2:
+        st.metric("Home Advantage", f"{model_params['home_adv']:.3f}")
+    with col3:
+        st.metric("Tempo Total", f"{elapsed:.0f}s" if elapsed else "N/A")
+    with col4:
+        ts_display = timestamp[:19].replace("T", " ") if timestamp else "N/A"
+        st.metric("Executado em", ts_display)
+
+    # Abas de resultados
+    tab_fav, tab_groups, tab_bets, tab_params = st.tabs([
+        "Favoritos ao Titulo",
+        "Previsoes por Grupo",
+        "Apostas EV-Optimal",
+        "Parametros do Modelo",
+    ])
+
+    with tab_fav:
+        _render_favorites(stats)
+
+    with tab_groups:
+        _render_group_predictions(output)
+
+    with tab_bets:
+        _render_bets(output)
+
+    with tab_params:
+        _render_model_params_table(output)
+
+    # Salvar
+    if show_save:
+        st.divider()
+        col_name, col_save = st.columns([3, 1])
+        with col_name:
+            run_name = st.text_input(
+                "Nome da simulacao (opcional)",
+                value="", key="ti_run_name",
+            )
+        with col_save:
+            st.write("")  # spacer
+            st.write("")
+            if st.button("Salvar Simulacao", key="btn_save_run"):
+                _save_run(output, run_name, timestamp)
+                st.success("Simulacao salva!")
+                st.rerun()
+
+
+def _render_favorites(stats):
+    """Top 20 favoritos ao titulo."""
+    rows = []
+    for team in WORLD_CUP_TEAM_LIST:
+        s = stats.get(team, {})
+        rows.append({
+            "Selecao": team,
+            "Titulo": s.get("champion", 0),
+            "Final": s.get("final", 0),
+            "Semi": s.get("sf", 0),
+            "Quartas": s.get("qf", 0),
+            "R16": s.get("r16", 0),
+        })
+    df = pd.DataFrame(rows).sort_values("Titulo", ascending=False).head(20)
+    df.index = range(1, len(df) + 1)
+    df.index.name = "Pos"
+
+    # Formatar como percentual
+    for col in ["Titulo", "Final", "Semi", "Quartas", "R16"]:
+        df[col] = df[col].apply(lambda x: f"{x:.1f}%")
+
+    st.dataframe(df, use_container_width=True, height=740)
+
+
+def _render_group_predictions(output):
+    """Previsoes por grupo: placares e classificacao."""
+    predictions = output["predictions"]
+    stats = output["simulation_stats"]
+
+    view = st.radio(
+        "Visualizacao", ["Placares", "Classificacao"],
+        horizontal=True, key="rd_group_view",
     )
 
+    if view == "Placares":
+        by_group = {}
+        for _, pred in predictions.items():
+            by_group.setdefault(pred["group"], []).append(pred)
 
-def render_history_page_stub():
+        for gname in sorted(by_group.keys()):
+            with st.expander(f"Grupo {gname}", expanded=False):
+                rows = []
+                for p in by_group[gname]:
+                    rows.append({
+                        "Jogo": f"{p['home']} vs {p['away']}",
+                        "Placar EV": p["score_ev"],
+                        "Modal": p["score_modal"],
+                        "Casa": f"{p['home_win']:.0f}%",
+                        "Empate": f"{p['draw']:.0f}%",
+                        "Fora": f"{p['away_win']:.0f}%",
+                        "EV pts": p["ev_points"],
+                    })
+                st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+    else:
+        for gname in sorted(GROUPS.keys()):
+            teams = GROUPS[gname]
+            with st.expander(f"Grupo {gname}", expanded=False):
+                rows = []
+                for t in teams:
+                    s = stats.get(t, {})
+                    rows.append({
+                        "Selecao": t,
+                        "1o": f"{s.get('group_1st', 0):.1f}%",
+                        "2o": f"{s.get('group_2nd', 0):.1f}%",
+                        "3o (Q)": f"{s.get('group_3rd_qual', 0):.1f}%",
+                        "Elim": f"{100 - s.get('group_1st', 0) - s.get('group_2nd', 0) - s.get('group_3rd_qual', 0):.1f}%",
+                    })
+                st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+
+
+def _render_bets(output):
+    """Apostas EV-optimal: grupos, campeao, terceiros."""
+
+    # Classificacao dos grupos
+    st.subheader("Classificacao dos Grupos")
+    group_bets = output.get("group_bets", {})
+    rows = []
+    total_ev = 0.0
+    for gname in sorted(group_bets.keys()):
+        gb = group_bets[gname]
+        ev = gb["ev_points"]
+        total_ev += ev
+        rows.append({
+            "Grupo": gname,
+            "1o": gb["bet_1st"],
+            "2o": gb["bet_2nd"],
+            "EV pts": f"{ev:.2f}",
+            "P(ambos exatos)": f"{gb['p_both_exact']:.1%}",
+        })
+    df_groups = pd.DataFrame(rows)
+    st.dataframe(df_groups, use_container_width=True, hide_index=True)
+    st.caption(f"Total EV classificacao: **{total_ev:.2f} pts** (max 240)")
+
+    st.divider()
+
+    # Campeao
+    st.subheader("Aposta de Campeao")
+    champ = output.get("champion_bet", {})
+    if champ and champ.get("bet"):
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Time", champ["bet"])
+        with col2:
+            st.metric("P(campeao)", f"{champ['p_champion']:.1%}")
+        with col3:
+            st.metric("EV", f"{champ['ev_points']:.2f} pts (max 25)")
+
+    st.divider()
+
+    # Terceiros colocados
+    st.subheader("Terceiros Colocados (induzidos)")
+    thirds = output.get("third_places", {})
+    if thirds:
+        per_team = thirds.get("per_team", {})
+        if per_team:
+            rows = []
+            for team, info in per_team.items():
+                rows.append({
+                    "Selecao": team,
+                    "P(3o qual)": f"{info['p_3rd_qual']:.1%}" if isinstance(info, dict) else "N/A",
+                    "EV pts": f"{info['ev']:.2f}" if isinstance(info, dict) else "N/A",
+                })
+            st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+        st.caption(f"Total EV terceiros: **{thirds.get('ev_points', 0):.2f} pts** (max 40)")
+
+    # Resumo geral EV
+    st.divider()
+    st.subheader("Resumo EV Total")
+    ev_groups = total_ev
+    ev_champ = champ.get("ev_points", 0) if champ else 0
+    ev_thirds = thirds.get("ev_points", 0) if thirds else 0
+
+    # EV dos placares
+    predictions = output.get("predictions", {})
+    ev_scores = sum(p.get("ev_points", 0) for p in predictions.values())
+
+    col1, col2, col3, col4, col5 = st.columns(5)
+    with col1:
+        st.metric("Placares", f"{ev_scores:.1f} pts")
+    with col2:
+        st.metric("Classificacao", f"{ev_groups:.1f} pts")
+    with col3:
+        st.metric("Campeao", f"{ev_champ:.1f} pts")
+    with col4:
+        st.metric("Terceiros", f"{ev_thirds:.1f} pts")
+    with col5:
+        st.metric("TOTAL", f"{ev_scores + ev_groups + ev_champ + ev_thirds:.1f} pts")
+
+
+def _render_model_params_table(output):
+    """Tabela de parametros alpha/beta por selecao."""
+    team_params = output.get("team_params", [])
+    rows = []
+    for p in team_params:
+        rows.append({
+            "Selecao": p["team"],
+            "Ataque": f"{p['attack']:+.3f}",
+            "Defesa": f"{p['defense']:+.3f}",
+            "Forca": f"{p['strength']:.3f}",
+            "Elo": p["elo"],
+            "Confed": p["confederation"],
+        })
+    df = pd.DataFrame(rows)
+    st.dataframe(df, use_container_width=True, height=1200, hide_index=True)
+
+    # Tournament factors se disponiveis
+    tfs = output.get("tournament_factors")
+    if tfs:
+        st.divider()
+        st.subheader("Tournament Factors")
+        tf_rows = []
+        for team, tf in sorted(tfs.items(), key=lambda x: x[1], reverse=True):
+            if tf == 0.0:
+                continue
+            tf_rows.append({
+                "Selecao": team,
+                "TF": f"{tf:+.3f}",
+                "Tipo": "over" if tf > 0 else "under",
+            })
+        if tf_rows:
+            st.dataframe(pd.DataFrame(tf_rows), use_container_width=True, hide_index=True)
+
+
+def _save_run(output, name, timestamp):
+    """Salva simulacao em runs/ como JSON."""
+    ts = timestamp or datetime.now().isoformat()
+    slug = ts[:19].replace(":", "-").replace("T", "_")
+    if name:
+        slug = f"{slug}_{name.replace(' ', '_')}"
+    filepath = os.path.join(RUNS_DIR, f"{slug}.json")
+
+    # Preparar output serializavel (remover numpy arrays)
+    clean = {
+        "metadata": {
+            "name": name or slug,
+            "timestamp": ts,
+            "calibration_summary": {
+                "w_dc": output["calibration"]["w_dc"],
+                "w_elo": output["calibration"]["w_elo"],
+                "w_tm": output["calibration"]["w_tm"],
+                "n_sims": output["calibration"]["n_sims"],
+            },
+        },
+        "predictions": output["predictions"],
+        "simulation_stats": output["simulation_stats"],
+        "group_bets": {
+            g: {k: v for k, v in b.items() if not isinstance(v, np.ndarray)}
+            for g, b in output.get("group_bets", {}).items()
+        },
+        "champion_bet": output.get("champion_bet"),
+        "third_places": output.get("third_places"),
+        "model_params": output["model_params"],
+        "team_params": output.get("team_params"),
+        "elo_ratings": output.get("elo_ratings"),
+        "groups": output.get("groups"),
+    }
+
+    with open(filepath, "w", encoding="utf-8") as f:
+        json.dump(clean, f, indent=2, ensure_ascii=False, default=str)
+
+
+# =============================================================================
+# Tela: Historico de Simulacoes
+# =============================================================================
+
+def render_history_page():
     st.header("Historico de Simulacoes")
-    st.info(
-        "Em construcao — Sprint 3c.\n\n"
-        "Aqui voce podera:\n"
-        "- Listar simulacoes salvas\n"
-        "- Comparar 2+ simulacoes lado a lado\n"
-        "- Editar odds de mercado\n"
-        "- Lock/unlock/delete simulacoes\n"
-        "- Exportar apostas finais"
+
+    # Listar runs salvos
+    pattern = os.path.join(RUNS_DIR, "*.json")
+    files = sorted(glob.glob(pattern), reverse=True)
+
+    if not files:
+        st.info("Nenhuma simulacao salva. Rode o pipeline e salve na aba 'Rodar Simulacao'.")
+        return
+
+    # Lista de runs
+    run_meta = []
+    for fp in files:
+        try:
+            with open(fp, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            meta = data.get("metadata", {})
+            mp = data.get("model_params", {})
+            stats = data.get("simulation_stats", {})
+
+            # Favorito
+            fav = max(stats.items(), key=lambda x: x[1].get("champion", 0)) if stats else ("?", {})
+
+            run_meta.append({
+                "Arquivo": os.path.basename(fp),
+                "Nome": meta.get("name", ""),
+                "Data": meta.get("timestamp", "")[:19].replace("T", " "),
+                "rho": f"{mp.get('rho', 0):.4f}",
+                "home_adv": f"{mp.get('home_adv', 0):.3f}",
+                "Favorito": f"{fav[0]} ({fav[1].get('champion', 0):.1f}%)",
+                "_path": fp,
+            })
+        except (json.JSONDecodeError, KeyError):
+            continue
+
+    if not run_meta:
+        st.warning("Nenhum arquivo valido encontrado em runs/.")
+        return
+
+    df_runs = pd.DataFrame(run_meta)
+
+    st.subheader(f"{len(run_meta)} simulacao(oes) salva(s)")
+    st.dataframe(
+        df_runs[["Nome", "Data", "rho", "home_adv", "Favorito"]],
+        use_container_width=True, hide_index=True,
+    )
+
+    # Selecionar run para visualizar
+    options = [r["Nome"] or r["Arquivo"] for r in run_meta]
+    selected = st.selectbox("Selecionar simulacao", options, key="sb_history_select")
+    idx = options.index(selected)
+    selected_path = run_meta[idx]["_path"]
+
+    col_view, col_delete = st.columns([1, 1])
+
+    with col_view:
+        if st.button("Visualizar", key="btn_view_run"):
+            with open(selected_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            st.session_state.history_view = data
+            st.session_state.history_view_name = selected
+
+    with col_delete:
+        if st.button("Excluir", key="btn_delete_run", type="secondary"):
+            os.remove(selected_path)
+            st.success(f"Simulacao '{selected}' excluida.")
+            if "history_view" in st.session_state:
+                del st.session_state.history_view
+            st.rerun()
+
+    # Visualizar run selecionado
+    if "history_view" in st.session_state:
+        data = st.session_state.history_view
+        name = st.session_state.get("history_view_name", "")
+        st.divider()
+        st.subheader(f"Simulacao: {name}")
+
+        meta = data.get("metadata", {})
+        cal_sum = meta.get("calibration_summary", {})
+        st.caption(
+            f"DC {cal_sum.get('w_dc', '?')} + Elo {cal_sum.get('w_elo', '?')} "
+            f"+ TM {cal_sum.get('w_tm', '?')} | {cal_sum.get('n_sims', '?'):,} sims"
+        )
+
+        _display_results(data, elapsed=0, timestamp=meta.get("timestamp", ""), show_save=False)
+
+    # Comparar duas runs
+    if len(run_meta) >= 2:
+        st.divider()
+        st.subheader("Comparar Simulacoes")
+
+        col_a, col_b = st.columns(2)
+        with col_a:
+            sel_a = st.selectbox("Simulacao A", options, index=0, key="sb_cmp_a")
+        with col_b:
+            sel_b = st.selectbox("Simulacao B", options,
+                                 index=min(1, len(options) - 1), key="sb_cmp_b")
+
+        if st.button("Comparar", key="btn_compare"):
+            path_a = run_meta[options.index(sel_a)]["_path"]
+            path_b = run_meta[options.index(sel_b)]["_path"]
+            with open(path_a, "r", encoding="utf-8") as f:
+                data_a = json.load(f)
+            with open(path_b, "r", encoding="utf-8") as f:
+                data_b = json.load(f)
+
+            _render_comparison(data_a, data_b, sel_a, sel_b)
+
+
+def _render_comparison(data_a, data_b, name_a, name_b):
+    """Compara top 20 favoritos de duas simulacoes lado a lado."""
+    stats_a = data_a.get("simulation_stats", {})
+    stats_b = data_b.get("simulation_stats", {})
+
+    rows = []
+    all_teams = set(list(stats_a.keys()) + list(stats_b.keys()))
+    for team in all_teams:
+        ca = stats_a.get(team, {}).get("champion", 0)
+        cb = stats_b.get(team, {}).get("champion", 0)
+        if ca > 0 or cb > 0:
+            rows.append({
+                "Selecao": team,
+                f"Titulo ({name_a})": f"{ca:.1f}%",
+                f"Titulo ({name_b})": f"{cb:.1f}%",
+                "Delta": f"{cb - ca:+.1f}pp",
+            })
+
+    df = pd.DataFrame(rows)
+    if not df.empty:
+        # Ordenar pelo primeiro run
+        col_a_name = f"Titulo ({name_a})"
+        df["_sort"] = df[col_a_name].str.rstrip("%").astype(float)
+        df = df.sort_values("_sort", ascending=False).drop(columns="_sort").head(20)
+        st.dataframe(df, use_container_width=True, hide_index=True)
+
+    # Comparar parametros
+    mp_a = data_a.get("model_params", {})
+    mp_b = data_b.get("model_params", {})
+
+    st.caption(
+        f"rho: {mp_a.get('rho', 0):.4f} vs {mp_b.get('rho', 0):.4f} | "
+        f"home_adv: {mp_a.get('home_adv', 0):.3f} vs {mp_b.get('home_adv', 0):.3f}"
     )
 
 
@@ -865,7 +1342,7 @@ with tab_calib:
     render_calibration_page()
 
 with tab_run:
-    render_run_page_stub()
+    render_run_page()
 
 with tab_history:
-    render_history_page_stub()
+    render_history_page()
