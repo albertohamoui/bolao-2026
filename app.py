@@ -1070,14 +1070,14 @@ def _render_bets(output):
     st.subheader("Terceiros Colocados (induzidos)")
     thirds = output.get("third_places", {})
     if thirds:
-        per_team = thirds.get("per_team", {})
+        per_team = thirds.get("per_team", [])
         if per_team:
             rows = []
-            for team, info in per_team.items():
+            for entry in per_team:
                 rows.append({
-                    "Selecao": team,
-                    "P(3o qual)": f"{info['p_3rd_qual']:.1%}" if isinstance(info, dict) else "N/A",
-                    "EV pts": f"{info['ev']:.2f}" if isinstance(info, dict) else "N/A",
+                    "Selecao": entry["team"],
+                    "P(3o qual)": f"{entry['p_3rd_qual']:.1%}",
+                    "EV pts": f"{entry['ev']:.2f}",
                 })
             st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
         st.caption(f"Total EV terceiros: **{thirds.get('ev_points', 0):.2f} pts** (max 40)")
