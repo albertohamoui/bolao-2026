@@ -1362,19 +1362,50 @@ def _render_optimizer():
         combos = generate_combinations(grid)
 
         progress = st.progress(0, text=f"Testando 0/{len(combos)} combinacoes...")
+        status_text = st.empty()
         results = []
+        best_so_far = 0
+        update_every = max(1, len(combos) // 50)  # atualizar ~50 vezes no total
+
+        import io, os as _os
+        from contextlib import redirect_stdout, redirect_stderr
+        devnull = open(_os.devnull, "w")
 
         for i, params in enumerate(combos):
             try:
-                result = run_single(params)
+                # Suprimir prints sem StringIO (mais rapido)
+                with redirect_stdout(devnull), redirect_stderr(devnull):
+                    if opt_cup == "2022":
+                        from backtests.wc2022.run_backtest import make_calibration_2022, run_backtest as _run_bt
+                        cal = make_calibration_2022(
+                            w_dc=params["w_dc"], w_elo=params["w_elo"], w_tm=params["w_tm"],
+                            xi=params["xi"], tm_scale=params["tm_scale"],
+                            dc_quality_filter_enabled=params["dc_qf_enabled"],
+                            date_cutoff=params["date_cutoff"],
+                        )
+                    else:
+                        from backtests.wc2018.run_backtest import make_calibration_2018, run_backtest as _run_bt
+                        cal = make_calibration_2018(
+                            w_dc=params["w_dc"], w_elo=params["w_elo"], w_tm=params["w_tm"],
+                            xi=params["xi"], tm_scale=params["tm_scale"],
+                            dc_quality_filter_enabled=params["dc_qf_enabled"],
+                            date_cutoff=params["date_cutoff"],
+                        )
+                    result = _run_bt(cal, verbose=False)
+                result["params"] = params
                 results.append(result)
+                if result["model_total"] > best_so_far:
+                    best_so_far = result["model_total"]
             except Exception:
                 pass
-            progress.progress((i + 1) / len(combos),
-                              text=f"Testando {i+1}/{len(combos)} combinacoes... "
-                                   f"(melhor ate agora: {max((r['model_total'] for r in results), default=0)} pts)")
 
-        progress.progress(1.0, text=f"Concluido! {len(results)} combinacoes testadas.")
+            if (i + 1) % update_every == 0 or i == len(combos) - 1:
+                progress.progress((i + 1) / len(combos))
+                status_text.text(f"Testando {i+1}/{len(combos)} — melhor: {best_so_far} pts")
+
+        devnull.close()
+        progress.progress(1.0)
+        status_text.text(f"Concluido! {len(results)} combinacoes testadas. Melhor: {best_so_far} pts")
 
         results.sort(key=lambda r: r["model_total"], reverse=True)
         st.session_state[f"optimize_results_{opt_cup}"] = results
