@@ -1361,7 +1361,7 @@ def _render_optimizer():
         status_text.info(f"Rodando otimizador ({n_combos} combinacoes, {eta})...")
 
         proc = subprocess.run(
-            ["python3", script_path] + ([quick_flag] if quick_flag else []),
+            [sys.executable, script_path] + ([quick_flag] if quick_flag else []),
             cwd=PROJECT_DIR,
             capture_output=True,
             text=True,
