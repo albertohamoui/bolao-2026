@@ -49,18 +49,25 @@ WC2018_CUTOFF_DATE = "2018-06-14"
 WC2018_END_DATE = "2018-07-15"
 
 
+_cache = {}
+
+
 def load_elo_2018() -> Dict[str, int]:
-    path = os.path.join(BACKTEST_DIR, "data", "elo_2018.json")
-    with open(path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    return {k: v for k, v in data.items() if not k.startswith("_")}
+    if "elo" not in _cache:
+        path = os.path.join(BACKTEST_DIR, "data", "elo_2018.json")
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        _cache["elo"] = {k: v for k, v in data.items() if not k.startswith("_")}
+    return dict(_cache["elo"])
 
 
 def load_tm_2018() -> Dict[str, int]:
-    path = os.path.join(BACKTEST_DIR, "data", "tm_2018.json")
-    with open(path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    return {k: v for k, v in data.items() if not k.startswith("_")}
+    if "tm" not in _cache:
+        path = os.path.join(BACKTEST_DIR, "data", "tm_2018.json")
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        _cache["tm"] = {k: v for k, v in data.items() if not k.startswith("_")}
+    return dict(_cache["tm"])
 
 
 def load_wc2018_results() -> Tuple[list, list]:
@@ -141,16 +148,23 @@ def make_calibration_2018(
     return cal
 
 
+def _load_all_matches():
+    """Carrega todos os jogos do results.csv (cached)."""
+    if "matches" not in _cache:
+        csv_path = os.path.join(PROJECT_DIR, "results.csv")
+        _cache["matches"] = load_matches(csv_path)
+        all_teams_set = set()
+        for h, a, _, _, _ in _cache["matches"]:
+            all_teams_set.add(h)
+            all_teams_set.add(a)
+        _cache["all_teams"] = sorted(all_teams_set)
+    return _cache["matches"], _cache["all_teams"]
+
+
 def train_model(cal: Calibration) -> DixonColesModel:
     elo_2018 = load_elo_2018()
-    csv_path = os.path.join(PROJECT_DIR, "results.csv")
-    all_matches = load_matches(csv_path)
 
-    all_teams_set = set()
-    for h, a, _, _, _ in all_matches:
-        all_teams_set.add(h)
-        all_teams_set.add(a)
-    all_teams = sorted(all_teams_set)
+    all_matches, all_teams = _load_all_matches()
 
     world_elo = {t: elo_2018.get(t, 1500) for t in all_teams}
 

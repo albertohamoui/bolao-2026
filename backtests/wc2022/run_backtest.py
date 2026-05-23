@@ -60,20 +60,27 @@ WC2022_END_DATE = "2022-12-18"
 # LOADERS — dados de 2022, isolados
 # =============================================================================
 
+_cache = {}
+
+
 def load_elo_2022() -> Dict[str, int]:
-    """Carrega ELOs de nov/2022 do arquivo local."""
-    path = os.path.join(BACKTEST_DIR, "data", "elo_2022.json")
-    with open(path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    return {k: v for k, v in data.items() if not k.startswith("_")}
+    """Carrega ELOs de nov/2022 do arquivo local (cached)."""
+    if "elo" not in _cache:
+        path = os.path.join(BACKTEST_DIR, "data", "elo_2022.json")
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        _cache["elo"] = {k: v for k, v in data.items() if not k.startswith("_")}
+    return dict(_cache["elo"])
 
 
 def load_tm_2022() -> Dict[str, int]:
-    """Carrega Transfermarkt de nov/2022 do arquivo local."""
-    path = os.path.join(BACKTEST_DIR, "data", "tm_2022.json")
-    with open(path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    return {k: v for k, v in data.items() if not k.startswith("_")}
+    """Carrega Transfermarkt de nov/2022 do arquivo local (cached)."""
+    if "tm" not in _cache:
+        path = os.path.join(BACKTEST_DIR, "data", "tm_2022.json")
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        _cache["tm"] = {k: v for k, v in data.items() if not k.startswith("_")}
+    return dict(_cache["tm"])
 
 
 def load_wc2022_results() -> Tuple[list, list]:
@@ -174,19 +181,24 @@ def make_calibration_2022(
 # TREINO E PREVISÃO
 # =============================================================================
 
+def _load_all_matches():
+    """Carrega todos os jogos do results.csv (cached)."""
+    if "matches" not in _cache:
+        csv_path = os.path.join(PROJECT_DIR, "results.csv")
+        _cache["matches"] = load_matches(csv_path)
+        all_teams_set = set()
+        for h, a, _, _, _ in _cache["matches"]:
+            all_teams_set.add(h)
+            all_teams_set.add(a)
+        _cache["all_teams"] = sorted(all_teams_set)
+    return _cache["matches"], _cache["all_teams"]
+
+
 def train_model(cal: Calibration) -> DixonColesModel:
     """Treina DC com jogos anteriores à Copa 2022, usando ELOs de 2022."""
     elo_2022 = load_elo_2022()
 
-    csv_path = os.path.join(PROJECT_DIR, "results.csv")
-    all_matches = load_matches(csv_path)
-
-    # Todos os times do results.csv
-    all_teams_set = set()
-    for h, a, _, _, _ in all_matches:
-        all_teams_set.add(h)
-        all_teams_set.add(a)
-    all_teams = sorted(all_teams_set)
+    all_matches, all_teams = _load_all_matches()
 
     # ELOs: times fora da Copa 2022 recebem default
     world_elo = {t: elo_2022.get(t, 1500) for t in all_teams}
