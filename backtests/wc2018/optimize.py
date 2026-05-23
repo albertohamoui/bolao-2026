@@ -196,6 +196,8 @@ def main():
     print(f"\nTempo total: {total_time/60:.1f} minutos")
     print(f"Combinações testadas: {len(results)}/{len(combos)}")
 
+    _auto_save_results(results)
+
     # =================================================================
     # ANÁLISE DE SENSIBILIDADE
     # =================================================================
@@ -222,6 +224,21 @@ def main():
             best_v = max(scores)
             worst_v = min(scores)
             print(f"    {val:>12}: avg={avg:.1f}  best={best_v}  worst={worst_v}  n={len(scores)}")
+
+
+def _auto_save_results(results: list):
+    """Salva resultados em JSON para o Streamlit carregar."""
+    import json
+    save_dir = os.path.join(PROJECT_DIR, "backtests", "saved_results")
+    os.makedirs(save_dir, exist_ok=True)
+    path = os.path.join(save_dir, "optimize_2018.json")
+    serializable = []
+    for r in results:
+        s = {k: v for k, v in r.items() if k not in ("details_groups", "details_ko")}
+        serializable.append(s)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(serializable, f, indent=2, ensure_ascii=False)
+    print(f"\nResultados salvos em {path}")
 
 
 if __name__ == "__main__":

@@ -1350,71 +1350,38 @@ def _render_optimizer():
             st.warning(f"Nenhum resultado salvo encontrado para Copa {opt_cup}")
 
     if run_clicked:
-        import sys as _sys
-        _backtest_dir = os.path.join(PROJECT_DIR, "backtests", f"wc{opt_cup}")
-        if _backtest_dir not in _sys.path:
-            _sys.path.insert(0, _backtest_dir)
+        # Rodar otimizador como subprocess para evitar overhead do Streamlit
+        import subprocess
+        quick_flag = "--quick" if "Rapido" in grid_mode else ""
+        script_path = os.path.join(PROJECT_DIR, "backtests", f"wc{opt_cup}", "optimize.py")
 
-        if opt_cup == "2022":
-            from backtests.wc2022.optimize import QUICK_GRID, FULL_GRID, generate_combinations, run_single
-        else:
-            from backtests.wc2018.optimize import QUICK_GRID, FULL_GRID, generate_combinations, run_single
-
-        grid = QUICK_GRID if "Rapido" in grid_mode else FULL_GRID
-        combos = generate_combinations(grid)
-
-        # Importar backtest e pré-aquecer cache
-        if opt_cup == "2022":
-            from backtests.wc2022.run_backtest import make_calibration_2022 as _make_cal, run_backtest as _run_bt, _load_all_matches
-        else:
-            from backtests.wc2018.run_backtest import make_calibration_2018 as _make_cal, run_backtest as _run_bt, _load_all_matches
-        _load_all_matches()
-
-        # Suprimir prints do modelo substituindo builtins.print temporariamente
-        # (redirect_stdout quebra a comunicação interna do Streamlit)
-        import builtins
-        _original_print = builtins.print
-        builtins.print = lambda *a, **k: None
-
-        progress = st.progress(0, text=f"Testando 0/{len(combos)} combinacoes...")
+        n_combos = "~30" if "Rapido" in grid_mode else "~660"
+        eta = "~30s" if "Rapido" in grid_mode else "~12min"
         status_text = st.empty()
-        results = []
-        best_so_far = 0
-        update_every = max(1, len(combos) // 50)
+        status_text.info(f"Rodando otimizador ({n_combos} combinacoes, {eta})...")
 
-        try:
-            for i, params in enumerate(combos):
-                try:
-                    cal = _make_cal(
-                        w_dc=params["w_dc"], w_elo=params["w_elo"], w_tm=params["w_tm"],
-                        xi=params["xi"], tm_scale=params["tm_scale"],
-                        dc_quality_filter_enabled=params["dc_qf_enabled"],
-                        date_cutoff=params["date_cutoff"],
-                    )
-                    result = _run_bt(cal, verbose=False)
-                    result["params"] = params
-                    results.append(result)
-                    if result["model_total"] > best_so_far:
-                        best_so_far = result["model_total"]
-                except Exception:
-                    pass
+        proc = subprocess.run(
+            ["python3", script_path] + ([quick_flag] if quick_flag else []),
+            cwd=PROJECT_DIR,
+            capture_output=True,
+            text=True,
+            timeout=1200,
+        )
 
-                if (i + 1) % update_every == 0 or i == len(combos) - 1:
-                    builtins.print = _original_print
-                    progress.progress((i + 1) / len(combos))
-                    status_text.text(f"Testando {i+1}/{len(combos)} — melhor: {best_so_far} pts")
-                    builtins.print = lambda *a, **k: None
-        finally:
-            builtins.print = _original_print
-
-        progress.progress(1.0)
-        status_text.text(f"Concluido! {len(results)} combinacoes testadas. Melhor: {best_so_far} pts")
-
-        results.sort(key=lambda r: r["model_total"], reverse=True)
-        st.session_state[f"optimize_results_{opt_cup}"] = results
-
-        _save_optimize_results(opt_cup, results)
-        st.success(f"Resultados salvos em backtests/saved_results/optimize_{opt_cup}.json")
+        if proc.returncode == 0:
+            # optimize.py salva automaticamente em saved_results/
+            saved = _load_saved_optimize_results(opt_cup)
+            if saved:
+                st.session_state[f"optimize_results_{opt_cup}"] = saved
+                status_text.success(f"Concluido! {len(saved)} combinacoes testadas e salvas.")
+            else:
+                status_text.warning("Otimizacao concluiu mas nenhum resultado foi salvo.")
+            # Mostrar output do CLI
+            with st.expander("Output do otimizador", expanded=False):
+                st.code(proc.stdout[-3000:] if len(proc.stdout) > 3000 else proc.stdout)
+        else:
+            status_text.error(f"Erro no otimizador")
+            st.code(proc.stderr[:2000])
 
     session_key = f"optimize_results_{opt_cup}"
     if session_key in st.session_state:
