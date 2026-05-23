@@ -1179,6 +1179,254 @@ def _save_run(output, name, timestamp):
 
 
 # =============================================================================
+# Tela: Backtest & Otimizacao
+# =============================================================================
+
+def render_backtest_page():
+    st.header("Backtest & Otimizacao")
+
+    st.markdown("""
+    Testa o modelo contra a **Copa do Mundo 2022** usando dados de epoca
+    (ELOs e Transfermarkt de novembro/2022, sem data leakage).
+
+    O **otimizador** testa combinacoes de variaveis e encontra a que
+    maximiza pontos do bolao.
+    """)
+
+    tab_single, tab_optimize = st.tabs(["Backtest Unico", "Otimizador (Grid Search)"])
+
+    with tab_single:
+        _render_backtest_single()
+
+    with tab_optimize:
+        _render_optimizer()
+
+
+def _render_backtest_single():
+    """Roda backtest com parametros configuráveis."""
+    st.subheader("Backtest com configuracao manual")
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        bt_w_dc = st.slider("Peso DC", 0.0, 1.0, 0.45, 0.05, key="bt_w_dc")
+    with col2:
+        bt_w_elo = st.slider("Peso ELO", 0.0, 1.0, 0.30, 0.05, key="bt_w_elo")
+    with col3:
+        bt_w_tm = st.slider("Peso TM", 0.0, 1.0, 0.25, 0.05, key="bt_w_tm")
+
+    # Validar soma
+    w_sum = bt_w_dc + bt_w_elo + bt_w_tm
+    if abs(w_sum - 1.0) > 0.01:
+        st.warning(f"Pesos devem somar 1.0 (atual: {w_sum:.2f})")
+        return
+
+    col4, col5, col6 = st.columns(3)
+    with col4:
+        bt_xi = st.select_slider("xi (time-decay)", [0.0003, 0.0005, 0.001, 0.002, 0.003, 0.005], value=0.001, key="bt_xi")
+    with col5:
+        bt_tm_scale = st.selectbox("Escala TM", ["sqrt", "log", "linear"], key="bt_tm_scale")
+    with col6:
+        bt_qf = st.checkbox("Quality Filter", value=True, key="bt_qf")
+
+    bt_cutoff = st.selectbox("Date Cutoff", ["2016-01-01", "2018-01-01", "2020-01-01"], index=1, key="bt_cutoff")
+
+    if st.button("Rodar Backtest 2022", type="primary", key="btn_backtest"):
+        import sys as _sys
+        _backtest_dir = os.path.join(PROJECT_DIR, "backtests", "wc2022")
+        if _backtest_dir not in _sys.path:
+            _sys.path.insert(0, _backtest_dir)
+
+        from run_backtest import make_calibration_2022, run_backtest as _run_bt
+
+        cal = make_calibration_2022(
+            w_dc=bt_w_dc, w_elo=bt_w_elo, w_tm=bt_w_tm,
+            xi=bt_xi, tm_scale=bt_tm_scale,
+            dc_quality_filter_enabled=bt_qf,
+            date_cutoff=bt_cutoff,
+        )
+
+        with st.spinner("Treinando modelo com dados pre-Copa 2022..."):
+            import io
+            from contextlib import redirect_stdout
+            f = io.StringIO()
+            with redirect_stdout(f):
+                result = _run_bt(cal, verbose=False)
+
+        _display_backtest_result(result)
+
+
+def _render_optimizer():
+    """Grid search sobre variaveis."""
+    st.subheader("Otimizador de Calibracao")
+    st.markdown("Testa multiplas combinacoes e encontra a melhor.")
+
+    grid_mode = st.radio("Modo", ["Rapido (~30 combos, ~30s)", "Completo (~660 combos, ~12min)"],
+                         key="grid_mode", horizontal=True)
+
+    if st.button("Iniciar Otimizacao", type="primary", key="btn_optimize"):
+        import sys as _sys
+        _backtest_dir = os.path.join(PROJECT_DIR, "backtests", "wc2022")
+        if _backtest_dir not in _sys.path:
+            _sys.path.insert(0, _backtest_dir)
+
+        from run_backtest import make_calibration_2022, run_backtest as _run_bt
+        from optimize import QUICK_GRID, FULL_GRID, generate_combinations, run_single
+
+        grid = QUICK_GRID if "Rapido" in grid_mode else FULL_GRID
+        combos = generate_combinations(grid)
+
+        progress = st.progress(0, text=f"Testando 0/{len(combos)} combinacoes...")
+        results = []
+
+        for i, params in enumerate(combos):
+            try:
+                result = run_single(params)
+                results.append(result)
+            except Exception:
+                pass
+            progress.progress((i + 1) / len(combos),
+                              text=f"Testando {i+1}/{len(combos)} combinacoes... "
+                                   f"(melhor ate agora: {max((r['model_total'] for r in results), default=0)} pts)")
+
+        progress.progress(1.0, text=f"Concluido! {len(results)} combinacoes testadas.")
+
+        results.sort(key=lambda r: r["model_total"], reverse=True)
+        st.session_state["optimize_results"] = results
+
+    if "optimize_results" in st.session_state:
+        results = st.session_state["optimize_results"]
+        _display_optimize_results(results)
+
+
+def _display_backtest_result(result: dict):
+    """Mostra resultados de um backtest unico."""
+    st.divider()
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Modelo", f"{result['model_total']} pts")
+    col2.metric("Baseline Fav 1x0", f"{result['b1_total']} pts",
+                delta=f"{result['model_total'] - result['b1_total']:+d}")
+    col3.metric("Baseline Fav 2x1", f"{result['b2_total']} pts",
+                delta=f"{result['model_total'] - result['b2_total']:+d}")
+    col4.metric("Baseline 1x1", f"{result['b3_total']} pts",
+                delta=f"{result['model_total'] - result['b3_total']:+d}")
+
+    st.caption(f"Grupos: {result['model_groups']} pts | Mata-mata: {result['model_ko']} pts")
+
+    # Detalhamento
+    with st.expander("Detalhamento por jogo (fase de grupos)", expanded=False):
+        rows = []
+        for d in result["details_groups"]:
+            rows.append({
+                "Jogo": f"{d['home']} vs {d['away']}",
+                "Aposta": d["bet"],
+                "Real": d["actual"],
+                "Pts": d["pts"],
+            })
+        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+
+    with st.expander("Detalhamento por jogo (mata-mata)", expanded=False):
+        rows = []
+        for d in result["details_ko"]:
+            rows.append({
+                "Jogo": f"{d['home']} vs {d['away']}",
+                "Aposta": d["bet"],
+                "Real": d["actual"],
+                "Pts": d["pts"],
+            })
+        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+
+
+def _display_optimize_results(results: list):
+    """Mostra resultados do otimizador."""
+    st.divider()
+    st.subheader("Ranking de Configuracoes")
+
+    best = results[0]
+    worst = results[-1]
+
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Melhor", f"{best['model_total']} pts")
+    col2.metric("Mediana", f"{results[len(results)//2]['model_total']} pts")
+    col3.metric("Pior", f"{worst['model_total']} pts")
+
+    # Top 10
+    st.markdown("**Top 10:**")
+    top_rows = []
+    for i, r in enumerate(results[:10]):
+        p = r["params"]
+        top_rows.append({
+            "#": i + 1,
+            "Total": r["model_total"],
+            "Grupos": r["model_groups"],
+            "KO": r["model_ko"],
+            "DC": p["w_dc"],
+            "ELO": p["w_elo"],
+            "TM": p["w_tm"],
+            "xi": p["xi"],
+            "Scale": p["tm_scale"],
+            "QF": "ON" if p["dc_qf_enabled"] else "OFF",
+            "Cutoff": p["date_cutoff"],
+        })
+    st.dataframe(pd.DataFrame(top_rows), use_container_width=True, hide_index=True)
+
+    # Baselines do melhor
+    bp = best["params"]
+    st.markdown(f"""
+    **Melhor config:** DC={bp['w_dc']:.2f}, ELO={bp['w_elo']:.2f}, TM={bp['w_tm']:.2f},
+    xi={bp['xi']:.4f}, scale={bp['tm_scale']}, QF={'ON' if bp['dc_qf_enabled'] else 'OFF'},
+    cutoff={bp['date_cutoff']}
+
+    | Estrategia | Pts | vs Modelo |
+    |---|---|---|
+    | **Modelo** | **{best['model_total']}** | — |
+    | Baseline Fav 1x0 | {best['b1_total']} | {best['model_total'] - best['b1_total']:+d} |
+    | Baseline Fav 2x1 | {best['b2_total']} | {best['model_total'] - best['b2_total']:+d} |
+    | Baseline 1x1 | {best['b3_total']} | {best['model_total'] - best['b3_total']:+d} |
+    """)
+
+    # Analise de sensibilidade
+    with st.expander("Analise de Sensibilidade", expanded=False):
+        for var_name, var_key in [
+            ("Blend DC", "w_dc"), ("Blend ELO", "w_elo"), ("Blend TM", "w_tm"),
+            ("xi", "xi"), ("TM scale", "tm_scale"),
+            ("Quality filter", "dc_qf_enabled"), ("Date cutoff", "date_cutoff"),
+        ]:
+            value_scores = {}
+            for r in results:
+                val = r["params"][var_key]
+                val_str = f"{val}" if isinstance(val, (str, bool)) else f"{val:.4f}"
+                if val_str not in value_scores:
+                    value_scores[val_str] = []
+                value_scores[val_str].append(r["model_total"])
+
+            sens_rows = []
+            for val, scores in sorted(value_scores.items(), key=lambda x: -sum(x[1])/len(x[1])):
+                sens_rows.append({
+                    "Valor": val,
+                    "Media": round(sum(scores) / len(scores), 1),
+                    "Melhor": max(scores),
+                    "Pior": min(scores),
+                    "N": len(scores),
+                })
+            st.markdown(f"**{var_name}:**")
+            st.dataframe(pd.DataFrame(sens_rows), use_container_width=True, hide_index=True)
+
+    # Botao para aplicar melhor config ao modelo 2026
+    st.divider()
+    if st.button("Aplicar melhor config ao modelo 2026", key="btn_apply_best"):
+        cal = _cal_dict()
+        cal["w_dc"] = bp["w_dc"]
+        cal["w_elo"] = bp["w_elo"]
+        cal["w_tm"] = bp["w_tm"]
+        cal["xi"] = bp["xi"]
+        cal["tm_scale"] = bp["tm_scale"]
+        cal["dc_quality_filter"]["enabled"] = bp["dc_qf_enabled"]
+        _sync_widget_keys_from_cal()
+        st.success(f"Config aplicada! DC={bp['w_dc']:.2f}, ELO={bp['w_elo']:.2f}, TM={bp['w_tm']:.2f}, xi={bp['xi']:.4f}")
+
+
+# =============================================================================
 # Tela: Historico de Simulacoes
 # =============================================================================
 
@@ -1332,9 +1580,10 @@ def _render_comparison(data_a, data_b, name_a, name_b):
 # Layout principal
 # =============================================================================
 
-tab_calib, tab_run, tab_history = st.tabs([
+tab_calib, tab_run, tab_backtest, tab_history = st.tabs([
     "Calibracao",
     "Rodar Simulacao",
+    "Backtest & Otimizacao",
     "Historico",
 ])
 
@@ -1343,6 +1592,9 @@ with tab_calib:
 
 with tab_run:
     render_run_page()
+
+with tab_backtest:
+    render_backtest_page()
 
 with tab_history:
     render_history_page()
