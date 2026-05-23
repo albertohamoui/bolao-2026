@@ -805,7 +805,8 @@ def _render_review_tab():
         if st.button("Salvar em config.json", type="primary",
                       disabled=save_disabled, key="btn_save"):
             save_config(edited_cal, CONFIG_PATH)
-            st.success("Salvo com sucesso!")
+            pushed = _auto_git_push([CONFIG_PATH], "data: update config.json")
+            st.success("Salvo e sincronizado!" if pushed else "Salvo localmente!")
             st.balloons()
 
     with col_discard:
@@ -833,6 +834,31 @@ def _render_review_tab():
 
 RUNS_DIR = os.path.join(PROJECT_DIR, "runs")
 os.makedirs(RUNS_DIR, exist_ok=True)
+
+
+def _auto_git_push(filepaths: list, message: str):
+    """Commita e pusha arquivos salvos automaticamente.
+
+    Funciona localmente com credenciais git existentes.
+    Em ambientes sem git (ex: Streamlit Cloud sem token), falha silenciosamente.
+    """
+    import subprocess
+    try:
+        for fp in filepaths:
+            rel = os.path.relpath(fp, PROJECT_DIR)
+            subprocess.run(["git", "add", rel], cwd=PROJECT_DIR,
+                           capture_output=True, timeout=10)
+        subprocess.run(
+            ["git", "commit", "-m", message],
+            cwd=PROJECT_DIR, capture_output=True, timeout=10,
+        )
+        result = subprocess.run(
+            ["git", "push"],
+            cwd=PROJECT_DIR, capture_output=True, timeout=30,
+        )
+        return result.returncode == 0
+    except Exception:
+        return False
 
 
 # =============================================================================
@@ -1177,6 +1203,9 @@ def _save_run(output, name, timestamp):
     with open(filepath, "w", encoding="utf-8") as f:
         json.dump(clean, f, indent=2, ensure_ascii=False, default=str)
 
+    if _auto_git_push([filepath], f"data: save run {slug}"):
+        st.toast("Simulacao salva e sincronizada com GitHub")
+
 
 # =============================================================================
 # Tela: Backtest & Otimizacao
@@ -1196,7 +1225,7 @@ def _load_saved_optimize_results(cup: str) -> list:
 
 
 def _save_optimize_results(cup: str, results: list):
-    """Salva resultados do otimizador em JSON."""
+    """Salva resultados do otimizador em JSON e pusha pro GitHub."""
     path = os.path.join(BACKTEST_SAVE_DIR, f"optimize_{cup}.json")
     serializable = []
     for r in results:
@@ -1204,6 +1233,8 @@ def _save_optimize_results(cup: str, results: list):
         serializable.append(s)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(serializable, f, indent=2, ensure_ascii=False)
+
+    _auto_git_push([path], f"data: save optimize results {cup}")
 
 
 def _get_backtest_module(cup: str):
