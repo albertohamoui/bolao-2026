@@ -1,7 +1,7 @@
 # BOLÃO 2026 — Documentação Técnica
 
 **Tempo de execução:** ~6 segundos para pipeline completo com 50.000 simulações Monte Carlo
-**Última atualização:** 24 de abril de 2026
+**Última atualização:** 23 de maio de 2026
 
 ---
 
@@ -544,9 +544,20 @@ O modelo otimiza cada placar isoladamente. Mas os placares induzem classificaç�
 
 O mata-mata é preenchido inteiro de uma vez. A otimização deveria considerar a árvore completa (quem avança em R32 determina quem joga em R16). Design doc em `design_optimal_full_bracket.md` (algoritmo DP, O(160) entradas). Implementação pendente.
 
-### 9.6 Ausência de backtest
+### 9.6 Calibração empírica via backtest
 
-O modelo nunca foi validado contra Copas passadas. Sem backtest, não sabemos empiricamente se agrega valor — só convicção teórica.
+O modelo foi validado contra a Copa 2022 usando dados de época (ELOs e Transfermarkt de novembro/2022, sem data leakage). O grid search completo (660 combinações de variáveis) revelou:
+
+- A melhor configuração encontrada faz **201 pts** — praticamente empatando com o Baseline "Favorito 1x0" (202 pts) e perdendo para o Baseline "Favorito 2x1" (223 pts)
+- **DC puro (100%) supera o blend** com ELO e TM na Copa 2022, sugerindo que os priors adicionam ruído para este torneio específico
+- **Quality filter ON** ganha em média ~5 pts vs OFF
+- **xi não é sensível**: variação entre 0.0003 e 0.005 muda menos de 3 pts em média
+- **tm_scale log > sqrt** por margem pequena (+3.6 pts médios)
+- **date_cutoff 2016 > 2018 > 2020**: mais dados históricos ajuda
+
+**Limitação:** N=1 (apenas Copa 2022). A Copa 2022 teve resultados atípicos (Argentina vs Arábia Saudita, Marrocos nas semis). Otimizar demais para 2022 é overfitting. Os resultados indicam direção, não valores definitivos.
+
+O backtest e o otimizador estão disponíveis na aba "Backtest & Otimização" do Streamlit e em `backtests/wc2022/`.
 
 ### 9.7 Limitações menores
 
@@ -562,10 +573,11 @@ Organizado pelos deadlines do bolão (ver PRAZOS.md).
 
 ### 10.1 Pré-7/6 (Fase 1 — placares + campeão + artilheiro)
 
-- **Backtest contra Copa 2022** — validação crítica pendente
-- **Ruído gaussiano nos lambdas** — over-dispersion para calibrar variância de zebras
+- **Modelo de artilheiro** — modelar P(jogador é artilheiro) usando convocações reais, gols/jogo por jogador, e minutos esperados na Copa. Arquivo de escalações em `escalacoes_copa_2026.md` (25 finalizadas, 23 pendentes até 2/6)
+- **Aplicar calibração otimizada** — usar resultados do grid search 2022 como guia para os pesos do blend, xi, e demais variáveis
+- **Backtest contra Copa 2018** — segundo ponto de validação para evitar overfitting ao 2022
 - **Otimização conjunta da fase de grupos** — placar + classificação induzida + 3ºs como função objetivo única
-- **Preencher player_stats e convocações** — ativar artilheiro e escalação quando dados disponíveis
+- **Investigar placares conservadores** — o modelo aposta muitos 0x1 e 1x0 quando 2x1 ou 2x0 daria mais pontos. Pode ser problema no `ev_optimal_score`
 
 ### 10.2 Pós-27/6 (Fase 2 — bracket do mata-mata)
 
@@ -577,8 +589,6 @@ Organizado pelos deadlines do bolão (ver PRAZOS.md).
 ### 10.3 Melhorias gerais (qualquer momento)
 
 - **Bracket FIFA oficial** — cross-bracket correto no MC
-- **Backtest formal dos pesos** — calibrar W_DC/W_ELO/W_TM via Copa 2014/2018/2022
-- **Calibrar xi** — cross-validation empírica
 - **Ativar defense_mult** nos expert adjustments
 
 ---
@@ -588,31 +598,63 @@ Organizado pelos deadlines do bolão (ver PRAZOS.md).
 ### 11.1 Estrutura de arquivos
 
 ```
-Bolão 2026/
-├── bolao2026.py                    # Modelo principal
+bolao-2026/
+├── bolao2026.py                    # Modelo principal (~93k)
 ├── config.json                     # Parâmetros editáveis (Calibration)
-├── app.py                          # Frontend Streamlit
-├── test_bolao_points.py            # Testes de bolao_points (24 testes)
+├── app.py                          # Frontend Streamlit (calibração, simulação, backtest)
+├── results.csv                     # Dados históricos (~49k jogos internacionais)
+├── bolao2026_results.json          # Output da última execução
+├── escalacoes_copa_2026.md         # Escalações oficiais das 48 seleções
+├── requirements.txt                # Dependências Python
+│
+├── backtests/
+│   └── wc2022/                     # Backtest Copa 2022 (dados isolados de época)
+│       ├── data/
+│       │   ├── elo_2022.json       # ELOs de nov/2022 (eloratings.net)
+│       │   └── tm_2022.json        # Transfermarkt de nov/2022
+│       ├── run_backtest.py         # Backtest limpo (sem data leakage)
+│       └── optimize.py             # Grid search de calibração (660 combinações)
+│
+├── scripts/
+│   ├── update_elos.py              # Atualiza ELOs via eloratings.net
+│   ├── update_elos_playwright.py   # Versão com Playwright (JS-heavy sites)
+│   ├── update_data.py              # Atualiza results.csv
+│   ├── backtest_2022.py            # Backtest antigo (DEPRECATED — usar backtests/wc2022/)
+│   ├── diff_elos.py                # Compara ELOs entre versões
+│   └── audit_dc_matches.py        # Exporta jogos usados no fitting
+│
+├── services/
+│   ├── storage.py                  # Persistência de runs em JSON/SQLite
+│   ├── diff.py                     # Diff entre runs
+│   └── sanity.py                   # Validação de sanidade do output
+│
+├── test_bolao_points.py            # Testes de bolao_points
 ├── test_group_champion_bet.py      # Testes de optimal_group_bet e champion_bet
 ├── test_knockout_bet.py            # Testes de optimal_knockout_bet
 ├── test_third_places.py            # Testes de induced_third_places
 ├── test_pipeline_smoke.py          # Smoke test do pipeline
-├── results.csv                     # Dados históricos (~49k jogos)
-├── bolao2026_results.json          # Output da última execução
+├── test_storage.py                 # Testes do storage service
+│
 ├── manual_bolao_do_zap.pdf         # Manual oficial do bolão
-├── bolao_regras_oficiais.md        # Gabarito do manual antigo (snapshot)
-├── bolao_regras_oficiais_v2.md     # Gabarito do manual atual
-├── auditoria_bolao.md              # Auditoria v1 (código vs manual)
-├── auditoria_bolao_v2.md           # Auditoria v2 (manual antigo vs novo)
+├── bolao_regras_oficiais_v2.md     # Gabarito de regras (versão atual)
+├── auditoria_bolao.md              # Auditoria código vs manual
+├── auditoria_bolao_v2.md           # Auditoria manual v1 vs v2
 ├── design_optimal_full_bracket.md  # Design doc: DP para bracket completo
 ├── PRAZOS.md                       # Datas e deadlines
 ├── TODO.md                         # Tarefas pendentes
 ├── bolao2026_README.md             # README
-├── requirements.txt                # Dependências Python
-├── scripts/
-│   └── diff_elos.py                # Helper de atualização de Elos
+├── CLAUDE_CODE_PROMPT.md           # Briefing para Claude Code
+│
+├── data/
+│   └── elo_ratings_latest.csv      # ELOs atuais (~244 seleções)
+│
+├── elo_bot/                        # Bot de scraping de ELOs (local, não commitado)
+│
+├── runs/                           # Runs salvos (JSON)
+│
 └── Doc Modelo Bolão/
-    └── bolao2026_documentacao.md   # ESTE ARQUIVO
+    ├── bolao2026_documentacao.md   # ESTE ARQUIVO
+    └── bolao2026_apresentacao.html # Apresentação visual do modelo
 ```
 
 ### 11.2 Constantes — referência rápida
@@ -676,9 +718,11 @@ Bolão 2026/
 
 **ρ fitado (não fixado):** o valor ótimo varia com o dataset. Seleções vs clubes têm ρ diferentes.
 
-**Sqrt para TM (não log/linear):** log comprime demais o topo; linear amplifica demais. Sqrt é o meio-termo.
+**Sqrt vs log para TM:** O backtest 2022 mostra log levemente superior (avg +3.6 pts). A decisão entre sqrt e log deve ser validada com mais backtests (2018).
 
 **50k simulações:** erro padrão para p=10% é 0.13 pp (IC 95% = ±0.26 pp). Precisão suficiente sem custo excessivo.
+
+**DC puro vs blend:** O grid search 2022 indica que DC puro (100%) supera o blend com ELO/TM naquele torneio. Isso pode ser artefato de N=1 — os priors ELO/TM podem agregar valor em média mas terem sido prejudiciais na Copa 2022 especificamente (resultados atípicos). Decisão pendente de backtest 2018.
 
 ### 11.7 Checklist de sanidade
 

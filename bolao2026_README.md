@@ -79,54 +79,52 @@ O modelo gera:
 - **Probabilidade de classificacao** por grupo
 - **Probabilidade de titulo** por selecao
 
-## Status atual (Sprint 3.5)
+## Status atual
 
-| Feature | Status | Default | Nota |
-|---|---|---|---|
-| Elo ratings corrigidos | **Sempre ativo** | — | Atualizados em 23/abr/2026 (eloratings.net) |
-| Bug fix time-decay | **Sempre ativo** | — | `_log_likelihood` agora usa weights corretamente |
-| Filtro qualidade DC | **Ativo** | `enabled: true` | Pesa menos jogos entre adversarios desiguais |
-| Tournament Factor V2 | Desligado | `enabled: false` | Impacto empirico marginal (<0.2pp). Codigo preservado. |
-| Modelo de escalacao | Desligado | `enabled: false` | Ativar apos convocacoes FIFA (~01/jun/2026) |
-| Modelo de artilheiro | Desligado | `enabled: false` | Ativar apos preencher player_stats no config.json |
+| Feature | Status | Nota |
+|---|---|---|
+| Filtro qualidade DC | **Ativo** | Pesa menos jogos entre adversarios desiguais |
+| Backtest Copa 2022 | **Ativo** | Dados de epoca (ELOs/TM nov/2022), sem data leakage |
+| Grid search otimizador | **Ativo** | 660 combinacoes de variaveis via Streamlit |
+| Escalacoes Copa 2026 | **Parcial** | 25 finalizadas, 23 pendentes (deadline FIFA: 2/jun) |
+| Tournament Factor V2 | Desligado | Impacto empirico marginal |
+| Modelo de escalacao | Desligado | Ativar apos convocacoes completas |
+| Modelo de artilheiro | Pendente | Proximo passo apos calibracao |
 
-## Como ativar features opcionais
+## Backtest e Otimizacao
 
-Todas as features sao controladas via `config.json`. Exemplo para ativar o modelo de escalacao:
+O modelo inclui um sistema de backtest limpo contra a Copa 2022:
 
-```json
-{
-  "squad_data": {
-    "enabled": true,
-    "weight": 0.5,
-    "use_top_11": false,
-    "convocated_squads": {
-      "Brazil": [
-        {"name": "Vinicius Jr.", "value_eur_m": 180, "position": "ATK"},
-        ...
-      ]
-    }
-  }
-}
-```
-
-Para o modelo de artilheiro, preencher `top_scorer_model.player_stats` com dados por jogador.
-
-Ver documentacao completa em `Doc Modelo Bolão/bolao2026_documentacao.md` (secoes §3.7, §3.8, §3.9).
-
-## Como atualizar Elo ratings
+- **Dados isolados** em `backtests/wc2022/data/` (ELOs e Transfermarkt de nov/2022)
+- **Grid search** testa 660 combinacoes de variaveis e encontra a melhor
+- **Disponivel via Streamlit** (aba "Backtest & Otimizacao") ou CLI
 
 ```bash
-# Criar arquivo com novos valores (JSON simples {"Team": valor, ...})
-python scripts/diff_elos.py novos_elos.json
-# Revisar diff, confirmar, e replicar em DEFAULT_ELO_RATINGS no bolao2026.py
+# Backtest unico com defaults
+python3 backtests/wc2022/run_backtest.py
+
+# Grid search completo
+python3 backtests/wc2022/optimize.py
+
+# Grid search rapido (~30 combos)
+python3 backtests/wc2022/optimize.py --quick
 ```
 
-## Interface de calibracao (Streamlit)
+## Escalacoes
+
+Arquivo `escalacoes_copa_2026.md` com as escalacoes oficiais de todas as 48 selecoes, organizado por grupo. Fontes: CNN Brasil, O Globo, BBC, Sky Sports, FA inglesa, NFF norueguesa — cross-checked entre multiplas fontes.
+
+## Interface Streamlit
 
 ```bash
-pip install streamlit
+pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Permite ajustar todos os hiperparametros via interface grafica, com presets "Modo Legacy" e "Modo Producao Atual" para comparacao rapida. Ver documentacao §6.5.
+Abas disponiveis:
+- **Calibracao** — ajustar hiperparametros (pesos do blend, xi, host advantage, etc.)
+- **Rodar Simulacao** — executar pipeline completo com Monte Carlo
+- **Backtest & Otimizacao** — backtest contra Copa 2022 + grid search de calibracao
+- **Historico** — comparar runs salvos
+
+Ver documentacao completa em `Doc Modelo Bolão/bolao2026_documentacao.md`.

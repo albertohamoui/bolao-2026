@@ -1,10 +1,28 @@
 # TODO — Bolão 2026
 
-Lista de trabalhos pendentes que excedem o escopo das sprints atuais.
+Lista de trabalhos pendentes. Deadline Fase 1: **7 de junho de 2026, 23h59**.
 
 ---
 
-## Artilheiro da Copa (bônus de 30 pts)
+## Calibracao otimizada (pesos do blend)
+
+**Status:** backtest 2022 completo, pendente validacao cruzada com 2018.
+
+O grid search contra Copa 2022 (660 combinacoes, dados de epoca) indica que DC puro (100%) supera o blend com ELO/TM naquele torneio. Antes de aplicar ao modelo 2026, validar contra Copa 2018 para evitar overfitting.
+
+Investigar por que o modelo produz placares conservadores demais (muitos 0x1/1x0 quando 2x1 daria mais pontos no bolao). Pode ser problema no `ev_optimal_score`.
+
+---
+
+## Escalacoes pendentes
+
+**Status:** 25 de 48 selecoes finalizadas. Arquivo: `escalacoes_copa_2026.md`.
+
+Selecoes faltantes com datas previstas: Marrocos (25/mai), Espanha lista final (25/mai), EUA (26/mai), Panama (26/mai), Holanda (27/mai), Africa do Sul (27/mai), Canada (29/mai), Argelia (31/mai), Colombia final (31/mai), Australia (1/jun), Gana (1/jun), Mexico final (1/jun), Turquia/Equador/Arabia Saudita/Uruguai/Jordania (sem data).
+
+---
+
+## Artilheiro da Copa (bonus de 30 pts)
 
 **Status:** não modelado. `optimal_champion_bet` já existe para o bônus do campeão (25 pts), mas artilheiro não tem análogo.
 
