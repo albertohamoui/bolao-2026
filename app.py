@@ -1355,33 +1355,72 @@ def _render_optimizer():
         quick_flag = "--quick" if "Rapido" in grid_mode else ""
         script_path = os.path.join(PROJECT_DIR, "backtests", f"wc{opt_cup}", "optimize.py")
 
-        n_combos = "~30" if "Rapido" in grid_mode else "~660"
-        eta = "~30s" if "Rapido" in grid_mode else "~12min"
+        n_combos = 30 if "Rapido" in grid_mode else 660
         status_text = st.empty()
-        status_text.info(f"Rodando otimizador ({n_combos} combinacoes, {eta})...")
+        progress = st.progress(0)
+        timer_text = st.empty()
 
-        proc = subprocess.run(
-            [sys.executable, script_path] + ([quick_flag] if quick_flag else []),
+        # Rodar como Popen para monitorar progresso em tempo real
+        proc = subprocess.Popen(
+            [sys.executable, "-u", script_path] + ([quick_flag] if quick_flag else []),
             cwd=PROJECT_DIR,
-            capture_output=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
             text=True,
-            timeout=1200,
         )
 
+        output_lines = []
+        completed = 0
+        best_so_far = 0
+        t0 = time.time()
+
+        for line in proc.stdout:
+            output_lines.append(line)
+            # Parsear progresso das linhas tipo "  [  3/660] 150 pts  (...)"
+            stripped = line.strip()
+            if stripped.startswith("[") and "/" in stripped and "pts" in stripped:
+                try:
+                    parts = stripped.split("]")[0].replace("[", "").strip().split("/")
+                    completed = int(parts[0])
+                    total = int(parts[1])
+                    pts_str = stripped.split("]")[1].strip().split("pts")[0].strip()
+                    pts = int(pts_str)
+                    if pts > best_so_far:
+                        best_so_far = pts
+                    elapsed = time.time() - t0
+                    speed = completed / elapsed if elapsed > 0 else 0
+                    eta_sec = (total - completed) / speed if speed > 0 else 0
+                    progress.progress(completed / total)
+                    timer_text.text(
+                        f"{completed}/{total} combinacoes | "
+                        f"melhor: {best_so_far} pts | "
+                        f"{speed:.1f} combos/s | "
+                        f"ETA: {eta_sec:.0f}s"
+                    )
+                except (ValueError, IndexError):
+                    pass
+
+        proc.wait()
+        stderr_output = proc.stderr.read()
+
         if proc.returncode == 0:
-            # optimize.py salva automaticamente em saved_results/
+            progress.progress(1.0)
+            elapsed = time.time() - t0
             saved = _load_saved_optimize_results(opt_cup)
             if saved:
                 st.session_state[f"optimize_results_{opt_cup}"] = saved
-                status_text.success(f"Concluido! {len(saved)} combinacoes testadas e salvas.")
+                timer_text.empty()
+                status_text.success(
+                    f"Concluido! {len(saved)} combinacoes em {elapsed:.0f}s "
+                    f"({len(saved)/elapsed:.1f} combos/s). Melhor: {best_so_far} pts"
+                )
             else:
                 status_text.warning("Otimizacao concluiu mas nenhum resultado foi salvo.")
-            # Mostrar output do CLI
-            with st.expander("Output do otimizador", expanded=False):
-                st.code(proc.stdout[-3000:] if len(proc.stdout) > 3000 else proc.stdout)
+            with st.expander("Output completo", expanded=False):
+                st.code("".join(output_lines[-100:]))
         else:
-            status_text.error(f"Erro no otimizador")
-            st.code(proc.stderr[:2000])
+            status_text.error("Erro no otimizador")
+            st.code(stderr_output[:2000])
 
     session_key = f"optimize_results_{opt_cup}"
     if session_key in st.session_state:
