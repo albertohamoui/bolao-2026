@@ -1182,15 +1182,50 @@ def _save_run(output, name, timestamp):
 # Tela: Backtest & Otimizacao
 # =============================================================================
 
+BACKTEST_SAVE_DIR = os.path.join(PROJECT_DIR, "backtests", "saved_results")
+os.makedirs(BACKTEST_SAVE_DIR, exist_ok=True)
+
+
+def _load_saved_optimize_results(cup: str) -> list:
+    """Carrega resultados salvos do otimizador."""
+    path = os.path.join(BACKTEST_SAVE_DIR, f"optimize_{cup}.json")
+    if os.path.exists(path):
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+
+def _save_optimize_results(cup: str, results: list):
+    """Salva resultados do otimizador em JSON."""
+    path = os.path.join(BACKTEST_SAVE_DIR, f"optimize_{cup}.json")
+    serializable = []
+    for r in results:
+        s = {k: v for k, v in r.items() if k not in ("details_groups", "details_ko")}
+        serializable.append(s)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(serializable, f, indent=2, ensure_ascii=False)
+
+
+def _get_backtest_module(cup: str):
+    """Importa o modulo de backtest correto."""
+    import sys as _sys
+    _backtest_dir = os.path.join(PROJECT_DIR, "backtests", f"wc{cup}")
+    if _backtest_dir not in _sys.path:
+        _sys.path.insert(0, _backtest_dir)
+
+    if cup == "2022":
+        from backtests.wc2022.run_backtest import make_calibration_2022 as make_cal, run_backtest as run_bt
+    else:
+        from backtests.wc2018.run_backtest import make_calibration_2018 as make_cal, run_backtest as run_bt
+    return make_cal, run_bt
+
+
 def render_backtest_page():
     st.header("Backtest & Otimizacao")
 
     st.markdown("""
-    Testa o modelo contra a **Copa do Mundo 2022** usando dados de epoca
-    (ELOs e Transfermarkt de novembro/2022, sem data leakage).
-
-    O **otimizador** testa combinacoes de variaveis e encontra a que
-    maximiza pontos do bolao.
+    Testa o modelo contra Copas passadas usando dados de epoca (sem data leakage).
+    Resultados do otimizador sao **salvos automaticamente** em disco.
     """)
 
     tab_single, tab_optimize = st.tabs(["Backtest Unico", "Otimizador (Grid Search)"])
@@ -1203,8 +1238,10 @@ def render_backtest_page():
 
 
 def _render_backtest_single():
-    """Roda backtest com parametros configuráveis."""
+    """Roda backtest com parametros configuraveis."""
     st.subheader("Backtest com configuracao manual")
+
+    bt_cup = st.radio("Copa", ["2022", "2018"], key="bt_cup", horizontal=True)
 
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -1214,7 +1251,6 @@ def _render_backtest_single():
     with col3:
         bt_w_tm = st.slider("Peso TM", 0.0, 1.0, 0.25, 0.05, key="bt_w_tm")
 
-    # Validar soma
     w_sum = bt_w_dc + bt_w_elo + bt_w_tm
     if abs(w_sum - 1.0) > 0.01:
         st.warning(f"Pesos devem somar 1.0 (atual: {w_sum:.2f})")
@@ -1228,29 +1264,28 @@ def _render_backtest_single():
     with col6:
         bt_qf = st.checkbox("Quality Filter", value=True, key="bt_qf")
 
-    bt_cutoff = st.selectbox("Date Cutoff", ["2016-01-01", "2018-01-01", "2020-01-01"], index=1, key="bt_cutoff")
+    cutoff_options = {
+        "2022": ["2016-01-01", "2018-01-01", "2020-01-01"],
+        "2018": ["2012-01-01", "2014-01-01", "2016-01-01"],
+    }
+    bt_cutoff = st.selectbox("Date Cutoff", cutoff_options[bt_cup], index=1, key="bt_cutoff")
 
-    if st.button("Rodar Backtest 2022", type="primary", key="btn_backtest"):
-        import sys as _sys
-        _backtest_dir = os.path.join(PROJECT_DIR, "backtests", "wc2022")
-        if _backtest_dir not in _sys.path:
-            _sys.path.insert(0, _backtest_dir)
+    if st.button(f"Rodar Backtest {bt_cup}", type="primary", key="btn_backtest"):
+        make_cal, run_bt = _get_backtest_module(bt_cup)
 
-        from run_backtest import make_calibration_2022, run_backtest as _run_bt
-
-        cal = make_calibration_2022(
+        cal = make_cal(
             w_dc=bt_w_dc, w_elo=bt_w_elo, w_tm=bt_w_tm,
             xi=bt_xi, tm_scale=bt_tm_scale,
             dc_quality_filter_enabled=bt_qf,
             date_cutoff=bt_cutoff,
         )
 
-        with st.spinner("Treinando modelo com dados pre-Copa 2022..."):
+        with st.spinner(f"Treinando modelo com dados pre-Copa {bt_cup}..."):
             import io
             from contextlib import redirect_stdout
             f = io.StringIO()
             with redirect_stdout(f):
-                result = _run_bt(cal, verbose=False)
+                result = run_bt(cal, verbose=False)
 
         _display_backtest_result(result)
 
@@ -1258,19 +1293,39 @@ def _render_backtest_single():
 def _render_optimizer():
     """Grid search sobre variaveis."""
     st.subheader("Otimizador de Calibracao")
-    st.markdown("Testa multiplas combinacoes e encontra a melhor.")
+    st.markdown("Testa multiplas combinacoes e encontra a melhor. Resultados sao salvos em disco.")
+
+    opt_cup = st.radio("Copa", ["2022", "2018"], key="opt_cup", horizontal=True)
 
     grid_mode = st.radio("Modo", ["Rapido (~30 combos, ~30s)", "Completo (~660 combos, ~12min)"],
                          key="grid_mode", horizontal=True)
 
-    if st.button("Iniciar Otimizacao", type="primary", key="btn_optimize"):
+    col_run, col_load = st.columns(2)
+
+    with col_run:
+        run_clicked = st.button("Iniciar Otimizacao", type="primary", key="btn_optimize")
+
+    with col_load:
+        load_clicked = st.button("Carregar resultados salvos", key="btn_load_optimize")
+
+    if load_clicked:
+        saved = _load_saved_optimize_results(opt_cup)
+        if saved:
+            st.session_state[f"optimize_results_{opt_cup}"] = saved
+            st.success(f"Carregados {len(saved)} resultados salvos da Copa {opt_cup}")
+        else:
+            st.warning(f"Nenhum resultado salvo encontrado para Copa {opt_cup}")
+
+    if run_clicked:
         import sys as _sys
-        _backtest_dir = os.path.join(PROJECT_DIR, "backtests", "wc2022")
+        _backtest_dir = os.path.join(PROJECT_DIR, "backtests", f"wc{opt_cup}")
         if _backtest_dir not in _sys.path:
             _sys.path.insert(0, _backtest_dir)
 
-        from run_backtest import make_calibration_2022, run_backtest as _run_bt
-        from optimize import QUICK_GRID, FULL_GRID, generate_combinations, run_single
+        if opt_cup == "2022":
+            from backtests.wc2022.optimize import QUICK_GRID, FULL_GRID, generate_combinations, run_single
+        else:
+            from backtests.wc2018.optimize import QUICK_GRID, FULL_GRID, generate_combinations, run_single
 
         grid = QUICK_GRID if "Rapido" in grid_mode else FULL_GRID
         combos = generate_combinations(grid)
@@ -1291,10 +1346,14 @@ def _render_optimizer():
         progress.progress(1.0, text=f"Concluido! {len(results)} combinacoes testadas.")
 
         results.sort(key=lambda r: r["model_total"], reverse=True)
-        st.session_state["optimize_results"] = results
+        st.session_state[f"optimize_results_{opt_cup}"] = results
 
-    if "optimize_results" in st.session_state:
-        results = st.session_state["optimize_results"]
+        _save_optimize_results(opt_cup, results)
+        st.success(f"Resultados salvos em backtests/saved_results/optimize_{opt_cup}.json")
+
+    session_key = f"optimize_results_{opt_cup}"
+    if session_key in st.session_state:
+        results = st.session_state[session_key]
         _display_optimize_results(results)
 
 
@@ -1422,8 +1481,11 @@ def _display_optimize_results(results: list):
         cal["xi"] = bp["xi"]
         cal["tm_scale"] = bp["tm_scale"]
         cal["dc_quality_filter"]["enabled"] = bp["dc_qf_enabled"]
-        _sync_widget_keys_from_cal()
-        st.success(f"Config aplicada! DC={bp['w_dc']:.2f}, ELO={bp['w_elo']:.2f}, TM={bp['w_tm']:.2f}, xi={bp['xi']:.4f}")
+        st.session_state["_apply_best_msg"] = f"Config aplicada! DC={bp['w_dc']:.2f}, ELO={bp['w_elo']:.2f}, TM={bp['w_tm']:.2f}, xi={bp['xi']:.4f}"
+        st.rerun()
+
+    if "_apply_best_msg" in st.session_state:
+        st.success(st.session_state.pop("_apply_best_msg"))
 
 
 # =============================================================================
