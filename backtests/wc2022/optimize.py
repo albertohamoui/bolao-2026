@@ -53,9 +53,11 @@ FULL_GRID = {
     "dc_qf_enabled": [True, False],
     # Date cutoff
     "date_cutoff": ["2018-01-01", "2016-01-01", "2020-01-01"],
+    # Goal inflation
+    "goal_inflation": [1.0, 1.05, 1.10, 1.15, 1.20, 1.25, 1.30],
 }
 
-# Grid rápido (~50 combinações, ~3-5 min)
+# Grid rápido
 QUICK_GRID = {
     "blend_weights": [
         (0.60, 0.25, 0.15),
@@ -68,6 +70,7 @@ QUICK_GRID = {
     "tm_scale": ["sqrt"],
     "dc_qf_enabled": [True, False],
     "date_cutoff": ["2018-01-01"],
+    "goal_inflation": [1.0, 1.10, 1.20],
 }
 
 
@@ -79,11 +82,13 @@ def generate_combinations(grid: dict) -> list:
             for tm in grid["tm_scale"]:
                 for qf in grid["dc_qf_enabled"]:
                     for dc in grid["date_cutoff"]:
-                        combos.append({
-                            "w_dc": bw[0], "w_elo": bw[1], "w_tm": bw[2],
-                            "xi": xi, "tm_scale": tm,
-                            "dc_qf_enabled": qf, "date_cutoff": dc,
-                        })
+                        for gi in grid["goal_inflation"]:
+                            combos.append({
+                                "w_dc": bw[0], "w_elo": bw[1], "w_tm": bw[2],
+                                "xi": xi, "tm_scale": tm,
+                                "dc_qf_enabled": qf, "date_cutoff": dc,
+                                "goal_inflation": gi,
+                            })
     return combos
 
 
@@ -99,10 +104,9 @@ def run_single(params: dict) -> dict:
         date_cutoff=params["date_cutoff"],
     )
 
-    # Suprimir output do modelo
     f = StringIO()
     with redirect_stdout(f):
-        result = run_backtest(cal, verbose=False)
+        result = run_backtest(cal, verbose=False, goal_inflation=params.get("goal_inflation", 1.0))
 
     return {**result, "params": params}
 
@@ -137,7 +141,7 @@ def main():
             label = (f"DC={params['w_dc']:.2f} ELO={params['w_elo']:.2f} "
                      f"TM={params['w_tm']:.2f} xi={params['xi']:.4f} "
                      f"scale={params['tm_scale']} qf={params['dc_qf_enabled']} "
-                     f"cut={params['date_cutoff']}")
+                     f"cut={params['date_cutoff']} gi={params.get('goal_inflation',1.0):.2f}")
             print(f"  [{i+1:>3}/{len(combos)}] {result['model_total']:>4} pts  "
                   f"({elapsed:.1f}s, ETA {eta/60:.0f}min)  {label}")
 
@@ -209,6 +213,7 @@ def main():
         ("Blend DC", "w_dc"), ("Blend ELO", "w_elo"), ("Blend TM", "w_tm"),
         ("xi", "xi"), ("TM scale", "tm_scale"),
         ("Quality filter", "dc_qf_enabled"), ("Date cutoff", "date_cutoff"),
+        ("Goal inflation", "goal_inflation"),
     ]:
         value_scores = {}
         for r in results:

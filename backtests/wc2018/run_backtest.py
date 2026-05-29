@@ -98,6 +98,25 @@ def load_wc2018_results() -> Tuple[list, list]:
     return group_results, knockout_results
 
 
+def inflated_score_matrix(model, home: str, away: str, k: float):
+    """Recalcula score_matrix com lambdas multiplicados por k."""
+    from scipy.stats import poisson
+    import numpy as _np
+    pred = model.predict_match(home, away, host_adv=0.0)
+    lh, la = pred["lambdas"]
+    lh *= k
+    la *= k
+    mg = 8
+    sm = _np.zeros((mg, mg))
+    for i in range(mg):
+        for j in range(mg):
+            sm[i, j] = poisson.pmf(i, lh) * poisson.pmf(j, la)
+    total = sm.sum()
+    if total > 0:
+        sm /= total
+    return sm, (lh, la)
+
+
 def make_calibration_2018(
     w_dc: float = 0.45,
     w_elo: float = 0.30,
@@ -179,30 +198,38 @@ def train_model(cal: Calibration) -> DixonColesModel:
     return model
 
 
-def generate_group_predictions(model: DixonColesModel) -> dict:
+def generate_group_predictions(model: DixonColesModel, goal_inflation: float = 1.0) -> dict:
     predictions = {}
     for gname, teams in sorted(GROUPS_2018.items()):
         for i in range(len(teams)):
             for j in range(i + 1, len(teams)):
                 h, a = teams[i], teams[j]
-                pred = model.predict_match(h, a, host_adv=0.0)
-                ev_score, ev_pts = ev_optimal_score(pred["score_matrix"], knockout=False)
+                if goal_inflation != 1.0:
+                    sm, lambdas = inflated_score_matrix(model, h, a, goal_inflation)
+                else:
+                    pred = model.predict_match(h, a, host_adv=0.0)
+                    sm, lambdas = pred["score_matrix"], pred["lambdas"]
+                ev_score, ev_pts = ev_optimal_score(sm, knockout=False)
                 key = f"{h} vs {a}"
                 predictions[key] = {
                     "home": h, "away": a, "group": gname,
                     "bet": ev_score, "ev_pts": ev_pts,
-                    "lambdas": pred["lambdas"],
+                    "lambdas": lambdas,
                 }
     return predictions
 
 
-def generate_knockout_predictions(model: DixonColesModel, knockout_results: list) -> list:
+def generate_knockout_predictions(model: DixonColesModel, knockout_results: list, goal_inflation: float = 1.0) -> list:
     predictions = []
     for m in knockout_results:
         h, a = m["home"], m["away"]
         try:
-            pred = model.predict_match(h, a, host_adv=0.0)
-            ev_score, ev_pts = ev_optimal_score(pred["score_matrix"], knockout=True)
+            if goal_inflation != 1.0:
+                sm, _ = inflated_score_matrix(model, h, a, goal_inflation)
+            else:
+                pred = model.predict_match(h, a, host_adv=0.0)
+                sm = pred["score_matrix"]
+            ev_score, ev_pts = ev_optimal_score(sm, knockout=True)
             predictions.append({"home": h, "away": a, "bet": ev_score, "ev_pts": ev_pts})
         except KeyError:
             predictions.append({"home": h, "away": a, "bet": (1, 0), "ev_pts": 0})
@@ -247,7 +274,7 @@ def baseline_favorite(home: str, away: str, elo: dict, score: tuple) -> tuple:
     return (score[1], score[0])
 
 
-def run_backtest(cal: Optional[Calibration] = None, verbose: bool = True) -> dict:
+def run_backtest(cal: Optional[Calibration] = None, verbose: bool = True, goal_inflation: float = 1.0) -> dict:
     if cal is None:
         cal = make_calibration_2018()
 
@@ -260,8 +287,8 @@ def run_backtest(cal: Optional[Calibration] = None, verbose: bool = True) -> dic
 
     model = train_model(cal)
 
-    predictions = generate_group_predictions(model)
-    ko_predictions = generate_knockout_predictions(model, knockout_results)
+    predictions = generate_group_predictions(model, goal_inflation=goal_inflation)
+    ko_predictions = generate_knockout_predictions(model, knockout_results, goal_inflation=goal_inflation)
 
     model_bets = align_predictions_to_results(predictions, group_results)
     model_pts_groups, model_details = score_bets(model_bets, group_results, knockout=False)
@@ -298,6 +325,7 @@ def run_backtest(cal: Optional[Calibration] = None, verbose: bool = True) -> dic
             "ad_split": cal.ad_split,
             "date_cutoff": cal.date_cutoff,
             "dc_qf_enabled": cal.dc_quality_filter.get("enabled", True),
+            "goal_inflation": goal_inflation,
         },
     }
 
