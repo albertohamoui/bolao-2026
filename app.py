@@ -55,6 +55,25 @@ st.set_page_config(
 if "calibration" not in st.session_state:
     st.session_state.calibration = load_config(CONFIG_PATH).to_dict()
 
+# Aplicar config pendente do backtest (antes dos widgets serem criados)
+if "_pending_apply" in st.session_state:
+    _pa = st.session_state.pop("_pending_apply")
+    _cal = st.session_state.calibration
+    _cal["w_dc"] = _pa["w_dc"]
+    _cal["w_elo"] = _pa["w_elo"]
+    _cal["w_tm"] = _pa["w_tm"]
+    _cal["xi"] = _pa["xi"]
+    _cal["tm_scale"] = _pa["tm_scale"]
+    _cal["dc_quality_filter"]["enabled"] = _pa["dc_qf_enabled"]
+    # Sincronizar widget keys para que os sliders reflitam os novos valores
+    st.session_state["sl_w_dc"] = float(_pa["w_dc"])
+    st.session_state["sl_w_elo"] = float(_pa["w_elo"])
+    st.session_state["sl_w_tm"] = float(_pa["w_tm"])
+    st.session_state["sl_xi"] = float(_pa["xi"])
+    st.session_state["rd_tm_scale"] = _pa["tm_scale"]
+    dcqf = _cal.get("dc_quality_filter", {})
+    st.session_state["cb_dcqf_enabled"] = bool(_pa["dc_qf_enabled"])
+
 # Contadores de versao para forcar re-render de data_editors apos reset
 for _vkey in ("elo_editor_version", "tm_editor_version", "expert_editor_version"):
     if _vkey not in st.session_state:
@@ -1545,14 +1564,15 @@ def _display_optimize_results(results: list):
     # Botao para aplicar melhor config ao modelo 2026
     st.divider()
     if st.button("Aplicar melhor config ao modelo 2026", key="btn_apply_best"):
-        cal = _cal_dict()
-        cal["w_dc"] = bp["w_dc"]
-        cal["w_elo"] = bp["w_elo"]
-        cal["w_tm"] = bp["w_tm"]
-        cal["xi"] = bp["xi"]
-        cal["tm_scale"] = bp["tm_scale"]
-        cal["dc_quality_filter"]["enabled"] = bp["dc_qf_enabled"]
-        st.session_state["_apply_best_msg"] = f"Config aplicada! DC={bp['w_dc']:.2f}, ELO={bp['w_elo']:.2f}, TM={bp['w_tm']:.2f}, xi={bp['xi']:.4f}"
+        st.session_state["_pending_apply"] = {
+            "w_dc": bp["w_dc"], "w_elo": bp["w_elo"], "w_tm": bp["w_tm"],
+            "xi": bp["xi"], "tm_scale": bp["tm_scale"],
+            "dc_qf_enabled": bp["dc_qf_enabled"],
+        }
+        st.session_state["_apply_best_msg"] = (
+            f"Config aplicada! DC={bp['w_dc']:.2f}, ELO={bp['w_elo']:.2f}, "
+            f"TM={bp['w_tm']:.2f}, xi={bp['xi']:.4f}"
+        )
         st.rerun()
 
     if "_apply_best_msg" in st.session_state:
