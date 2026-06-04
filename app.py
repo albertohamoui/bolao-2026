@@ -26,9 +26,12 @@ from bolao2026 import (
     GROUPS,
     WORLD_CUP_TEAM_LIST,
     Calibration,
+    _THIRD_PLACE_SLOTS,
+    _assign_thirds_to_slots,
     load_config,
     run_full_pipeline,
     save_config,
+    smart_baseline_score,
 )
 
 # Caminho absoluto do config.json
@@ -965,10 +968,9 @@ def _display_results(output, elapsed, timestamp, show_save=False):
         st.metric("Executado em", ts_display)
 
     # Abas de resultados
-    tab_fav, tab_groups, tab_smart, tab_bets, tab_params = st.tabs([
+    tab_fav, tab_groups, tab_bets, tab_params = st.tabs([
         "Favoritos ao Titulo",
         "Previsoes por Grupo",
-        "Config Campea",
         "Apostas EV-Optimal",
         "Parametros do Modelo",
     ])
@@ -978,9 +980,6 @@ def _display_results(output, elapsed, timestamp, show_save=False):
 
     with tab_groups:
         _render_group_predictions(output)
-
-    with tab_smart:
-        _render_smart_baseline(output)
 
     with tab_bets:
         _render_bets(output)
@@ -1077,54 +1076,6 @@ def _render_group_predictions(output):
                 st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
 
-def _render_smart_baseline(output):
-    """Config Campea: Smart Baseline jogo a jogo."""
-    predictions = output.get("predictions", {})
-
-    st.markdown(
-        "**Smart Baseline** — DC puro, xi=0.0005, qf=ON, cutoff=2020  \n"
-        "Regra: P(empate)>35% → **1x1** | λ diff>0.5 → **2x0** favorito | senão → **2x1** favorito"
-    )
-    st.caption(
-        "Testado em 2018 (252 pts) e 2022 (253 pts) — soma 505. "
-        "Bate todos os baselines e o modelo EV-optimal."
-    )
-
-    by_group = {}
-    for _, pred in predictions.items():
-        by_group.setdefault(pred["group"], []).append(pred)
-
-    for gname in sorted(by_group.keys()):
-        teams = GROUPS[gname]
-        with st.expander(f"Grupo {gname} — {', '.join(teams)}", expanded=True):
-            rows = []
-            for p in by_group[gname]:
-                smart = p.get("score_smart", "-")
-                ev = p.get("score_ev", "-")
-                lh = p.get("home_xg", 0)
-                la = p.get("away_xg", 0)
-                draw_pct = p.get("draw", 0)
-
-                # Determine decision reason
-                if draw_pct > 35:
-                    decisao = f"EMPATE ({draw_pct:.0f}%)"
-                elif abs(lh - la) > 0.5:
-                    fav = p["home"] if lh >= la else p["away"]
-                    decisao = f"BIG {fav} (Δ={abs(lh - la):.2f})"
-                else:
-                    fav = p["home"] if lh >= la else p["away"]
-                    decisao = f"NORMAL {fav} (Δ={abs(lh - la):.2f})"
-
-                rows.append({
-                    "Jogo": f"{p['home']} vs {p['away']}",
-                    "PALPITE": smart,
-                    "Decisao": decisao,
-                    "λ Casa": f"{lh:.2f}",
-                    "λ Fora": f"{la:.2f}",
-                    "P(Empate)": f"{draw_pct:.0f}%",
-                    "EV-Optimal": ev,
-                })
-            st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
 
 def _render_bets(output):
@@ -1785,15 +1736,367 @@ def _render_comparison(data_a, data_b, name_a, name_b):
 
 
 # =============================================================================
+# Config Campea — top-level tab
+# =============================================================================
+
+_CHAMPION_CAL = Calibration(
+    w_dc=1.0, w_elo=0.0, w_tm=0.0, xi=0.0005,
+    date_cutoff='2020-01-01', tm_scale='sqrt',
+    dc_quality_filter={
+        'enabled': True,
+        'thresholds': [300, 200, 100],
+        'weights': [0.2, 0.5, 0.8, 1.0],
+    },
+    tournament_factor={'enabled': False},
+    top_scorer_model={'enabled': False},
+    squad_data={'enabled': False},
+    n_sims=50000,
+)
+
+
+def _champion_decision_label(draw_pct: float, lh: float, la: float,
+                             home: str, away: str) -> str:
+    """Return human-readable decision label for the smart baseline."""
+    if draw_pct > 35:
+        return f"EMPATE ({draw_pct:.0f}%)"
+    diff = abs(lh - la)
+    fav = home if lh >= la else away
+    if diff > 0.5:
+        return f"BIG {fav} (\u0394={diff:.2f})"
+    return f"NORMAL {fav} (\u0394={diff:.2f})"
+
+
+def _render_champion_groups(output: dict) -> None:
+    """Sub-tab: Fase de Grupos."""
+    predictions = output.get("predictions", {})
+    model_params = output.get("model_params", {})
+    attack = model_params.get("attack", {})
+    defense = model_params.get("defense", {})
+    group_bets = output.get("group_bets", {})
+
+    by_group: dict = {}
+    for _key, pred in predictions.items():
+        by_group.setdefault(pred["group"], []).append(pred)
+
+    for idx, gname in enumerate(sorted(by_group.keys())):
+        teams = GROUPS[gname]
+        with st.expander(f"Grupo {gname} \u2014 {', '.join(teams)}",
+                         expanded=(idx == 0)):
+            rows = []
+            for p in by_group[gname]:
+                lh = p.get("home_xg", 0)
+                la = p.get("away_xg", 0)
+                draw_pct = p.get("draw", 0)
+                rows.append({
+                    "Jogo": f"{p['home']} vs {p['away']}",
+                    "PALPITE": p.get("score_smart", "-"),
+                    "Decisao": _champion_decision_label(
+                        draw_pct, lh, la, p["home"], p["away"]),
+                    "\u03bb Casa": f"{lh:.2f}",
+                    "\u03bb Fora": f"{la:.2f}",
+                    "P(Empate)": f"{draw_pct:.0f}%",
+                    "Atk Casa": f"{attack.get(p['home'], 0):.3f}",
+                    "Def Casa": f"{defense.get(p['home'], 0):.3f}",
+                    "Atk Fora": f"{attack.get(p['away'], 0):.3f}",
+                    "Def Fora": f"{defense.get(p['away'], 0):.3f}",
+                })
+            st.dataframe(pd.DataFrame(rows), use_container_width=True,
+                         hide_index=True)
+
+            gb = group_bets.get(gname, {})
+            if gb:
+                st.caption(
+                    f"Classificacao prevista: **1o {gb.get('bet_1st', '?')}** "
+                    f"| **2o {gb.get('bet_2nd', '?')}**"
+                )
+
+
+def _render_champion_knockout(output: dict) -> None:
+    """Sub-tab: Mata-mata."""
+    group_bets = output.get("group_bets", {})
+    third_places = output.get("third_places", {})
+    stats = output.get("simulation_stats", {})
+    model = output.get("_model")
+
+    # Build position lookup: "1A" -> team, "2A" -> team, etc.
+    pos: dict = {}
+    for gname in sorted(GROUPS.keys()):
+        gb = group_bets.get(gname, {})
+        pos["1" + gname] = gb.get("bet_1st", GROUPS[gname][0])
+        pos["2" + gname] = gb.get("bet_2nd", GROUPS[gname][1])
+
+    # Assign 8 best third-placed teams to bracket slots
+    top8_3rd = third_places.get("top8_induced", [])
+    thirds_per_group = third_places.get("thirds_per_group", {})
+    # Build list of dicts with "team" and "group" keys for the assignment fn
+    best_thirds_for_assign = []
+    for team in top8_3rd:
+        group = next(
+            (g for g, t in thirds_per_group.items() if t == team), None
+        )
+        if group:
+            best_thirds_for_assign.append({"team": team, "group": group})
+    if len(best_thirds_for_assign) == 8:
+        third_slots = _assign_thirds_to_slots(best_thirds_for_assign)
+        for slot_key, team in third_slots.items():
+            pos[slot_key] = team
+
+    if not model:
+        st.warning("Modelo nao disponivel no output. Rode novamente para "
+                    "ver palpites do mata-mata.")
+        return
+
+    # Official FIFA 2026 R32 bracket (16 matches)
+    r32_matchups = [
+        (pos.get("2A", "?"), pos.get("2B", "?")),         # M73
+        (pos.get("1E", "?"), pos.get("3_M74", "?")),      # M74
+        (pos.get("1F", "?"), pos.get("2C", "?")),          # M75
+        (pos.get("1C", "?"), pos.get("2F", "?")),          # M76
+        (pos.get("1I", "?"), pos.get("3_M77", "?")),      # M77
+        (pos.get("2E", "?"), pos.get("2I", "?")),          # M78
+        (pos.get("1A", "?"), pos.get("3_M79", "?")),      # M79
+        (pos.get("1L", "?"), pos.get("3_M80", "?")),      # M80
+        (pos.get("1D", "?"), pos.get("3_M81", "?")),      # M81
+        (pos.get("1G", "?"), pos.get("3_M82", "?")),      # M82
+        (pos.get("2K", "?"), pos.get("2L", "?")),          # M83
+        (pos.get("1H", "?"), pos.get("2J", "?")),          # M84
+        (pos.get("1B", "?"), pos.get("3_M85", "?")),      # M85
+        (pos.get("1J", "?"), pos.get("2H", "?")),          # M86
+        (pos.get("1K", "?"), pos.get("3_M87", "?")),      # M87
+        (pos.get("2D", "?"), pos.get("2G", "?")),          # M88
+    ]
+
+    def _predict_and_advance(home, away):
+        """Predict match and decide who advances."""
+        try:
+            pred = model.predict_match(home, away, host_adv=0.0)
+            sb = smart_baseline_score(pred["score_matrix"], pred["lambdas"])
+            lh, la = pred["lambdas"]
+        except Exception:
+            sb = ("-", "-")
+            lh, la = 0, 0
+        p_home = stats.get(home, {}).get("champion", 0)
+        p_away = stats.get(away, {}).get("champion", 0)
+        advances = home if p_home >= p_away else away
+        return {
+            "Jogo": f"{home} vs {away}",
+            "Palpite Smart": f"{sb[0]}x{sb[1]}",
+            "\u03bb Casa": f"{lh:.2f}",
+            "\u03bb Fora": f"{la:.2f}",
+            "Avanca": advances,
+        }, advances
+
+    bracket_results: dict = {}
+
+    # R32
+    r32_matches = []
+    r32_winners = []
+    for home, away in r32_matchups:
+        match_info, winner = _predict_and_advance(home, away)
+        r32_matches.append(match_info)
+        r32_winners.append(winner)
+    bracket_results["R32"] = r32_matches
+
+    # R16: official bracket tree
+    w = r32_winners
+    r16_matchups = [
+        (w[1], w[4]),    # M89: W(M74) vs W(M77)
+        (w[0], w[2]),    # M90: W(M73) vs W(M75)
+        (w[3], w[5]),    # M91: W(M76) vs W(M78)
+        (w[6], w[7]),    # M92: W(M79) vs W(M80)
+        (w[10], w[11]),  # M93: W(M83) vs W(M84)
+        (w[8], w[9]),    # M94: W(M81) vs W(M82)
+        (w[13], w[15]),  # M95: W(M86) vs W(M88)
+        (w[12], w[14]),  # M96: W(M85) vs W(M87)
+    ]
+    r16_matches = []
+    r16_winners = []
+    for home, away in r16_matchups:
+        match_info, winner = _predict_and_advance(home, away)
+        r16_matches.append(match_info)
+        r16_winners.append(winner)
+    bracket_results["R16"] = r16_matches
+
+    # QF
+    qf_matchups = [
+        (r16_winners[0], r16_winners[1]),  # M97
+        (r16_winners[4], r16_winners[5]),  # M98
+        (r16_winners[2], r16_winners[3]),  # M99
+        (r16_winners[6], r16_winners[7]),  # M100
+    ]
+    qf_matches = []
+    qf_winners = []
+    for home, away in qf_matchups:
+        match_info, winner = _predict_and_advance(home, away)
+        qf_matches.append(match_info)
+        qf_winners.append(winner)
+    bracket_results["QF"] = qf_matches
+
+    # SF
+    sf_matchups = [
+        (qf_winners[0], qf_winners[1]),  # M101
+        (qf_winners[2], qf_winners[3]),  # M102
+    ]
+    sf_matches = []
+    sf_winners = []
+    for home, away in sf_matchups:
+        match_info, winner = _predict_and_advance(home, away)
+        sf_matches.append(match_info)
+        sf_winners.append(winner)
+    bracket_results["SF"] = sf_matches
+
+    # Final
+    final_match_info, final_winner = _predict_and_advance(
+        sf_winners[0], sf_winners[1]
+    )
+    bracket_results["Final"] = [final_match_info]
+
+    # Display round by round
+    for round_name in round_names:
+        if round_name not in bracket_results:
+            break
+        matches = bracket_results[round_name]
+        n_matches = len(matches)
+        label = f"{round_name} ({n_matches} jogos)"
+        with st.expander(label, expanded=(round_name in ("SF", "Final"))):
+            st.dataframe(pd.DataFrame(matches), use_container_width=True,
+                         hide_index=True)
+
+    # Final results
+    st.divider()
+    if "Final" in bracket_results and bracket_results["Final"]:
+        final_match = bracket_results["Final"][0]
+        champion = final_match["Avanca"]
+        finalist_a = final_match["Jogo"].split(" vs ")[0]
+        finalist_b = final_match["Jogo"].split(" vs ")[1]
+        vice = finalist_b if champion == finalist_a else finalist_a
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("Campeao", champion)
+        with col2:
+            st.metric("Vice", vice)
+
+        if "SF" in bracket_results and len(bracket_results["SF"]) == 2:
+            sf_losers = []
+            for m in bracket_results["SF"]:
+                a_team = m["Jogo"].split(" vs ")[0]
+                b_team = m["Jogo"].split(" vs ")[1]
+                loser = b_team if m["Avanca"] == a_team else a_team
+                sf_losers.append(loser)
+            st.caption(f"3o e 4o: {sf_losers[0]}, {sf_losers[1]}")
+
+
+def _render_champion_probabilities(output: dict) -> None:
+    """Sub-tab: Probabilidades."""
+    stats = output.get("simulation_stats", {})
+    rows = []
+    for team in WORLD_CUP_TEAM_LIST:
+        s = stats.get(team, {})
+        rows.append({
+            "Selecao": team,
+            "Campeao %": s.get("champion", 0),
+            "Final %": s.get("final", 0),
+            "Semi %": s.get("sf", 0),
+            "Quartas %": s.get("qf", 0),
+            "R16 %": s.get("r16", 0),
+            "R32 %": s.get("r32", 0),
+            "1o Grupo %": s.get("group_1st", 0),
+            "2o Grupo %": s.get("group_2nd", 0),
+        })
+    df = pd.DataFrame(rows).sort_values("Campeao %", ascending=False)
+    df.index = range(1, len(df) + 1)
+    df.index.name = "Pos"
+
+    # Format as percentages with 1 decimal
+    pct_cols = [c for c in df.columns if c != "Selecao"]
+    for col in pct_cols:
+        df[col] = df[col].apply(lambda x: f"{x:.1f}%")
+
+    st.dataframe(df, use_container_width=True, height=1750)
+
+
+def render_champion_config_page() -> None:
+    """Top-level tab: Config Campea."""
+    st.header("Config Campea")
+    st.markdown(
+        "**Smart Baseline** \u2014 DC puro, xi=0.0005, qf=ON, cutoff=2020  \n"
+        "Regra: P(empate)>35% \u2192 **1x1** | \u03bb diff>0.5 \u2192 "
+        "**2x0** favorito | senao \u2192 **2x1** favorito"
+    )
+    st.caption(
+        "Testado em 2018 (252 pts) e 2022 (253 pts) \u2014 soma 505. "
+        "Bate todos os baselines e o modelo EV-optimal."
+    )
+
+    run_clicked = st.button("Rodar Config Campea", type="primary",
+                            key="btn_champion_run")
+
+    output = st.session_state.get("champion_output")
+
+    if run_clicked:
+        t_start = time.time()
+        status = st.empty()
+        progress_bar = st.progress(
+            0, text="Carregando dados e otimizando Dixon-Coles...")
+
+        def mc_progress(current: int, total: int) -> None:
+            pct = current / total
+            progress_bar.progress(
+                pct,
+                text=f"Monte Carlo: {current:,}/{total:,} simulacoes...",
+            )
+
+        try:
+            status.info(
+                "Otimizacao Dixon-Coles em andamento. "
+                "Pode levar alguns minutos..."
+            )
+            output = run_full_pipeline(
+                _CHAMPION_CAL, progress_callback=mc_progress)
+            elapsed = time.time() - t_start
+            progress_bar.progress(1.0, text=f"Concluido em {elapsed:.0f}s")
+            status.success(f"Pipeline concluido em {elapsed:.0f}s")
+            st.session_state.champion_output = output
+        except Exception as e:
+            status.error(f"Erro: {e}")
+            return
+
+    if output is None:
+        st.info("Clique em 'Rodar Config Campea' para gerar os palpites.")
+        return
+
+    # Sub-tabs
+    sub_groups, sub_knockout, sub_probs = st.tabs([
+        "Fase de Grupos",
+        "Mata-mata",
+        "Probabilidades",
+    ])
+
+    with sub_groups:
+        _render_champion_groups(output)
+
+    with sub_knockout:
+        _render_champion_knockout(output)
+
+    with sub_probs:
+        _render_champion_probabilities(output)
+
+
+# =============================================================================
 # Layout principal
 # =============================================================================
 
-tab_calib, tab_run, tab_backtest, tab_history = st.tabs([
+tab_champion, tab_calib, tab_run, tab_backtest, tab_history = st.tabs([
+    "Config Campea",
     "Calibracao",
     "Rodar Simulacao",
     "Backtest & Otimizacao",
     "Historico",
 ])
+
+with tab_champion:
+    render_champion_config_page()
 
 with tab_calib:
     render_calibration_page()

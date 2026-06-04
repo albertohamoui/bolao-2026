@@ -1711,6 +1711,71 @@ class DixonColesModel:
 
 
 # =============================================================================
+# THIRD-PLACE BRACKET ASSIGNMENT (FIFA 2026 official bracket)
+# =============================================================================
+
+# Each R32 match involving a 3rd-place team and the groups it can come from.
+_THIRD_PLACE_SLOTS: Dict[str, set] = {
+    "3_M74": {"A", "B", "C", "D", "F"},
+    "3_M77": {"C", "D", "F", "G", "H"},
+    "3_M79": {"C", "E", "F", "H", "I"},
+    "3_M80": {"E", "H", "I", "J", "K"},
+    "3_M81": {"B", "E", "F", "I", "J"},
+    "3_M82": {"A", "E", "H", "I", "J"},
+    "3_M85": {"E", "F", "G", "I", "J"},
+    "3_M87": {"D", "E", "I", "J", "L"},
+}
+
+
+def _assign_thirds_to_slots(
+    best_thirds: List[Dict[str, Any]],
+) -> Dict[str, str]:
+    """
+    Assign 8 qualified third-place teams to the 8 bracket slots using
+    a most-constrained-first greedy approach.
+
+    Args:
+        best_thirds: list of 8 dicts with keys "team" and "group".
+
+    Returns:
+        dict mapping slot key (e.g. "3_M74") to team name.
+    """
+    qualified_groups = {t3["group"] for t3 in best_thirds}
+    group_to_team = {t3["group"]: t3["team"] for t3 in best_thirds}
+
+    # Build available options per slot (intersection with qualified groups)
+    available: Dict[str, set] = {}
+    for slot, allowed in _THIRD_PLACE_SLOTS.items():
+        available[slot] = allowed & qualified_groups
+
+    assigned: Dict[str, str] = {}
+    used_groups: set = set()
+
+    # Greedy: always pick the slot with fewest remaining options first
+    for _ in range(8):
+        # Filter out already-assigned slots
+        remaining = {
+            s: opts - used_groups
+            for s, opts in available.items()
+            if s not in assigned
+        }
+        if not remaining:
+            break
+        # Pick most constrained slot
+        slot = min(remaining, key=lambda s: len(remaining[s]))
+        options = remaining[slot]
+        if not options:
+            # Fallback: pick any unused group (should not happen with valid data)
+            options = qualified_groups - used_groups
+        # Pick the first group alphabetically for determinism
+        chosen_group = min(options)
+        assigned[slot] = group_to_team[chosen_group]
+        used_groups.add(chosen_group)
+
+    return assigned
+
+
+# =============================================================================
 # SIMULACAO MONTE CARLO
 # =============================================================================
 
@@ -1788,56 +1853,116 @@ class WorldCupSimulator:
                     "gf": table[t3]["gf"],
                 })
 
-        qualified = []
+        # Build position lookup: "1A" -> team, "2A" -> team, etc.
+        pos = {}
         for gname in sorted(self.groups.keys()):
             s = group_results[gname]["standings"]
-            qualified.append(("1" + gname, s[0]))
-            qualified.append(("2" + gname, s[1]))
+            pos["1" + gname] = s[0]
+            pos["2" + gname] = s[1]
 
         third_place.sort(key=lambda x: (x["pts"], x["gd"], x["gf"]), reverse=True)
         best_thirds = third_place[:8]
         best_third_teams = [t3["team"] for t3 in best_thirds]
-        for t3 in best_thirds:
-            qualified.append(("3" + t3["group"], t3["team"]))
 
-        r32_teams = [q[1] for q in qualified]
+        # Assign 8 third-place teams to bracket slots using constraint satisfaction
+        third_slots = _assign_thirds_to_slots(best_thirds)
+        for slot_key, team in third_slots.items():
+            pos[slot_key] = team
 
-        current_round = r32_teams[:32] if len(r32_teams) >= 32 else r32_teams
+        # Official FIFA 2026 R32 bracket (16 matches)
+        r32_matchups = [
+            (pos["2A"], pos["2B"]),           # M73
+            (pos["1E"], pos.get("3_M74")),    # M74
+            (pos["1F"], pos["2C"]),            # M75
+            (pos["1C"], pos["2F"]),            # M76
+            (pos["1I"], pos.get("3_M77")),    # M77
+            (pos["2E"], pos["2I"]),            # M78
+            (pos["1A"], pos.get("3_M79")),    # M79
+            (pos["1L"], pos.get("3_M80")),    # M80
+            (pos["1D"], pos.get("3_M81")),    # M81
+            (pos["1G"], pos.get("3_M82")),    # M82
+            (pos["2K"], pos["2L"]),            # M83
+            (pos["1H"], pos["2J"]),            # M84
+            (pos["1B"], pos.get("3_M85")),    # M85
+            (pos["1J"], pos["2H"]),            # M86
+            (pos["1K"], pos.get("3_M87")),    # M87
+            (pos["2D"], pos["2G"]),            # M88
+        ]
+
+        r32_teams = [t for pair in r32_matchups for t in pair]
         rounds_results = {}
         reached = {
-            "R32": list(current_round),
+            "R32": list(r32_teams),
             "R16": [], "QF": [], "SF": [], "Final": [],
         }
 
-        round_names = ["R32", "R16", "QF", "SF", "Final"]
-        for round_name in round_names:
-            if len(current_round) < 2:
-                break
+        def _sim_ko(h, a):
+            hg, ag, pen = self._simulate_match_fast(h, a, knockout=True)
+            team_goals[h] = team_goals.get(h, 0) + hg
+            team_goals[a] = team_goals.get(a, 0) + ag
+            if pen:
+                return pen
+            return h if hg > ag else a
 
-            winners = []
-            for i in range(0, len(current_round) - 1, 2):
-                h, a = current_round[i], current_round[i+1]
-                hg, ag, pen = self._simulate_match_fast(h, a, knockout=True)
-                team_goals[h] = team_goals.get(h, 0) + hg
-                team_goals[a] = team_goals.get(a, 0) + ag
-                if pen:
-                    winners.append(pen)
-                elif hg > ag:
-                    winners.append(h)
-                else:
-                    winners.append(a)
+        # R32 (16 matches -> 16 winners)
+        r32_winners = [_sim_ko(h, a) for h, a in r32_matchups]
+        rounds_results["R32"] = [
+            (m[0], m[1], w) for m, w in zip(r32_matchups, r32_winners)
+        ]
+        reached["R16"] = list(r32_winners)
 
-            rounds_results[round_name] = list(zip(
-                current_round[::2], current_round[1::2], winners
-            ))
-            current_round = winners
+        # R16: pair R32 winners per official bracket
+        # M89: W(M74) vs W(M77), M90: W(M73) vs W(M75)
+        # M91: W(M76) vs W(M78), M92: W(M79) vs W(M80)
+        # M93: W(M83) vs W(M84), M94: W(M81) vs W(M82)
+        # M95: W(M86) vs W(M88), M96: W(M85) vs W(M87)
+        w = r32_winners  # indices 0-15 correspond to M73-M88
+        r16_matchups = [
+            (w[1], w[4]),    # M89: W(M74) vs W(M77)
+            (w[0], w[2]),    # M90: W(M73) vs W(M75)
+            (w[3], w[5]),    # M91: W(M76) vs W(M78)
+            (w[6], w[7]),    # M92: W(M79) vs W(M80)
+            (w[10], w[11]),  # M93: W(M83) vs W(M84)
+            (w[8], w[9]),    # M94: W(M81) vs W(M82)
+            (w[13], w[15]),  # M95: W(M86) vs W(M88)
+            (w[12], w[14]),  # M96: W(M85) vs W(M87)
+        ]
+        r16_winners = [_sim_ko(h, a) for h, a in r16_matchups]
+        rounds_results["R16"] = [
+            (m[0], m[1], w) for m, w in zip(r16_matchups, r16_winners)
+        ]
+        reached["QF"] = list(r16_winners)
 
-            next_round = {"R32": "R16", "R16": "QF",
-                          "QF": "SF", "SF": "Final"}.get(round_name)
-            if next_round is not None:
-                reached[next_round] = list(winners)
+        # QF
+        qf_matchups = [
+            (r16_winners[0], r16_winners[1]),  # M97: W(M89) vs W(M90)
+            (r16_winners[4], r16_winners[5]),  # M98: W(M93) vs W(M94)
+            (r16_winners[2], r16_winners[3]),  # M99: W(M91) vs W(M92)
+            (r16_winners[6], r16_winners[7]),  # M100: W(M95) vs W(M96)
+        ]
+        qf_winners = [_sim_ko(h, a) for h, a in qf_matchups]
+        rounds_results["QF"] = [
+            (m[0], m[1], w) for m, w in zip(qf_matchups, qf_winners)
+        ]
+        reached["SF"] = list(qf_winners)
 
-        champion = current_round[0] if current_round else None
+        # SF
+        sf_matchups = [
+            (qf_winners[0], qf_winners[1]),  # M101: W(M97) vs W(M98)
+            (qf_winners[2], qf_winners[3]),  # M102: W(M99) vs W(M100)
+        ]
+        sf_winners = [_sim_ko(h, a) for h, a in sf_matchups]
+        rounds_results["SF"] = [
+            (m[0], m[1], w) for m, w in zip(sf_matchups, sf_winners)
+        ]
+        reached["Final"] = list(sf_winners)
+
+        # Final
+        final_matchup = (sf_winners[0], sf_winners[1])
+        champion = _sim_ko(final_matchup[0], final_matchup[1])
+        rounds_results["Final"] = [
+            (final_matchup[0], final_matchup[1], champion)
+        ]
         return {
             "groups": group_results,
             "champion": champion,
@@ -2235,6 +2360,7 @@ def run_full_pipeline(cal: Calibration,
         "tournament_factors": getattr(model, "_tournament_factors", None),
         "tournament_factors_detail": getattr(model, "_tournament_factors_detail", None),
         "scorer_results": getattr(simulator, "scorer_results", None),
+        "_model": model,
     }
 
     return output
