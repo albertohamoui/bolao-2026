@@ -1952,6 +1952,7 @@ def _render_champion_knockout(output: dict) -> None:
     bracket_results["Final"] = [final_match_info]
 
     # Display round by round
+    round_names = ["R32", "R16", "QF", "SF", "Final"]
     for round_name in round_names:
         if round_name not in bracket_results:
             break
