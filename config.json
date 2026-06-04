@@ -1,11 +1,11 @@
 {
-  "w_dc": 0.45,
-  "w_elo": 0.3,
-  "w_tm": 0.25,
-  "xi": 0.001,
+  "w_dc": 1.0,
+  "w_elo": 0.0,
+  "w_tm": 0.0,
+  "xi": 0.0005,
   "wc_host_adv": 0.12,
   "n_sims": 50000,
-  "date_cutoff": "2022-01-01",
+  "date_cutoff": "2020-01-01",
   "tm_scale": "sqrt",
   "ad_split": [
     0.6,

@@ -1,0 +1,8066 @@
+[
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 252,
+    "pts_2022": 253,
+    "combined": 505
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 255,
+    "pts_2022": 249,
+    "combined": 504
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 261,
+    "pts_2022": 242,
+    "combined": 503
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 242,
+    "pts_2022": 254,
+    "combined": 496
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 270,
+    "pts_2022": 221,
+    "combined": 491
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 251,
+    "pts_2022": 239,
+    "combined": 490
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 258,
+    "pts_2022": 229,
+    "combined": 487
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 236,
+    "pts_2022": 249,
+    "combined": 485
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 239,
+    "pts_2022": 245,
+    "combined": 484
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 245,
+    "pts_2022": 238,
+    "combined": 483
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 269,
+    "pts_2022": 208,
+    "combined": 477
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 226,
+    "pts_2022": 250,
+    "combined": 476
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 265,
+    "pts_2022": 209,
+    "combined": 474
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 254,
+    "pts_2022": 217,
+    "combined": 471
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 235,
+    "pts_2022": 235,
+    "combined": 470
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 250,
+    "pts_2022": 220,
+    "combined": 470
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 250,
+    "pts_2022": 220,
+    "combined": 470
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 250,
+    "pts_2022": 220,
+    "combined": 470
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 250,
+    "pts_2022": 220,
+    "combined": 470
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 228,
+    "pts_2022": 241,
+    "combined": 469
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 239,
+    "pts_2022": 230,
+    "combined": 469
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 229,
+    "pts_2022": 239,
+    "combined": 468
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 242,
+    "pts_2022": 225,
+    "combined": 467
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 234,
+    "pts_2022": 232,
+    "combined": 466
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 225,
+    "pts_2022": 238,
+    "combined": 463
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 228,
+    "pts_2022": 235,
+    "combined": 463
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 231,
+    "pts_2022": 230,
+    "combined": 461
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 221,
+    "pts_2022": 239,
+    "combined": 460
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 253,
+    "pts_2022": 204,
+    "combined": 457
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 265,
+    "pts_2022": 192,
+    "combined": 457
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 209,
+    "pts_2022": 247,
+    "combined": 456
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 249,
+    "pts_2022": 205,
+    "combined": 454
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 264,
+    "pts_2022": 190,
+    "combined": 454
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 249,
+    "pts_2022": 204,
+    "combined": 453
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 253,
+    "pts_2022": 200,
+    "combined": 453
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 256,
+    "pts_2022": 196,
+    "combined": 452
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 205,
+    "pts_2022": 246,
+    "combined": 451
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 208,
+    "pts_2022": 243,
+    "combined": 451
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 234,
+    "pts_2022": 217,
+    "combined": 451
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 234,
+    "pts_2022": 216,
+    "combined": 450
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 234,
+    "pts_2022": 216,
+    "combined": 450
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 234,
+    "pts_2022": 216,
+    "combined": 450
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 234,
+    "pts_2022": 216,
+    "combined": 450
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 231,
+    "pts_2022": 218,
+    "combined": 449
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 224,
+    "pts_2022": 225,
+    "combined": 449
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 212,
+    "pts_2022": 237,
+    "combined": 449
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 223,
+    "pts_2022": 226,
+    "combined": 449
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 201,
+    "pts_2022": 247,
+    "combined": 448
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 218,
+    "pts_2022": 228,
+    "combined": 446
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 227,
+    "pts_2022": 219,
+    "combined": 446
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 219,
+    "pts_2022": 226,
+    "combined": 445
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 235,
+    "pts_2022": 210,
+    "combined": 445
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 237,
+    "pts_2022": 206,
+    "combined": 443
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 234,
+    "pts_2022": 208,
+    "combined": 442
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 215,
+    "pts_2022": 226,
+    "combined": 441
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 208,
+    "pts_2022": 231,
+    "combined": 439
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 211,
+    "pts_2022": 226,
+    "combined": 437
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 204,
+    "pts_2022": 233,
+    "combined": 437
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 231,
+    "pts_2022": 206,
+    "combined": 437
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 249,
+    "pts_2022": 188,
+    "combined": 437
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 248,
+    "pts_2022": 186,
+    "combined": 434
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 199,
+    "pts_2022": 234,
+    "combined": 433
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 233,
+    "pts_2022": 200,
+    "combined": 433
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 237,
+    "pts_2022": 196,
+    "combined": 433
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 226,
+    "pts_2022": 206,
+    "combined": 432
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 240,
+    "pts_2022": 192,
+    "combined": 432
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 218,
+    "pts_2022": 213,
+    "combined": 431
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 223,
+    "pts_2022": 206,
+    "combined": 429
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 223,
+    "pts_2022": 206,
+    "combined": 429
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 223,
+    "pts_2022": 206,
+    "combined": 429
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 223,
+    "pts_2022": 206,
+    "combined": 429
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 249,
+    "pts_2022": 180,
+    "combined": 429
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 249,
+    "pts_2022": 180,
+    "combined": 429
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 212,
+    "pts_2022": 216,
+    "combined": 428
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 211,
+    "pts_2022": 215,
+    "combined": 426
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 211,
+    "pts_2022": 214,
+    "combined": 425
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 201,
+    "pts_2022": 224,
+    "combined": 425
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 207,
+    "pts_2022": 218,
+    "combined": 425
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 219,
+    "pts_2022": 206,
+    "combined": 425
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 225,
+    "pts_2022": 200,
+    "combined": 425
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 221,
+    "pts_2022": 202,
+    "combined": 423
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 218,
+    "pts_2022": 204,
+    "combined": 422
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 206,
+    "pts_2022": 214,
+    "combined": 420
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 192,
+    "pts_2022": 227,
+    "combined": 419
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 206,
+    "pts_2022": 212,
+    "combined": 418
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 203,
+    "pts_2022": 214,
+    "combined": 417
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 203,
+    "pts_2022": 214,
+    "combined": 417
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 203,
+    "pts_2022": 214,
+    "combined": 417
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 203,
+    "pts_2022": 214,
+    "combined": 417
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 228,
+    "pts_2022": 188,
+    "combined": 416
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 227,
+    "pts_2022": 189,
+    "combined": 416
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 192,
+    "pts_2022": 224,
+    "combined": 416
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 226,
+    "pts_2022": 189,
+    "combined": 415
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 224,
+    "pts_2022": 189,
+    "combined": 413
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 181,
+    "pts_2022": 232,
+    "combined": 413
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 187,
+    "pts_2022": 226,
+    "combined": 413
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 225,
+    "pts_2022": 187,
+    "combined": 412
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 217,
+    "pts_2022": 194,
+    "combined": 411
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 210,
+    "pts_2022": 201,
+    "combined": 411
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 214,
+    "pts_2022": 197,
+    "combined": 411
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 222,
+    "pts_2022": 188,
+    "combined": 410
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 196,
+    "pts_2022": 214,
+    "combined": 410
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 204,
+    "pts_2022": 206,
+    "combined": 410
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 233,
+    "pts_2022": 176,
+    "combined": 409
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 233,
+    "pts_2022": 176,
+    "combined": 409
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 195,
+    "pts_2022": 212,
+    "combined": 407
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 209,
+    "pts_2022": 196,
+    "combined": 405
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 208,
+    "pts_2022": 196,
+    "combined": 404
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 207,
+    "pts_2022": 197,
+    "combined": 404
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 216,
+    "pts_2022": 188,
+    "combined": 404
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 216,
+    "pts_2022": 188,
+    "combined": 404
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 208,
+    "pts_2022": 196,
+    "combined": 404
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 206,
+    "pts_2022": 197,
+    "combined": 403
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 223,
+    "pts_2022": 179,
+    "combined": 402
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 188,
+    "pts_2022": 214,
+    "combined": 402
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 204,
+    "pts_2022": 197,
+    "combined": 401
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 207,
+    "pts_2022": 194,
+    "combined": 401
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 205,
+    "pts_2022": 195,
+    "combined": 400
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 223,
+    "pts_2022": 176,
+    "combined": 399
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 197,
+    "pts_2022": 202,
+    "combined": 399
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 190,
+    "pts_2022": 209,
+    "combined": 399
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 194,
+    "pts_2022": 205,
+    "combined": 399
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 202,
+    "pts_2022": 196,
+    "combined": 398
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 176,
+    "pts_2022": 222,
+    "combined": 398
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 184,
+    "pts_2022": 214,
+    "combined": 398
+  },
+  {
+    "params": {
+      "draw_threshold": 0.35,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 190,
+    "pts_2022": 208,
+    "combined": 398
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 175,
+    "pts_2022": 220,
+    "combined": 395
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 196,
+    "pts_2022": 196,
+    "combined": 392
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 196,
+    "pts_2022": 196,
+    "combined": 392
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 188,
+    "pts_2022": 204,
+    "combined": 392
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 198,
+    "pts_2022": 194,
+    "combined": 392
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 203,
+    "pts_2022": 187,
+    "combined": 390
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 168,
+    "pts_2022": 222,
+    "combined": 390
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 194,
+    "pts_2022": 195,
+    "combined": 389
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 187,
+    "pts_2022": 202,
+    "combined": 389
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 228,
+    "pts_2022": 160,
+    "combined": 388
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 210,
+    "pts_2022": 177,
+    "combined": 387
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 203,
+    "pts_2022": 184,
+    "combined": 387
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 210,
+    "pts_2022": 177,
+    "combined": 387
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 210,
+    "pts_2022": 177,
+    "combined": 387
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 191,
+    "pts_2022": 195,
+    "combined": 386
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 207,
+    "pts_2022": 177,
+    "combined": 384
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 188,
+    "pts_2022": 195,
+    "combined": 383
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 222,
+    "pts_2022": 160,
+    "combined": 382
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 222,
+    "pts_2022": 160,
+    "combined": 382
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 223,
+    "pts_2022": 159,
+    "combined": 382
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 222,
+    "pts_2022": 160,
+    "combined": 382
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 222,
+    "pts_2022": 160,
+    "combined": 382
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 186,
+    "pts_2022": 195,
+    "combined": 381
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 204,
+    "pts_2022": 177,
+    "combined": 381
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 211,
+    "pts_2022": 170,
+    "combined": 381
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 185,
+    "pts_2022": 195,
+    "combined": 380
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 178,
+    "pts_2022": 202,
+    "combined": 380
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 202,
+    "pts_2022": 177,
+    "combined": 379
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 222,
+    "pts_2022": 157,
+    "combined": 379
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 201,
+    "pts_2022": 177,
+    "combined": 378
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 207,
+    "pts_2022": 171,
+    "combined": 378
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 206,
+    "pts_2022": 172,
+    "combined": 378
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 211,
+    "pts_2022": 167,
+    "combined": 378
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 182,
+    "pts_2022": 195,
+    "combined": 377
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 189,
+    "pts_2022": 188,
+    "combined": 377
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 181,
+    "pts_2022": 195,
+    "combined": 376
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 181,
+    "pts_2022": 195,
+    "combined": 376
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 208,
+    "pts_2022": 168,
+    "combined": 376
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 198,
+    "pts_2022": 177,
+    "combined": 375
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 200,
+    "pts_2022": 175,
+    "combined": 375
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 190,
+    "pts_2022": 185,
+    "combined": 375
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 190,
+    "pts_2022": 185,
+    "combined": 375
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 197,
+    "pts_2022": 177,
+    "combined": 374
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 197,
+    "pts_2022": 177,
+    "combined": 374
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 214,
+    "pts_2022": 159,
+    "combined": 373
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 202,
+    "pts_2022": 168,
+    "combined": 370
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 202,
+    "pts_2022": 168,
+    "combined": 370
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 203,
+    "pts_2022": 167,
+    "combined": 370
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 202,
+    "pts_2022": 168,
+    "combined": 370
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 202,
+    "pts_2022": 168,
+    "combined": 370
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 191,
+    "pts_2022": 178,
+    "combined": 369
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 181,
+    "pts_2022": 188,
+    "combined": 369
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 202,
+    "pts_2022": 165,
+    "combined": 367
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 187,
+    "pts_2022": 179,
+    "combined": 366
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 186,
+    "pts_2022": 180,
+    "combined": 366
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 191,
+    "pts_2022": 175,
+    "combined": 366
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 192,
+    "pts_2022": 174,
+    "combined": 366
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 169,
+    "pts_2022": 196,
+    "combined": 365
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 189,
+    "pts_2022": 175,
+    "combined": 364
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 189,
+    "pts_2022": 174,
+    "combined": 363
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 180,
+    "pts_2022": 183,
+    "combined": 363
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 203,
+    "pts_2022": 160,
+    "combined": 363
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 175,
+    "pts_2022": 187,
+    "combined": 362
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 174,
+    "pts_2022": 187,
+    "combined": 361
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 205,
+    "pts_2022": 156,
+    "combined": 361
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 194,
+    "pts_2022": 167,
+    "combined": 361
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 186,
+    "pts_2022": 174,
+    "combined": 360
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 170,
+    "pts_2022": 190,
+    "combined": 360
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 191,
+    "pts_2022": 169,
+    "combined": 360
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 185,
+    "pts_2022": 174,
+    "combined": 359
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 190,
+    "pts_2022": 169,
+    "combined": 359
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 184,
+    "pts_2022": 174,
+    "combined": 358
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 202,
+    "pts_2022": 156,
+    "combined": 358
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 186,
+    "pts_2022": 172,
+    "combined": 358
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 183,
+    "pts_2022": 175,
+    "combined": 358
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 167,
+    "pts_2022": 190,
+    "combined": 357
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 201,
+    "pts_2022": 156,
+    "combined": 357
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 207,
+    "pts_2022": 150,
+    "combined": 357
+  },
+  {
+    "params": {
+      "draw_threshold": 0.32,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 161,
+    "pts_2022": 196,
+    "combined": 357
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 169,
+    "pts_2022": 187,
+    "combined": 356
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 200,
+    "pts_2022": 156,
+    "combined": 356
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 183,
+    "pts_2022": 172,
+    "combined": 355
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 180,
+    "pts_2022": 174,
+    "combined": 354
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 164,
+    "pts_2022": 190,
+    "combined": 354
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 180,
+    "pts_2022": 174,
+    "combined": 354
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 180,
+    "pts_2022": 174,
+    "combined": 354
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 180,
+    "pts_2022": 174,
+    "combined": 354
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 185,
+    "pts_2022": 169,
+    "combined": 354
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 172,
+    "pts_2022": 182,
+    "combined": 354
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 195,
+    "pts_2022": 159,
+    "combined": 354
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 207,
+    "pts_2022": 147,
+    "combined": 354
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 206,
+    "pts_2022": 148,
+    "combined": 354
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 207,
+    "pts_2022": 147,
+    "combined": 354
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 163,
+    "pts_2022": 190,
+    "combined": 353
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 166,
+    "pts_2022": 187,
+    "combined": 353
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 196,
+    "pts_2022": 156,
+    "combined": 352
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 180,
+    "pts_2022": 172,
+    "combined": 352
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 196,
+    "pts_2022": 156,
+    "combined": 352
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 196,
+    "pts_2022": 156,
+    "combined": 352
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 196,
+    "pts_2022": 156,
+    "combined": 352
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 169,
+    "pts_2022": 183,
+    "combined": 352
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 179,
+    "pts_2022": 172,
+    "combined": 351
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 182,
+    "pts_2022": 169,
+    "combined": 351
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 183,
+    "pts_2022": 168,
+    "combined": 351
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 170,
+    "pts_2022": 178,
+    "combined": 348
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 170,
+    "pts_2022": 178,
+    "combined": 348
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 186,
+    "pts_2022": 160,
+    "combined": 346
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 186,
+    "pts_2022": 160,
+    "combined": 346
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 163,
+    "pts_2022": 183,
+    "combined": 346
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 187,
+    "pts_2022": 158,
+    "combined": 345
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 186,
+    "pts_2022": 159,
+    "combined": 345
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 166,
+    "pts_2022": 178,
+    "combined": 344
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 164,
+    "pts_2022": 178,
+    "combined": 342
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 176,
+    "pts_2022": 166,
+    "combined": 342
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 182,
+    "pts_2022": 160,
+    "combined": 342
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 175,
+    "pts_2022": 167,
+    "combined": 342
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 187,
+    "pts_2022": 155,
+    "combined": 342
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 186,
+    "pts_2022": 156,
+    "combined": 342
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 187,
+    "pts_2022": 155,
+    "combined": 342
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 180,
+    "pts_2022": 160,
+    "combined": 340
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 192,
+    "pts_2022": 148,
+    "combined": 340
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 180,
+    "pts_2022": 159,
+    "combined": 339
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 170,
+    "pts_2022": 166,
+    "combined": 336
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 186,
+    "pts_2022": 148,
+    "combined": 334
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 167,
+    "pts_2022": 166,
+    "combined": 333
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 166,
+    "pts_2022": 167,
+    "combined": 333
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 165,
+    "pts_2022": 166,
+    "combined": 331
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 183,
+    "pts_2022": 148,
+    "combined": 331
+  },
+  {
+    "params": {
+      "draw_threshold": 0.28,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 181,
+    "pts_2022": 148,
+    "combined": 329
+  },
+  {
+    "params": {
+      "draw_threshold": 0.3,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 160,
+    "pts_2022": 167,
+    "combined": 327
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 162,
+    "combined": 309
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 162,
+    "combined": 309
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 162,
+    "combined": 309
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 162,
+    "combined": 309
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 162,
+    "combined": 309
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 162,
+    "combined": 309
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 162,
+    "combined": 309
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 162,
+    "combined": 309
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 172,
+    "combined": 303
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 172,
+    "combined": 303
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 172,
+    "combined": 303
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 172,
+    "combined": 303
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 172,
+    "combined": 303
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 172,
+    "combined": 303
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 172,
+    "combined": 303
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 172,
+    "combined": 303
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 145,
+    "pts_2022": 156,
+    "combined": 301
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 145,
+    "pts_2022": 156,
+    "combined": 301
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 145,
+    "pts_2022": 156,
+    "combined": 301
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 145,
+    "pts_2022": 156,
+    "combined": 301
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 145,
+    "pts_2022": 156,
+    "combined": 301
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 145,
+    "pts_2022": 156,
+    "combined": 301
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 145,
+    "pts_2022": 156,
+    "combined": 301
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 145,
+    "pts_2022": 156,
+    "combined": 301
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 152,
+    "combined": 299
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 152,
+    "combined": 299
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 152,
+    "combined": 299
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 152,
+    "combined": 299
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 152,
+    "combined": 299
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 152,
+    "combined": 299
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 152,
+    "combined": 299
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 152,
+    "combined": 299
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 149,
+    "combined": 296
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 149,
+    "combined": 296
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 149,
+    "combined": 296
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 149,
+    "combined": 296
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 149,
+    "combined": 296
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 149,
+    "combined": 296
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 149,
+    "combined": 296
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 147,
+    "pts_2022": 149,
+    "combined": 296
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 129,
+    "pts_2022": 166,
+    "combined": 295
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 129,
+    "pts_2022": 166,
+    "combined": 295
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 129,
+    "pts_2022": 166,
+    "combined": 295
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 129,
+    "pts_2022": 166,
+    "combined": 295
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 129,
+    "pts_2022": 166,
+    "combined": 295
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 129,
+    "pts_2022": 166,
+    "combined": 295
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 129,
+    "pts_2022": 166,
+    "combined": 295
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 129,
+    "pts_2022": 166,
+    "combined": 295
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 142,
+    "pts_2022": 150,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 142,
+    "pts_2022": 150,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 142,
+    "pts_2022": 150,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 142,
+    "pts_2022": 150,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 142,
+    "pts_2022": 150,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 142,
+    "pts_2022": 150,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 142,
+    "pts_2022": 150,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 142,
+    "pts_2022": 150,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 134,
+    "pts_2022": 158,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 134,
+    "pts_2022": 158,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 134,
+    "pts_2022": 158,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 134,
+    "pts_2022": 158,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 134,
+    "pts_2022": 158,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 134,
+    "pts_2022": 158,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 134,
+    "pts_2022": 158,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 134,
+    "pts_2022": 158,
+    "combined": 292
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 141,
+    "pts_2022": 147,
+    "combined": 288
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 141,
+    "pts_2022": 147,
+    "combined": 288
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 141,
+    "pts_2022": 147,
+    "combined": 288
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 141,
+    "pts_2022": 147,
+    "combined": 288
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 141,
+    "pts_2022": 147,
+    "combined": 288
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 141,
+    "pts_2022": 147,
+    "combined": 288
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 141,
+    "pts_2022": 147,
+    "combined": 288
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 141,
+    "pts_2022": 147,
+    "combined": 288
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 168,
+    "combined": 286
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 168,
+    "combined": 286
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 168,
+    "combined": 286
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 168,
+    "combined": 286
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 168,
+    "combined": 286
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 168,
+    "combined": 286
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 168,
+    "combined": 286
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 168,
+    "combined": 286
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 158,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 158,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 158,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 158,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 158,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 158,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 158,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 158,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 150,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 150,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 150,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 150,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 150,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 150,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 150,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        1,
+        1
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 131,
+    "pts_2022": 150,
+    "combined": 281
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 155,
+    "combined": 278
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 155,
+    "combined": 278
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 155,
+    "combined": 278
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 155,
+    "combined": 278
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 155,
+    "combined": 278
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 155,
+    "combined": 278
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 155,
+    "combined": 278
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        2,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 123,
+    "pts_2022": 155,
+    "combined": 278
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 115,
+    "pts_2022": 160,
+    "combined": 275
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 115,
+    "pts_2022": 160,
+    "combined": 275
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 115,
+    "pts_2022": 160,
+    "combined": 275
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 115,
+    "pts_2022": 160,
+    "combined": 275
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 115,
+    "pts_2022": 160,
+    "combined": 275
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 115,
+    "pts_2022": 160,
+    "combined": 275
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 115,
+    "pts_2022": 160,
+    "combined": 275
+  },
+  {
+    "params": {
+      "draw_threshold": 0.25,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 115,
+    "pts_2022": 160,
+    "combined": 275
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 156,
+    "combined": 274
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 156,
+    "combined": 274
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 156,
+    "combined": 274
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 156,
+    "combined": 274
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 156,
+    "combined": 274
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 156,
+    "combined": 274
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 156,
+    "combined": 274
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        0
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 118,
+    "pts_2022": 156,
+    "combined": 274
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 117,
+    "pts_2022": 153,
+    "combined": 270
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.3,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 117,
+    "pts_2022": 153,
+    "combined": 270
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 117,
+    "pts_2022": 153,
+    "combined": 270
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.5,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 117,
+    "pts_2022": 153,
+    "combined": 270
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 117,
+    "pts_2022": 153,
+    "combined": 270
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.7,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 117,
+    "pts_2022": 153,
+    "combined": 270
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        1,
+        0
+      ]
+    },
+    "pts_2018": 117,
+    "pts_2022": 153,
+    "combined": 270
+  },
+  {
+    "params": {
+      "draw_threshold": 0.2,
+      "draw_score": [
+        0,
+        0
+      ],
+      "big_win_lambda_diff": 0.9,
+      "big_win_score": [
+        3,
+        1
+      ],
+      "normal_win_score": [
+        2,
+        1
+      ]
+    },
+    "pts_2018": 117,
+    "pts_2022": 153,
+    "combined": 270
+  }
+]

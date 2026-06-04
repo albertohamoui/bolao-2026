@@ -688,6 +688,43 @@ def bolao_points(bet: Tuple[int, int], actual: Tuple[int, int], knockout: bool =
     return table["winner_only"]
 
 
+def smart_baseline_score(
+    score_matrix: np.ndarray,
+    lambdas: Tuple[float, float],
+    draw_threshold: float = 0.35,
+    draw_score: Tuple[int, int] = (1, 1),
+    big_win_lambda_diff: float = 0.5,
+    big_win_score: Tuple[int, int] = (2, 0),
+    normal_win_score: Tuple[int, int] = (2, 1),
+) -> Tuple[int, int]:
+    """
+    Smart Baseline: usa probabilidades DC para escolher placar.
+
+    1. Se P(empate) > draw_threshold -> draw_score
+    2. Se |lambda_h - lambda_a| > big_win_lambda_diff -> big_win_score pro favorito
+    3. Senao -> normal_win_score pro favorito
+    """
+    n = score_matrix.shape[0]
+    p_draw = sum(float(score_matrix[i, i]) for i in range(n))
+    lh, la = lambdas
+
+    if p_draw > draw_threshold:
+        return draw_score
+
+    diff = abs(lh - la)
+    home_is_fav = lh >= la
+
+    if diff > big_win_lambda_diff:
+        score = big_win_score
+    else:
+        score = normal_win_score
+
+    if home_is_fav:
+        return score
+    else:
+        return (score[1], score[0])
+
+
 def ev_optimal_score(score_matrix: np.ndarray, knockout: bool = False, max_goals: int = 8):
     """
     Encontra o placar (a, b) que maximiza o valor esperado de pontos
@@ -2138,6 +2175,7 @@ def run_full_pipeline(cal: Calibration,
                 ms = pred["most_likely_score"]
                 ev_score, ev_pts = ev_optimal_score(pred["score_matrix"], knockout=False)
                 lh, la = pred["lambdas"]
+                sb = smart_baseline_score(pred["score_matrix"], pred["lambdas"])
 
                 match_key = f"{h} vs {a}"
                 all_predictions[match_key] = {
@@ -2145,6 +2183,7 @@ def run_full_pipeline(cal: Calibration,
                     "group": gname,
                     "score_modal": f"{ms[0]}x{ms[1]}",
                     "score_ev": f"{ev_score[0]}x{ev_score[1]}",
+                    "score_smart": f"{sb[0]}x{sb[1]}",
                     "ev_points": round(ev_pts, 2),
                     "home_win": round(ph * 100, 1),
                     "draw": round(pd * 100, 1),

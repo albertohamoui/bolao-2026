@@ -965,9 +965,10 @@ def _display_results(output, elapsed, timestamp, show_save=False):
         st.metric("Executado em", ts_display)
 
     # Abas de resultados
-    tab_fav, tab_groups, tab_bets, tab_params = st.tabs([
+    tab_fav, tab_groups, tab_smart, tab_bets, tab_params = st.tabs([
         "Favoritos ao Titulo",
         "Previsoes por Grupo",
+        "Config Campea",
         "Apostas EV-Optimal",
         "Parametros do Modelo",
     ])
@@ -977,6 +978,9 @@ def _display_results(output, elapsed, timestamp, show_save=False):
 
     with tab_groups:
         _render_group_predictions(output)
+
+    with tab_smart:
+        _render_smart_baseline(output)
 
     with tab_bets:
         _render_bets(output)
@@ -1047,6 +1051,7 @@ def _render_group_predictions(output):
                 for p in by_group[gname]:
                     rows.append({
                         "Jogo": f"{p['home']} vs {p['away']}",
+                        "Smart": p.get("score_smart", "-"),
                         "Placar EV": p["score_ev"],
                         "Modal": p["score_modal"],
                         "Casa": f"{p['home_win']:.0f}%",
@@ -1070,6 +1075,56 @@ def _render_group_predictions(output):
                         "Elim": f"{100 - s.get('group_1st', 0) - s.get('group_2nd', 0) - s.get('group_3rd_qual', 0):.1f}%",
                     })
                 st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+
+
+def _render_smart_baseline(output):
+    """Config Campea: Smart Baseline jogo a jogo."""
+    predictions = output.get("predictions", {})
+
+    st.markdown(
+        "**Smart Baseline** — DC puro, xi=0.0005, qf=ON, cutoff=2020  \n"
+        "Regra: P(empate)>35% → **1x1** | λ diff>0.5 → **2x0** favorito | senão → **2x1** favorito"
+    )
+    st.caption(
+        "Testado em 2018 (252 pts) e 2022 (253 pts) — soma 505. "
+        "Bate todos os baselines e o modelo EV-optimal."
+    )
+
+    by_group = {}
+    for _, pred in predictions.items():
+        by_group.setdefault(pred["group"], []).append(pred)
+
+    for gname in sorted(by_group.keys()):
+        teams = GROUPS[gname]
+        with st.expander(f"Grupo {gname} — {', '.join(teams)}", expanded=True):
+            rows = []
+            for p in by_group[gname]:
+                smart = p.get("score_smart", "-")
+                ev = p.get("score_ev", "-")
+                lh = p.get("home_xg", 0)
+                la = p.get("away_xg", 0)
+                draw_pct = p.get("draw", 0)
+
+                # Determine decision reason
+                if draw_pct > 35:
+                    decisao = f"EMPATE ({draw_pct:.0f}%)"
+                elif abs(lh - la) > 0.5:
+                    fav = p["home"] if lh >= la else p["away"]
+                    decisao = f"BIG {fav} (Δ={abs(lh - la):.2f})"
+                else:
+                    fav = p["home"] if lh >= la else p["away"]
+                    decisao = f"NORMAL {fav} (Δ={abs(lh - la):.2f})"
+
+                rows.append({
+                    "Jogo": f"{p['home']} vs {p['away']}",
+                    "PALPITE": smart,
+                    "Decisao": decisao,
+                    "λ Casa": f"{lh:.2f}",
+                    "λ Fora": f"{la:.2f}",
+                    "P(Empate)": f"{draw_pct:.0f}%",
+                    "EV-Optimal": ev,
+                })
+            st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
 
 def _render_bets(output):
