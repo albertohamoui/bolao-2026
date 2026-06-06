@@ -57,10 +57,17 @@ def smart_bet(
     lambdas: Tuple[float, float],
     draw_threshold: float,
     draw_score: Tuple[int, int],
+    very_big_lambda_diff: float,
+    very_big_score: Tuple[int, int],
     big_win_lambda_diff: float,
     big_win_score: Tuple[int, int],
     normal_win_score: Tuple[int, int],
 ) -> Tuple[int, int]:
+    """
+    4 tiers: empate / very_big / big / normal.
+    Very_big resolve o problema do limite de 40: jogos muito desiguais
+    usam placar diferente do big_win, diversificando.
+    """
     probs = compute_match_probs(score_matrix)
     lh, la = lambdas
 
@@ -70,7 +77,9 @@ def smart_bet(
     home_is_fav = lh >= la
     diff = abs(lh - la)
 
-    if diff > big_win_lambda_diff:
+    if diff > very_big_lambda_diff:
+        score = very_big_score
+    elif diff > big_win_lambda_diff:
         score = big_win_score
     else:
         score = normal_win_score
@@ -82,15 +91,17 @@ def smart_bet(
 
 
 # =============================================================================
-# GRID — mais opcoes de placar alto (bonus gols) e empate
+# GRID — 4 tiers para diversificar placares (limite 40)
 # =============================================================================
 
 GRID = {
-    "draw_threshold": [0.20, 0.25, 0.28, 0.30, 0.32, 0.35],
-    "draw_score": [(0, 0), (1, 1), (2, 2)],
-    "big_win_lambda_diff": [0.3, 0.5, 0.7, 0.9],
-    "big_win_score": [(2, 0), (2, 1), (3, 0), (3, 1), (3, 2), (4, 1)],
-    "normal_win_score": [(1, 0), (2, 1), (2, 0)],
+    "draw_threshold": [0.30, 0.32, 0.35],
+    "draw_score": [(1, 1)],
+    "very_big_lambda_diff": [0.9, 1.0, 1.2, 1.5],
+    "very_big_score": [(3, 0), (3, 1), (4, 0), (4, 1)],
+    "big_win_lambda_diff": [0.3, 0.5, 0.7],
+    "big_win_score": [(2, 0), (2, 1)],
+    "normal_win_score": [(1, 0), (2, 1)],
 }
 
 
