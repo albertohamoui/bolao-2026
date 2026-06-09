@@ -1867,23 +1867,36 @@ def _render_champion_knockout(output: dict) -> None:
     ]
 
     def _predict_and_advance(home, away):
-        """Predict match and decide who advances."""
+        """Prediz o jogo e decide quem avanca PELO PLACAR Smart.
+
+        Empate no tempo normal (Smart = placar igual) e decidido nos
+        penaltis pelo maior P(vitoria) em jogo unico.
+        """
         try:
             pred = model.predict_match(home, away, host_adv=0.0)
             sb = smart_baseline_score(pred["score_matrix"], pred["lambdas"])
             lh, la = pred["lambdas"]
+            p_home, _p_draw, p_away = pred["result_probs"]
         except Exception:
             sb = ("-", "-")
             lh, la = 0, 0
-        p_home = stats.get(home, {}).get("champion", 0)
-        p_away = stats.get(away, {}).get("champion", 0)
-        advances = home if p_home >= p_away else away
+            p_home, p_away = 0, 0
+
+        sh, sa = sb
+        obs = ""
+        if isinstance(sh, int) and isinstance(sa, int) and sh == sa:
+            # Empate no tempo normal -> decide nos penaltis
+            advances = home if p_home >= p_away else away
+            obs = f"Penaltis ({max(p_home, p_away) * 100:.0f}%)"
+        else:
+            advances = home if sh > sa else away
         return {
             "Jogo": f"{home} vs {away}",
             "Palpite Smart": f"{sb[0]}x{sb[1]}",
             "\u03bb Casa": f"{lh:.2f}",
             "\u03bb Fora": f"{la:.2f}",
             "Avanca": advances,
+            "Obs": obs,
         }, advances
 
     bracket_results: dict = {}
@@ -1939,11 +1952,19 @@ def _render_champion_knockout(output: dict) -> None:
     ]
     sf_matches = []
     sf_winners = []
+    sf_losers = []
     for home, away in sf_matchups:
         match_info, winner = _predict_and_advance(home, away)
         sf_matches.append(match_info)
         sf_winners.append(winner)
+        sf_losers.append(away if winner == home else home)
     bracket_results["SF"] = sf_matches
+
+    # Disputa de 3o lugar (M103) entre os perdedores das semis
+    third_match_info, third_winner = _predict_and_advance(
+        sf_losers[0], sf_losers[1]
+    )
+    bracket_results["3o lugar"] = [third_match_info]
 
     # Final
     final_match_info, final_winner = _predict_and_advance(
@@ -1952,7 +1973,7 @@ def _render_champion_knockout(output: dict) -> None:
     bracket_results["Final"] = [final_match_info]
 
     # Display round by round
-    round_names = ["R32", "R16", "QF", "SF", "Final"]
+    round_names = ["R32", "R16", "QF", "SF", "3o lugar", "Final"]
     for round_name in round_names:
         if round_name not in bracket_results:
             break
@@ -1972,20 +1993,25 @@ def _render_champion_knockout(output: dict) -> None:
         finalist_b = final_match["Jogo"].split(" vs ")[1]
         vice = finalist_b if champion == finalist_a else finalist_a
 
-        col1, col2 = st.columns(2)
+        # 3o e 4o lugar vem do jogo M103 (perdedores das semis)
+        terceiro = vice  # fallback
+        quarto = ""
+        if "3o lugar" in bracket_results and bracket_results["3o lugar"]:
+            tm = bracket_results["3o lugar"][0]
+            terceiro = tm["Avanca"]
+            ta = tm["Jogo"].split(" vs ")[0]
+            tb = tm["Jogo"].split(" vs ")[1]
+            quarto = tb if terceiro == ta else ta
+
+        col1, col2, col3, col4 = st.columns(4)
         with col1:
             st.metric("Campeao", champion)
         with col2:
             st.metric("Vice", vice)
-
-        if "SF" in bracket_results and len(bracket_results["SF"]) == 2:
-            sf_losers = []
-            for m in bracket_results["SF"]:
-                a_team = m["Jogo"].split(" vs ")[0]
-                b_team = m["Jogo"].split(" vs ")[1]
-                loser = b_team if m["Avanca"] == a_team else a_team
-                sf_losers.append(loser)
-            st.caption(f"3o e 4o: {sf_losers[0]}, {sf_losers[1]}")
+        with col3:
+            st.metric("3o lugar", terceiro)
+        with col4:
+            st.metric("4o lugar", quarto)
 
 
 def _render_champion_probabilities(output: dict) -> None:
