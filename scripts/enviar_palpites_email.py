@@ -283,6 +283,8 @@ def main() -> int:
     ap.add_argument("--force", action="store_true", help="ignora dedup")
     ap.add_argument("--now", help="ISO local p/ teste (ex 2026-06-12T15:30)")
     ap.add_argument("--mock", help="JSON com {'matches':[...]} p/ teste offline")
+    ap.add_argument("--test-next", action="store_true",
+                    help="envia 1 email do proximo jogo agora (ignora janela/dedup)")
     args = ap.parse_args()
 
     if args.now:
@@ -295,15 +297,23 @@ def main() -> int:
     raw = fetch_matches(token, args.mock)
     matches = [parse_match(m) for m in raw]
 
-    lo = now + timedelta(minutes=WINDOW_BEFORE_MIN)
-    hi = now + timedelta(minutes=WINDOW_AFTER_MIN)
-    triggers = [m for m in matches if lo <= m["kickoff_local"] <= hi]
+    if args.test_next:
+        # modo teste: pega o proximo jogo com palpite (ou o ultimo, se acabou)
+        mapped = [m for m in matches
+                  if frozenset({norm(m["api_home"]), norm(m["api_away"])}) in palpites]
+        upcoming = [m for m in mapped if m["kickoff_local"] >= now]
+        triggers = [min(upcoming, key=lambda x: x["kickoff_local"])] if upcoming \
+            else ([max(mapped, key=lambda x: x["kickoff_local"])] if mapped else [])
+    else:
+        lo = now + timedelta(minutes=WINDOW_BEFORE_MIN)
+        hi = now + timedelta(minutes=WINDOW_AFTER_MIN)
+        triggers = [m for m in matches if lo <= m["kickoff_local"] <= hi]
 
     state = load_state()
     fired = 0
     for trig in sorted(triggers, key=lambda x: x["kickoff_local"]):
         mid = str(trig["id"])
-        if not args.force and mid in state:
+        if not args.force and not args.test_next and mid in state:
             continue
         day_local = trig["kickoff_local"].date()
         day_matches = build_day_view(matches, palpites, day_local)
@@ -315,10 +325,11 @@ def main() -> int:
             print(html)
         else:
             send_email(subj, html)
-            state[mid] = now.isoformat()
+            if not args.test_next:
+                state[mid] = now.isoformat()
         fired += 1
 
-    if not args.dry_run:
+    if not args.dry_run and not args.test_next:
         save_state(state)
     print(f"now={now:%Y-%m-%d %H:%M %Z} | triggers={len(triggers)} | enviados={fired}")
     return 0

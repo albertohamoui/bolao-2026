@@ -5,7 +5,12 @@ name: Email palpites boloes Copa 2026
 on:
   schedule:
     - cron: "*/10 * * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      test_next:
+        description: "Enviar 1 email de teste do proximo jogo agora"
+        type: boolean
+        default: false
 
 permissions:
   contents: write   # para persistir bolao_polla/.sent_state.json
@@ -34,7 +39,9 @@ jobs:
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
           BOLAO_UTC_OFFSET: "-3"
-        run: python scripts/enviar_palpites_email.py
+        run: |
+          python scripts/enviar_palpites_email.py \
+            ${{ inputs.test_next && '--test-next' || '' }}
 
       - name: Persistir estado de envio (dedup)
         run: |
