@@ -11,3 +11,6 @@ build/
 .obsidian/
 elo_bot/
 test_simulations.db
+
+# Office lock/temp files
+~$*
