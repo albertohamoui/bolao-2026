@@ -60,6 +60,7 @@ API_ALIASES = {
     "turkiye": "Turkey",
     "czechrepublic": "Czechia",
     "caboverde": "Cape Verde",
+    "capeverdeislands": "Cape Verde",
     "congodr": "DR Congo",
     "drcongo": "DR Congo",
     "usa": "United States",
