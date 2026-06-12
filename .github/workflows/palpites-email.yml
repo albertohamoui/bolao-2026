@@ -1,0 +1,46 @@
+name: Email palpites boloes Copa 2026
+
+# Roda a cada 10 min. O script so envia email para jogos cujo kickoff esta na
+# janela de ~20-40 min a frente (efetivo ~30 min antes), com dedup por estado.
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write   # para persistir bolao_polla/.sent_state.json
+
+concurrency:
+  group: bolao-email
+  cancel-in-progress: false
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install requests
+
+      - name: Enviar emails dos jogos na janela
+        env:
+          FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          BOLAO_UTC_OFFSET: "-3"
+        run: python scripts/enviar_palpites_email.py
+
+      - name: Persistir estado de envio (dedup)
+        run: |
+          git add bolao_polla/.sent_state.json 2>/dev/null || true
+          if ! git diff --cached --quiet; then
+            git config user.name "bolao-bot"
+            git config user.email "actions@users.noreply.github.com"
+            git commit -m "chore: update sent state [skip ci]"
+            git push
+          fi

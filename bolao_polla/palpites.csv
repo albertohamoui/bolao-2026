@@ -1,0 +1,73 @@
+grupo,jogo,home,away,zap_h,zap_a,cli_h,cli_a,polla_h,polla_a
+A,1,Mexico,South Africa,2,0,2,1,1,0
+A,2,South Korea,Czechia,2,1,2,1,1,1
+A,3,Czechia,South Africa,2,1,2,1,1,0
+A,4,Mexico,South Korea,2,1,2,1,1,1
+A,5,Czechia,Mexico,2,1,1,2,1,1
+A,6,South Africa,South Korea,1,2,1,2,0,1
+B,7,Canada,Bosnia and Herzegovina,2,0,2,0,1,0
+B,8,Qatar,Switzerland,0,2,1,4,0,2
+B,9,Switzerland,Bosnia and Herzegovina,2,0,4,1,2,0
+B,10,Canada,Qatar,2,0,4,1,2,0
+B,11,Switzerland,Canada,2,1,1,2,1,0
+B,12,Bosnia and Herzegovina,Qatar,2,1,2,1,1,0
+C,13,Haiti,Scotland,0,2,1,4,0,2
+C,14,Brazil,Morocco,2,1,2,1,1,0
+C,15,Brazil,Haiti,2,0,4,1,4,0
+C,16,Scotland,Morocco,0,2,0,2,0,1
+C,17,Scotland,Brazil,0,2,1,4,0,2
+C,18,Morocco,Haiti,2,0,4,1,2,0
+D,19,United States,Paraguay,2,1,1,2,0,0
+D,20,Australia,Turkey,2,1,2,1,1,1
+D,21,Turkey,Paraguay,2,1,1,2,1,1
+D,22,United States,Australia,1,2,1,2,0,1
+D,23,Turkey,United States,2,1,2,1,2,1
+D,24,Paraguay,Australia,1,1,1,1,0,0
+E,25,Ivory Coast,Ecuador,1,1,1,1,0,0
+E,26,Germany,Curacao,2,0,4,1,3,0
+E,27,Germany,Ivory Coast,2,0,2,0,1,0
+E,28,Ecuador,Curacao,2,0,4,1,2,0
+E,29,Curacao,Ivory Coast,0,2,1,4,0,2
+E,30,Ecuador,Germany,2,1,2,1,0,0
+F,31,Netherlands,Japan,1,2,1,2,1,1
+F,32,Sweden,Tunisia,1,2,1,2,1,1
+F,33,Netherlands,Sweden,2,0,2,0,2,1
+F,34,Tunisia,Japan,2,0,2,0,0,1
+F,35,Japan,Sweden,2,0,2,0,2,0
+F,36,Tunisia,Netherlands,0,2,0,2,0,1
+G,37,Iran,New Zealand,2,0,2,0,1,0
+G,38,Belgium,Egypt,2,0,2,0,1,0
+G,39,Belgium,Iran,2,0,2,0,1,0
+G,40,New Zealand,Egypt,0,2,0,2,0,1
+G,41,Egypt,Iran,1,2,1,2,0,1
+G,42,New Zealand,Belgium,0,2,1,4,0,1
+H,43,Saudi Arabia,Uruguay,0,2,0,2,0,1
+H,44,Spain,Cape Verde,2,0,4,1,3,0
+H,45,Uruguay,Cape Verde,2,0,4,1,1,0
+H,46,Spain,Saudi Arabia,2,0,4,1,2,0
+H,47,Cape Verde,Saudi Arabia,1,1,1,1,0,0
+H,48,Uruguay,Spain,0,2,0,2,0,1
+I,49,France,Senegal,2,0,2,0,1,0
+I,50,Iraq,Norway,0,2,0,2,0,1
+I,51,Norway,Senegal,2,1,2,1,1,1
+I,52,France,Iraq,2,0,4,1,2,0
+I,53,Norway,France,0,2,0,2,0,2
+I,54,Senegal,Iraq,2,0,2,0,1,0
+J,55,Argentina,Algeria,2,0,2,0,1,0
+J,56,Austria,Jordan,2,0,2,0,2,0
+J,57,Argentina,Austria,2,0,2,0,1,0
+J,58,Jordan,Algeria,0,2,0,2,1,2
+J,59,Algeria,Austria,1,2,1,2,1,1
+J,60,Jordan,Argentina,0,2,1,4,0,2
+K,61,Portugal,DR Congo,2,0,2,0,1,0
+K,62,Uzbekistan,Colombia,0,2,0,2,0,1
+K,63,Portugal,Uzbekistan,2,0,2,0,1,0
+K,64,Colombia,DR Congo,2,0,2,0,1,0
+K,65,Colombia,Portugal,1,2,1,3,0,1
+K,66,DR Congo,Uzbekistan,1,1,1,1,0,0
+L,67,England,Croatia,2,1,2,1,1,0
+L,68,Ghana,Panama,2,1,2,1,1,1
+L,69,England,Ghana,2,0,4,1,1,0
+L,70,Panama,Croatia,0,2,1,4,0,2
+L,71,Panama,England,0,2,1,4,0,2
+L,72,Croatia,Ghana,2,0,2,0,1,0

@@ -1,0 +1,36 @@
+{
+  "matches": [
+    {
+      "id": 1001,
+      "utcDate": "2026-06-12T16:00:00Z",
+      "status": "FINISHED",
+      "homeTeam": {"name": "Mexico"},
+      "awayTeam": {"name": "South Africa"},
+      "score": {"fullTime": {"home": 2, "away": 0}}
+    },
+    {
+      "id": 1002,
+      "utcDate": "2026-06-12T19:00:00Z",
+      "status": "TIMED",
+      "homeTeam": {"name": "Korea Republic"},
+      "awayTeam": {"name": "Czechia"},
+      "score": {"fullTime": {"home": null, "away": null}}
+    },
+    {
+      "id": 1003,
+      "utcDate": "2026-06-12T22:00:00Z",
+      "status": "TIMED",
+      "homeTeam": {"name": "Canada"},
+      "awayTeam": {"name": "Switzerland"},
+      "score": {"fullTime": {"home": null, "away": null}}
+    },
+    {
+      "id": 1004,
+      "utcDate": "2026-06-11T19:00:00Z",
+      "status": "FINISHED",
+      "homeTeam": {"name": "Brazil"},
+      "awayTeam": {"name": "Haiti"},
+      "score": {"fullTime": {"home": 4, "away": 0}}
+    }
+  ]
+}
