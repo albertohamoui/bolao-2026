@@ -32,6 +32,7 @@ import smtplib
 import sys
 import unicodedata
 from datetime import datetime, timedelta, timezone
+from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from pathlib import Path
@@ -115,8 +116,8 @@ def parse_match(m: dict) -> dict:
         "kickoff_utc": ko,
         "kickoff_local": ko.astimezone(LOCAL_TZ),
         "status": m.get("status", ""),
-        "api_home": canonical((m.get("homeTeam") or {}).get("name") or ""),
-        "api_away": canonical((m.get("awayTeam") or {}).get("name") or ""),
+        "api_home": canonical(((m.get("homeTeam") or {}).get("name") or "").replace("\xa0", " ").strip()),
+        "api_away": canonical(((m.get("awayTeam") or {}).get("name") or "").replace("\xa0", " ").strip()),
         "home_g": home_g,
         "away_g": away_g,
         "has_result": has_result,
@@ -233,7 +234,7 @@ def send_email(subj: str, html: str) -> None:
     pwd = os.environ["GMAIL_APP_PASSWORD"]
     to = [x.strip() for x in os.environ["EMAIL_TO"].split(",") if x.strip()]
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = subj
+    msg["Subject"] = Header(subj, "utf-8")
     msg["From"] = user
     msg["To"] = ", ".join(to)
     msg.attach(MIMEText(html, "html", "utf-8"))
