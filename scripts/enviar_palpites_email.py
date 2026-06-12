@@ -66,9 +66,11 @@ API_ALIASES = {
 }
 
 
-def norm(name: str) -> str:
+def norm(name) -> str:
     """Chave normalizada: sem acento, minuscula, so letras/numeros."""
-    s = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()
+    if not name:
+        return ""
+    s = unicodedata.normalize("NFKD", str(name)).encode("ascii", "ignore").decode()
     return "".join(c for c in s.lower() if c.isalnum())
 
 
@@ -113,8 +115,8 @@ def parse_match(m: dict) -> dict:
         "kickoff_utc": ko,
         "kickoff_local": ko.astimezone(LOCAL_TZ),
         "status": m.get("status", ""),
-        "api_home": canonical(m["homeTeam"]["name"]),
-        "api_away": canonical(m["awayTeam"]["name"]),
+        "api_home": canonical((m.get("homeTeam") or {}).get("name") or ""),
+        "api_away": canonical((m.get("awayTeam") or {}).get("name") or ""),
         "home_g": home_g,
         "away_g": away_g,
         "has_result": has_result,
