@@ -28,7 +28,8 @@ jobs:
 
       - name: Enviar emails dos jogos na janela
         env:
-          FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
+          # secret criado como FOOTBAL_DATA_TOKEN (sem o 2o L); mapeado p/ o nome certo
+          FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBAL_DATA_TOKEN }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}

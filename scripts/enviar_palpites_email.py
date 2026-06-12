@@ -93,8 +93,12 @@ def fetch_matches(token: str | None, mock: str | None) -> list[dict]:
     if mock:
         return json.loads(Path(mock).read_text(encoding="utf-8"))["matches"]
     import requests  # import tardio: so necessario em producao
-    resp = requests.get(API_URL, headers={"X-Auth-Token": token or ""}, timeout=30)
-    resp.raise_for_status()
+    if not token:
+        raise SystemExit("ERRO: FOOTBALL_DATA_TOKEN vazio. Configure o secret.")
+    resp = requests.get(API_URL, headers={"X-Auth-Token": token}, timeout=30)
+    if resp.status_code != 200:
+        raise SystemExit(
+            f"ERRO API football-data {resp.status_code}: {resp.text[:300]}")
     return resp.json()["matches"]
 
 
