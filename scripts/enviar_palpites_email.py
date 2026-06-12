@@ -230,8 +230,10 @@ def save_state(state: dict) -> None:
 
 
 def send_email(subj: str, html: str) -> None:
-    user = os.environ["GMAIL_USER"]
-    pwd = os.environ["GMAIL_APP_PASSWORD"]
+    user = os.environ["GMAIL_USER"].strip()
+    # senha de app do Gmail tem 16 chars; o Google exibe em grupos com espacos
+    # (as vezes nao-quebraveis \xa0). Remove qualquer espaco para o AUTH ASCII.
+    pwd = "".join(os.environ["GMAIL_APP_PASSWORD"].split())
     to = [x.strip() for x in os.environ["EMAIL_TO"].split(",") if x.strip()]
     msg = MIMEMultipart("alternative")
     msg["Subject"] = Header(subj, "utf-8")
