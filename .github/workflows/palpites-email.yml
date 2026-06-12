@@ -11,6 +11,10 @@ on:
         description: "Enviar 1 email de teste do proximo jogo agora"
         type: boolean
         default: false
+      audit:
+        description: "Conferir jogos da API vs palpites (nao envia email)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write   # para persistir bolao_polla/.sent_state.json
@@ -41,7 +45,8 @@ jobs:
           BOLAO_UTC_OFFSET: "-3"
         run: |
           python scripts/enviar_palpites_email.py \
-            ${{ inputs.test_next && '--test-next' || '' }}
+            ${{ inputs.test_next && '--test-next' || '' }} \
+            ${{ inputs.audit && '--audit' || '' }}
 
       - name: Persistir estado de envio (dedup)
         run: |

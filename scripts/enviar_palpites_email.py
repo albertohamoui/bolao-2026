@@ -64,6 +64,8 @@ API_ALIASES = {
     "drcongo": "DR Congo",
     "usa": "United States",
     "unitedstatesofamerica": "United States",
+    "bosniaherzegovina": "Bosnia and Herzegovina",
+    "bosniaandherzegovina": "Bosnia and Herzegovina",
 }
 
 
@@ -288,6 +290,8 @@ def main() -> int:
     ap.add_argument("--mock", help="JSON com {'matches':[...]} p/ teste offline")
     ap.add_argument("--test-next", action="store_true",
                     help="envia 1 email do proximo jogo agora (ignora janela/dedup)")
+    ap.add_argument("--audit", action="store_true",
+                    help="confere todos os jogos da API contra palpites.csv e lista descasamentos")
     args = ap.parse_args()
 
     if args.now:
@@ -299,6 +303,18 @@ def main() -> int:
     palpites = load_palpites()
     raw = fetch_matches(token, args.mock)
     matches = [parse_match(m) for m in raw]
+
+    if args.audit:
+        # jogos com ambos os times definidos (fase de grupos) vs palpites.csv
+        named = [m for m in matches if m["api_home"] and m["api_away"]]
+        unmatched = [m for m in named
+                     if frozenset({norm(m["api_home"]), norm(m["api_away"])})
+                     not in palpites]
+        print(f"AUDIT: {len(named)} jogos com times definidos | "
+              f"casados={len(named)-len(unmatched)} | SEM PALPITE={len(unmatched)}")
+        for m in unmatched:
+            print(f"  SEM PALPITE: {m['api_home']} x {m['api_away']}")
+        return 0 if not unmatched else 2
 
     if args.test_next:
         # modo teste: pega o proximo jogo com palpite (ou o ultimo, se acabou)
