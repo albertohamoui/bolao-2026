@@ -46,11 +46,13 @@ API_URL = "https://api.football-data.org/v4/competitions/WC/matches"
 # Offset fixo (Brasil -3 nao tem mais horario de verao; Panama -5). Configuravel
 # por env BOLAO_UTC_OFFSET. Offset fixo evita depender do tzdata no Windows.
 LOCAL_TZ = timezone(timedelta(hours=float(os.environ.get("BOLAO_UTC_OFFSET", "-3"))))
-# Janela de disparo: kickoff entre +20 e +40 min. Com cron a cada 10 min, cada
-# jogo cai na janela de >=2 execucoes (robusto a atraso do Actions); o dedup por
-# estado garante 1 email por jogo. Disparo efetivo ~30 min antes.
-WINDOW_BEFORE_MIN = 20
-WINDOW_AFTER_MIN = 40
+# O cron do GitHub Actions e esparso/throttled (na pratica dispara ~1x/hora,
+# com gaps de varias horas), entao uma janela estreita perde quase todos os
+# jogos. Modelo CATCH-UP: cada execucao avisa todo jogo com palpite que comeca
+# dentro do look-ahead e ainda nao foi avisado. O dedup garante 1 email/jogo.
+# Cobertura: basta UMA execucao disparar na janela [kickoff-3h, kickoff+15min].
+LOOK_AHEAD_MIN = 180   # avisa jogos que comecam ate 3h a frente
+GRACE_AFTER_MIN = 15   # ainda avisa jogo que comecou ha <=15 min (chega tarde, mas chega)
 
 # Aliases de nomes da API -> nome canonico usado no palpites.csv.
 API_ALIASES = {
@@ -325,9 +327,13 @@ def main() -> int:
         triggers = [min(upcoming, key=lambda x: x["kickoff_local"])] if upcoming \
             else ([max(mapped, key=lambda x: x["kickoff_local"])] if mapped else [])
     else:
-        lo = now + timedelta(minutes=WINDOW_BEFORE_MIN)
-        hi = now + timedelta(minutes=WINDOW_AFTER_MIN)
-        triggers = [m for m in matches if lo <= m["kickoff_local"] <= hi]
+        # CATCH-UP: avisa todo jogo com palpite que comeca dentro do look-ahead
+        # (e ate GRACE_AFTER_MIN apos o inicio). O dedup faz cada jogo sair 1x.
+        lo = now - timedelta(minutes=GRACE_AFTER_MIN)
+        hi = now + timedelta(minutes=LOOK_AHEAD_MIN)
+        triggers = [m for m in matches
+                    if frozenset({norm(m["api_home"]), norm(m["api_away"])}) in palpites
+                    and lo <= m["kickoff_local"] <= hi]
 
     state = load_state()
     fired = 0
