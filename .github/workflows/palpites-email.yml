@@ -1,10 +1,10 @@
 name: Email palpites boloes Copa 2026
 
-# Roda a cada 10 min. O script so envia email para jogos cujo kickoff esta na
-# janela de ~20-40 min a frente (efetivo ~30 min antes), com dedup por estado.
+# DESATIVADO: a Copa 2026 acabou. O schedule foi comentado, entao o workflow
+# so roda sob demanda (workflow_dispatch). Para religar, descomente o schedule.
+# schedule:
+#   - cron: "*/10 * * * *"
 on:
-  schedule:
-    - cron: "*/10 * * * *"
   workflow_dispatch:
     inputs:
       test_next:
